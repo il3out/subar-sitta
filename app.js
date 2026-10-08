@@ -17,37 +17,39 @@ const t={
  mw:n=>`Matchweek`,round:n=>`Round ${n}`,
  locksIn:"Locks in",lockedAt:(d,tm)=>`Locked ${d}, ${tm}`,locksAt:(d,tm)=>`${d}, ${tm} Kuwait time`,
  inOf:n=>`${n} of 6 in`,gg:m=>m==null?"Golden Goal not set":`Golden Goal ${m}′`,
- save:{clean:"",pending:"Saving shortly",saving:"Saving",saved:tm=>`Saved ${tm}`,failed:"Not saved. Tap to retry",half:"Add the other score to save it"},
- st:{todo:"No prediction",half:"Add both scores",edited:"Not saved yet",saving:"Saving",saved:"Saved",failed:"Not saved",locked:"Locked",none:"No prediction"},
- final:"Full time",awaiting:"Awaiting result",voidF:"Postponed, not scored",
+ save:{clean:"",pending:"⏳ Saving shortly",saving:"⏳ Saving",saved:tm=>`✅ Saved ${tm}`,failed:"⚠️ Not saved. Tap to retry",half:"✏️ Add the other score to save it"},
+ st:{todo:"🤔 No prediction yet",half:"✏️ Add both scores",edited:"⏳ Not saved yet",saving:"⏳ Saving",saved:"✅ Saved",failed:"⚠️ Not saved",locked:"🔒 Locked in",none:"😶 No prediction"},
+ final:"🏁 Full time",awaiting:"⏳ Awaiting result",voidF:"🚫 Postponed, not scored",
  goalsOf:c=>`${c} goals`,
- ggH:"Golden Goal",ggP:"The minute of the first goal across all six. It settles ties on points.",ggSet:"Set the minute",ggWas:m=>`First goal came in minute ${m}.`,ggUnset:"Not set",
+ ggH:"⏱️ Golden Goal",ggP:"The minute of the first goal across all six. It settles ties on points.",ggSet:"Set the minute",ggWas:m=>`First goal came in minute ${m}.`,ggUnset:"Not set",
  kp:{for:"Goals for",clear:"Clear",done:"Done",less:"One fewer",more:"One more"},
- roomH:"Who's in",roomOpen:"Scores stay hidden until kick-off.",roomLocked:"Everyone's picks are on the Results page.",notYet:"Not in yet",ggShort:"GG",
- lastH:"Last round",lastNone:"Results appear here once a round is complete.",yourPick:"You",
- tableH:"The table",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
+ roomH:"👀 Who's in",roomOpen:"Scores stay hidden until kick-off.",roomLocked:"Everyone's picks are on the Results page.",notYet:"😴 Not in yet",ggShort:"GG",
+ lastH:"🏁 Last round",lastNone:"Results appear here once a round is complete.",yourPick:"You",
+ tableH:"🏆 The table",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
  after:n=>n===1?"After 1 round":`After ${n} rounds`,exactWon:(e,w)=>`${e} exact, ${w} ${w===1?"round":"rounds"} won`,
- behind:(p,n)=>p===0?`Level with ${n}`:`${p} behind ${n}`,leads:p=>p===0?"Level at the top":`Leads by ${p}`,you:"you",lastRd:p=>`${p} last round`,
- rulesH:"How it works",rules:["Six fixtures every round. Predict the full-time score of each.","An exact score is worth 5 points. The right result (win, draw or loss) is worth 2.","The Golden Goal is the minute of the first goal across all six. It settles ties.","Picks lock at the first kick-off. Then everyone's picks are revealed."],
+ behind:(p,n)=>p===0?`🤝 Level with ${n}`:`🎯 ${p} behind ${n}`,leads:p=>p===0?"🤝 Level at the top":`📈 Leads by ${p}`,you:"you",lastRd:p=>`${p} last round`,
+ rulesH:"📖 How it works",rules:["⚽ Six fixtures every round. Predict the full-time score of each.","🎯 An exact score is worth 5 points. The right result (win, draw or loss) is worth 2.","⏱️ The Golden Goal is the minute of the first goal across all six. It settles ties.","🔒 Picks lock at the first kick-off. Then everyone's picks are revealed."],
  joinH:["A private","season"],joinM:"Six fixtures every round. Call the scores, pick the minute of the first goal, and climb the table.",
- nick:"Your name in the league",nickPh:"For example Bu Salem",nickErr:"Use at least two characters.",join:"Join the league",joined:"Welcome to Subar Sitta",
+ nick:"Your name in the league",nickPh:"For example Bu Salem",nickErr:"Use at least two characters.",join:"Join the league",joined:"🎉 Welcome to Subar Sitta",
  signInT:"Sign in",joinT:"Join",email:"Email",password:"Password",pwHint:"At least 8 characters",code:"Invite code",codeHint:"From the person who invited you",
- signIn:"Sign in",signUp:"Create account and join",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"Password saved",
+ signIn:"Sign in",signUp:"Create account and join",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"✅ Password saved",
  confirmEmail:"Check your email to confirm your account, then sign in.",signOut:"Sign out",authErr:"Email or password is not right.",
- badCode:"That invite code is not right.",weakPw:"Use at least 8 characters.",badEmail:"Enter a valid email.",locked:"Picks are locked for this round.",
- noRound:"No round is open",noRoundUser:"The next round opens automatically when the fixtures are published.",noRoundAdmin:"The autopilot opens rounds automatically. You can also open one from Admin.",
- resultsH:"Results",everyone:"Everyone's picks",hiddenH:"Picks are hidden until kick-off",hiddenM:(a,b)=>`${a} of ${b} members have saved picks so far.`,nobody:"Nobody predicted this round.",
+ badCode:"That invite code is not right.",weakPw:"Use at least 8 characters.",badEmail:"Enter a valid email.",locked:"🔒 Picks are locked for this round.",
+ noRound:"😴 No round is open",noRoundUser:"The next round opens automatically when the fixtures are published.",noRoundAdmin:"The autopilot opens rounds automatically. You can also open one from Admin.",
+ resultsH:"Results",everyone:"Everyone's picks",hiddenH:"🙈 Picks are hidden until kick-off",hiddenM:(a,b)=>`${a} of ${b} members have saved picks so far.`,nobody:"🦗 Nobody predicted this round.",
  member:"Member",total:"Pts",savedAt:"Saved",exact5:"Exact score, 5",right2:"Right result, 2",live:"In play",ft:"FT",draw:"Draw",splitOf:n=>`${n} ${n===1?"pick":"picks"}`,
  pass:"Member",no:n=>`No. ${String(n).padStart(3,"0")}`,since:"Member since",season:"Season",position:"Position",points:"Points",avg:"Per round",exactN:"Exact scores",rightN:"Right results",wonN:"Rounds won",
- choose:"Member",h2h:"Head to head",vs:"Against",h2hNeed:"Head to head starts when another member joins.",h2hAfter:"Head to head starts after the first completed round.",wins:"wins",draws:"level",
+ choose:"Member",h2h:"⚔️ Head to head",vs:"Against",h2hNeed:"Head to head starts when another member joins.",h2hAfter:"Head to head starts after the first completed round.",wins:"wins",draws:"level",
  adminH:"Admin",adminOnly:"This page is for admins only.",adminSub:n=>`${n} ${n===1?"member":"members"} in the league.`,current:"Current round",
  autoH:"Autopilot",autoM:"Opens each round from the real Premier League fixtures, locks it at the first kick-off, and settles results and the Golden Goal.",autoOn:"On",autoOff:"Off",runNow:"Run now",lastRun:"Last action",callsToday:n=>`${n} of 80 data requests used today`,never:"Nothing yet",
- inviteH:"Invite code",inviteM:"Share it with friends so they can join. A new code stops the old one working.",newCode:"New code",copy:"Copy",copied:"Copied",
- resultsT:n=>`Round ${n} results`,fg:"Minute of the first goal (90 if goalless)",saveResults:"Save results",resultsSaved:"Results saved",lockNow:"Lock picks now",reopen:"Reopen picks",lockedMsg:"Picks locked",reopenedMsg:"Picks reopened",resNote:"A round counts toward the table once all six results are in.",
- newT:n=>`Open round ${n} by hand`,homeN:i=>`Home ${i}`,awayL:"Away",ko:"Kick-off (Kuwait time)",deadline:"Pick deadline (blank means the first kick-off)",openN:n=>`Open round ${n}`,opened:n=>`Round ${n} is open`,
+ inviteH:"Invite code",inviteM:"Share it with friends so they can join. A new code stops the old one working.",newCode:"New code",copy:"Copy",copied:"📋 Copied",
+ resultsT:n=>`Round ${n} results`,fg:"Minute of the first goal (90 if goalless)",saveResults:"Save results",resultsSaved:"✅ Results saved",lockNow:"Lock picks now",reopen:"Reopen picks",lockedMsg:"Picks locked",reopenedMsg:"Picks reopened",resNote:"A round counts toward the table once all six results are in.",
+ newT:n=>`Open round ${n} by hand`,homeN:i=>`Home ${i}`,awayL:"Away",ko:"Kick-off (Kuwait time)",deadline:"Pick deadline (blank means the first kick-off)",openN:n=>`Open round ${n}`,opened:n=>`🟢 Round ${n} is open`,
  needSix:"Fill all six fixtures: two different teams and a kick-off for each.",dup:"A team appears in more than one fixture.",curChanged:"Current round updated",
  err:{perm:"You don't have permission for that change.",quota:"Storage is full.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
- private:"Private league. Invitation only."};
+ private:"🔐 Private league. Invitation only.",
+ allSaved:tm=>`✅ All 6 saved${tm?` at ${tm}`:""}`,allSavedNoGG:"✅ 6 scores saved. Set the Golden Goal ⏱️",saveNow:"💾 Save my picks",saveTodo:n=>`✏️ ${n} of 6 in`,cheer:"✅ All six saved. Good luck 🍀",
+ banner:["🔥 Six matches. Six exact scores. One perfect six.","🎯 Exact score 5 points. Right result 2.","⏱️ Golden Goal settles every tie.","👑 Bragging rights last a whole week."]};
 
 /* ===================== signets: one construction, 1.6 stroke, round caps ===================== */
 const sv=b=>`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">${b}</svg>`;
@@ -220,20 +222,34 @@ function joinView(){
       <p class="err" id="autherr" role="alert"></p>
       <div class="row"><button class="btn" type="button" data-act="join">${t.join}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></div></form></section></div>`}
 
+/* floating watch: original Subar Sitta chronograph clip art */
+const WATCH=`<svg class="float-watch" viewBox="0 0 120 170" aria-hidden="true" focusable="false">
+<defs><linearGradient id="wc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F7FA"/><stop offset=".5" stop-color="#AEB9C6"/><stop offset="1" stop-color="#E3E9EF"/></linearGradient>
+<radialGradient id="wd" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#1B3462"/><stop offset="1" stop-color="#0A1830"/></radialGradient></defs>
+<path d="M42 4h36l4 34H38z" fill="#13254A"/><path d="M38 132h44l-4 34H42z" fill="#13254A"/>
+<path d="M45 8v26M75 8v26M45 136v26M75 136v26" stroke="#5C7BA8" stroke-width="1" stroke-dasharray="3 3"/>
+<rect x="100" y="78" width="9" height="14" rx="3" fill="url(#wc)"/>
+<circle cx="60" cy="85" r="48" fill="url(#wc)"/><circle cx="60" cy="85" r="40" fill="url(#wd)"/>
+<g stroke="#DCE4EC" stroke-linecap="round">${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6,r1=37,r2=i%3?33:30;return `<line x1="${(60+Math.sin(a)*r1).toFixed(1)}" y1="${(85-Math.cos(a)*r1).toFixed(1)}" x2="${(60+Math.sin(a)*r2).toFixed(1)}" y2="${(85-Math.cos(a)*r2).toFixed(1)}" stroke-width="${i%3?1.2:2.2}"/>`}).join("")}</g>
+<circle cx="45" cy="92" r="9" fill="#A9D9F2" opacity=".9"/><circle cx="75" cy="92" r="9" fill="#A9D9F2" opacity=".9"/>
+<line x1="45" y1="92" x2="45" y2="85" stroke="#0A1830" stroke-width="1.4"/><line x1="75" y1="92" x2="80" y2="95" stroke="#0A1830" stroke-width="1.4"/>
+<text x="60" y="72" text-anchor="middle" font-family="Sofia Sans Extra Condensed,sans-serif" font-weight="800" font-size="16" fill="#F8FAFD">6</text>
+<line x1="60" y1="85" x2="60" y2="58" stroke="#F8FAFD" stroke-width="2.4" stroke-linecap="round"/><line x1="60" y1="85" x2="78" y2="77" stroke="#F8FAFD" stroke-width="2.4" stroke-linecap="round"/>
+<line class="fw-sec" x1="60" y1="90" x2="60" y2="50" stroke="#9CDEC2" stroke-width="1"/><circle cx="60" cy="85" r="2.6" fill="#F8FAFD"/></svg>`;
 /* ===================== matchday ===================== */
 function home(){
   const r=current();
   if(!r)return `<div class="wrap">${empty(t.noRound,S.isAdmin?t.noRoundAdmin:t.noRoundUser)}${railTable()}</div>`;
   ensureDraft(r);const locked=isLocked(r),settled=isSettled(r);
-  const head=`<header class="md-head"><img class="md-six" src="six.webp" alt="" width="640" height="631">
+  const head=`<div class="banner" role="note"><span id="bannerTxt">${t.banner[0]}</span></div><header class="md-head"><img class="md-six" src="six.webp" alt="" width="640" height="631">${WATCH}
       <p class="md-round"><span>${t.round(r.n)}</span><span>${esc(S.meta?.season||"2026/27")}</span></p>
-      <h1 class="title">${locked?(settled?"Full time":"Locked"):"Matchweek"}<br><span class="t2 num">${pad(r.n)}</span></h1>
+      <h1 class="title md-title">${locked?(settled?"Full time":"Locked"):"Matchweek"} <span class="t2 num">${pad(r.n)}</span></h1>
       ${locked?`<p class="when">${esc(t.lockedAt(fDay(r.deadline),fTime(r.deadline)))}</p>`
         :`<div class="chrono" data-deadline="${esc(r.deadline)}" role="timer" aria-live="off"><span class="lbl">${t.locksIn}</span><span data-dur></span></div><p class="when">${esc(t.locksAt(fLong(r.deadline),fTime(r.deadline)))}</p>`}
       <div class="ribbon" id="ribbon" role="img"></div>
       <div class="status" id="status"></div>
     </header>`;
-  const fx=`<section class="ledger" id="fixtures" aria-label="Your predictions">${r.fixtures.map(f=>fixture(f,locked)).join("")}</section>${ggBlock(r,locked)}`;
+  const fx=`<section class="ledger" id="fixtures" aria-label="Your predictions">${r.fixtures.map(f=>fixture(f,locked)).join("")}</section>${ggBlock(r,locked)}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
   return `<div class="md"><div class="wrap">${head}
     <div class="grid"><div>${fx}</div><aside class="rail" aria-label="League">${room(r)}${lastRound()}${railTable()}${rules()}</aside></div></div></div>`;
 }
@@ -273,6 +289,15 @@ function syncHead(){const r=current();if(!r||!S.draft)return;const locked=isLock
   const half=Object.values(S.draft.s).some(v=>(v[0]==null)!==(v[1]==null));
   const k=locked?"clean":half&&S.saveState!=="saving"?"half":S.saveState==="saving"?"saving":S.saveState==="failed"?"failed":S.dirty?"pending":S.saveState==="saved"||S.savedAt?"saved":"clean";
   const saveTxt=k==="saved"?(S.savedAt?t.save.saved(fTime(S.savedAt)):""):t.save[k];
+  const sb2=$("#savebar");if(sb2){const all=n===6&&k==="saved";const tm=S.savedAt?fTime(S.savedAt):"";
+    sb2.dataset.s=all?(S.draft.gg!=null?"all":"nogg"):k;
+    sb2.innerHTML=all?`<span class="sb-msg">${S.draft.gg!=null?t.allSaved(tm):t.allSavedNoGG}</span>`
+      :k==="failed"?`<button class="sb-btn bad" type="button" data-act="retrysave">${t.save.failed}</button>`
+      :k==="saving"||k==="pending"?`<span class="sb-msg">${t.save.saving}</span>`
+      :k==="half"?`<span class="sb-msg">${t.save.half}</span>`
+      :k==="saved"?`<span class="sb-msg">${t.save.saved(tm)}. ${t.saveTodo(n)}</span>`
+      :`<span class="sb-msg">${t.saveTodo(n)}</span><button class="sb-btn" type="button" data-act="savenow">${t.saveNow}</button>`;
+    if(all&&S.draft.gg!=null&&S.cheered!==r.id&&S.saveState==="saved"&&S.justSaved){S.cheered=r.id;toast(t.cheer)}S.justSaved=false}
   const el=$("#status");if(el)el.innerHTML=`<span><b class="num">${n}</b> of 6 in</span><span>${esc(t.gg(S.draft.gg))}</span>${saveTxt?(k==="failed"?`<button class="save" type="button" data-s="failed" data-act="retrysave">${saveTxt}</button>`:`<span class="save" data-s="${k}" role="status">${saveTxt}</span>`):""}`}
 function syncRow(fid,changedIdx){const r=current();const f=r?.fixtures.find(x=>x.id===fid);const el=document.querySelector(`[data-card="${fid}"]`);if(!f||!el)return;
   const prev=el.dataset.state,st=cardState(f);el.dataset.state=st;
@@ -339,7 +364,7 @@ async function save(){const r=current();if(!r||!S.draft||!S.dirty)return;if(isLo
   const v=S.ver;saving=true;S.saveState="saving";syncAll();
   const rounds={...(S.picks[S.uid]?.rounds||{}),[r.id]:{s:clean,gg:S.draft.gg,at:new Date().toISOString()}};
   const ok=await write("picks/"+S.uid,{rounds});saving=false;
-  if(ok){S.picks[S.uid]={rounds};S.draftSrc=JSON.stringify({s:clean,gg:S.draft.gg});S.savedAt=new Date().toISOString();S.saveState="saved";
+  if(ok){S.picks[S.uid]={rounds};S.draftSrc=JSON.stringify({s:clean,gg:S.draft.gg});S.savedAt=new Date().toISOString();S.saveState="saved";S.justSaved=true;
     S.dirty=S.ver!==v||Object.values(S.draft.s).some(x=>(x[0]==null)!==(x[1]==null));if(S.ver!==v)queueSave(300)}
   else S.saveState="failed";
   syncAll();$$(".fx.just-saved").forEach(e=>setTimeout(()=>e.classList.remove("just-saved"),400))}
@@ -376,11 +401,11 @@ function roundView(){
 
 /* ===================== table ===================== */
 function standRow(s,tb,mini){const above=tb[s.rank-2];const below=tb[s.rank];
-  const mv=s.move==null||s.move===0?"":s.move>0?`<span class="mv up" aria-label="up ${s.move}">▲${s.move}</span>`:`<span class="mv down" aria-label="down ${-s.move}">▼${-s.move}</span>`;
+  const mv=s.move==null||s.move===0?"":s.move>0?`<span class="mv up" aria-label="up ${s.move}">🔼${s.move}</span>`:`<span class="mv down" aria-label="down ${-s.move}">🔽${-s.move}</span>`;
   const rival=s.rank===1?(below?t.leads(s.pts-below.pts):""):t.behind(above.pts-s.pts,dname(above.uid));
   return `<li><button class="st ${s.rank===1?"lead":""} ${s.uid===S.uid?"mine":""}" type="button" data-player="${esc(s.uid)}" data-move="${s.move||0}">
     <span class="st-rank num">${pad(s.rank)}</span>
-    <span><span class="st-name">${esc(dname(s.uid))}${mv}</span>${mini?"":`<span class="st-sub">${esc(t.exactWon(s.ex,s.won))}</span>`}<span class="st-rival">${esc(rival)}</span></span>
+    <span><span class="st-name">${s.rank===1?"👑 ":""}${esc(dname(s.uid))}${mv}</span>${mini?"":`<span class="st-sub">${esc(t.exactWon(s.ex,s.won))}</span>`}<span class="st-rival">${esc(rival)}</span></span>
     <span class="st-pts">${s.pts}${s.last!=null&&!mini?`<small>${t.lastRd(s.last)}</small>`:""}</span></button></li>`}
 function tableView(){const tb=table();const n=roundList().filter(isSettled).length;
   const head=`<header style="padding-top:24px"><h1 class="title">${t.tableH}</h1><p class="sub">${n?esc(t.after(n)):""}</p></header>`;
@@ -444,6 +469,7 @@ function tick(){const el=$("[data-deadline]");if(!el)return;const ms=new Date(el
   el.querySelector("[data-dur]").innerHTML=(d?`<b>${pad(d)}</b><i>d</i>`:"")+`<b>${pad(h)}</b><i>h</i><b>${pad(m)}</b><i>m</i><b class="s">${pad(s)}</b><i>s</i>`;
   el.setAttribute("aria-label",`${t.locksIn} ${d?d+" days ":""}${h} hours ${m} minutes`)}
 setInterval(()=>{if($("[data-deadline]"))tick()},1000);
+let bannerI=0;setInterval(()=>{const b=$("#bannerTxt");if(!b||RM.matches)return;bannerI=(bannerI+1)%t.banner.length;b.classList.remove("in");void b.offsetWidth;b.textContent=t.banner[bannerI];b.classList.add("in")},4500);
 function postRender(){
   if(S.page==="home"&&S.draft)syncHead();
   /* rank movement: rows that changed position slide in from where they were, once per visit */
@@ -470,6 +496,7 @@ document.addEventListener("click",async e=>{
   const act=e.target.closest("[data-act]");if(!act)return;const a=act.dataset.act;
   const authErr=m=>{const el=$("#autherr");if(el)el.textContent=m};
   if(a==="retrysave"){S.saveState="dirty";S.dirty=true;save();return}
+  if(a==="savenow"){if(S.dirty)flushSave();else toast(t.save.saved(S.savedAt?fTime(S.savedAt):""));return}
   if(a==="join"||a==="signup"){const code=($("#code").value||"").trim(),nick=($("#nick").value||"").trim().slice(0,24);
     if(code.length<4)return authErr(t.badCode);if(nick.length<2)return authErr(t.nickErr);act.disabled=true;
     if(a==="signup"){const email=($("#em").value||"").trim(),pw=$("#pw").value||"";
