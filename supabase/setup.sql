@@ -344,6 +344,35 @@ end $$;
 revoke execute on function public.af_get(text), public.refresh_round(text), public.open_next_round(),
   public.autopilot() from public, anon, authenticated;
 
+-- ---------------------------------------------------------------- who's in (who saved, how many, when — never the scores)
+create table public.pick_status (
+  user_id  uuid not null references public.players on delete cascade,
+  round_id text not null references public.rounds on delete cascade,
+  filled   int  not null,                       -- fixtures with both scores entered
+  has_gg   boolean not null,                    -- Golden Goal minute set
+  first_at timestamptz not null default now(),  -- first save
+  last_at  timestamptz not null default now(),  -- latest save
+  saves    int  not null default 1,
+  primary key (user_id, round_id)
+);
+alter table public.pick_status enable row level security;
+create policy pick_status_read on public.pick_status for select using (public.is_member());
+revoke insert, update, delete on public.pick_status from anon, authenticated;   -- only the trigger writes
+
+create function public.pick_status_sync() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  insert into pick_status (user_id, round_id, filled, has_gg)
+  values (new.user_id, new.round_id, (select count(*) from jsonb_object_keys(new.s)), new.gg is not null)
+  on conflict (user_id, round_id) do update
+    set filled = excluded.filled, has_gg = excluded.has_gg, last_at = now(), saves = pick_status.saves + 1;
+  return new;
+end $$;
+create trigger pick_status_sync after insert or update on public.picks
+  for each row execute function public.pick_status_sync();
+
+alter publication supabase_realtime add table public.pick_status;
+
 -- ---------------------------------------------------------------- live updates
 alter publication supabase_realtime add table public.league, public.rounds, public.players, public.picks;
 

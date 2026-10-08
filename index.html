@@ -226,6 +226,17 @@ main{min-width:0;padding:0 var(--gut) 48px}
 .avatar.ini{display:grid;place-items:center;background:#162f4c;font-size:10px;letter-spacing:.04em;color:var(--plat)}
 .avatar.lg{width:64px;height:64px;font-size:20px}
 .footnote{font-size:11px;color:var(--silver);margin-top:14px}
+.room{display:grid}
+.room-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto 64px;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #253a53;text-align:left;width:100%}
+.room-row:last-child{border-bottom:0}
+.room-row .who{min-width:0}
+.room-row .nm{display:block;font-size:13px;letter-spacing:.04em;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.room-row small{display:block;font-size:10px;letter-spacing:.08em;color:var(--silver);text-transform:uppercase;margin-top:3px}
+.room-row .pips{display:flex;gap:3px}
+.room-row .pips i{width:6px;height:14px;border-radius:2px;background:#1f3550}
+.room-row .pips i.on{background:var(--ice)}
+.room-row .when{font-size:10px;letter-spacing:.06em;color:var(--silver);text-align:right;line-height:1.35;text-transform:uppercase}
+.room-row.me .nm{color:var(--ice)}
 details.side summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.12em;text-transform:uppercase;min-height:24px}
 details.side summary::-webkit-details-marker{display:none}
 details.side summary::after{content:"+";font-size:20px;color:var(--ice)}
@@ -417,8 +428,8 @@ const t={
  save:"Save predictions",saving:"Saving…",retry:"Try again",
  ds:{clean:n=>[n?`${n} / 6 saved`:"Nothing entered","Blank is not 0–0"],incomplete:n=>[`${n} / 6 ready`,"Save now and finish the rest later"],ready:["All six ready","Golden Goal set"],
   partial:n=>[`${n} / 6 ready`,"Add the other score before saving"],saving:["Saving…","Keep this page open"],saved:["Saved","You can edit until the lock"],failed:["Not saved","Your edits are kept here. Try again."]},
- lastO:"02 / Last round",lastH:"The result.",lastNone:"Results appear once a round is complete.",
- tableO:"03 / Inner circle",tableH:"The table.",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
+ lastO:"03 / Last round",lastH:"The result.",lastNone:"Results appear once a round is complete.",
+ tableO:"04 / Inner circle",tableH:"The table.",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
  pos:"Pos",member:"Member",rd:"Rd",pts:"Pts",you:"You",lbSub:(e,w)=>`${e} exact · ${w} won`,
  rulesT:"How it works",rules:["Six fixtures every round. Predict the full-time score of each.","Exact score: 5 points. Right result (win, draw or loss): 2 points.","Golden Goal: the minute of the first goal across all six. It settles ties.","Picks lock at the first kick-off. Then everyone's picks are revealed."],
  joinO:"Invitation",joinH:["A private","season."],joinM:"Six fixtures every round. Call the scores, pick the Golden Goal minute and climb the table.",
@@ -430,7 +441,7 @@ const t={
  autoT:"Autopilot",autoM:"Opens each round from the real Premier League fixtures, locks it at the first kick-off, and settles results and the Golden Goal automatically.",
  autoOn:"On",autoOff:"Off",runNow:"Run now",lastRun:"Last action",callsToday:n=>`${n} of 80 data requests used today`,never:"Nothing yet",
  inviteT:"Invite code",inviteM:"Share this with friends so they can join. Make a new one to stop the old code working.",newCode:"New code",copied:"Copied",
- voidF:"Postponed · not scored",noIdT:"Sign in",noId:"",
+ voidF:"Postponed · not scored",roomO:"02 / The room",roomH:"Who's in.",roomIn:(a,b)=>`${a} / ${b} in`,notYet:"Not in yet",ggOk:"Golden Goal ✓",ggNo:"No Golden Goal",savedAt:"Saved",roomLocked:"Everyone's picks are on the Results page.",roomOpen:"Scores stay hidden until kick-off.",noIdT:"Sign in",noId:"",
  noRound:"No round is open",noRoundUser:"The next round opens soon.",noRoundAdmin:"Open the first round from Admin.",
  roundO:"Matchday archive",roundH:"Results.",chooseRound:"Choose round",yourPick:"Your pick",everyone:"Everyone's picks",hiddenT:"Picks stay hidden until the round locks",
  hiddenM:(a,b)=>`${a} of ${b} members have saved picks.`,nobody:"Nobody predicted this round.",player:"Member",gg:"GG",total:"Total",exact5:"Exact · 5",right2:"Right result · 2",
@@ -518,13 +529,14 @@ const errMsg=e=>{const m=String(e?.message||e||"");return /row-level security|vi
 async function q(p){try{const {data,error}=await p;if(error){toast(errMsg(error),true);return null}return data??true}catch(e){toast(t.err.gen,true);return null}}
 /* everything a member can see, in one go (the data is small); RLS decides what comes back */
 async function loadAll(){
-  const [lg,rd,pl,pk]=await Promise.all([sb.from("league").select("*").maybeSingle(),sb.from("rounds").select("*").order("n"),sb.from("players").select("*"),sb.from("picks").select("*")]);
+  const [lg,rd,pl,pk,st]=await Promise.all([sb.from("league").select("*").maybeSingle(),sb.from("rounds").select("*").order("n"),sb.from("players").select("*"),sb.from("picks").select("*"),sb.from("pick_status").select("*")]);   /* a missing pick_status table (update not run yet) is tolerated */
   if(lg.error||rd.error||pl.error||pk.error){S.loadFailed=true;S.ready=true;render();return}
   const L=lg.data;S.meta=L?{season:L.season,currentRound:L.current_round,auto:L.auto,status:L.status,statusAt:L.status_at,calls:L.calls_day===new Date().toISOString().slice(0,10)?L.calls_today:0}:null;
   S.rounds={};(rd.data||[]).forEach(r=>{(r.fixtures||[]).forEach(f=>{if(f.h&&!CLUBS[f.h])CLUBS[f.h]=f.hn||f.h;if(f.a&&!CLUBS[f.a])CLUBS[f.a]=f.an||f.a});
     S.rounds[r.id]={n:r.n,deadline:r.deadline,locked:r.locked,firstGoal:r.first_goal,fixtures:r.fixtures||[],settledAt:r.settled_at}});
   S.players={};(pl.data||[]).forEach(p=>S.players[p.id]={nick:p.nick,isAdmin:p.is_admin});
   S.picks={};(pk.data||[]).forEach(p=>{(S.picks[p.user_id]??={rounds:{}}).rounds[p.round_id]={s:p.s||{},gg:p.gg,at:p.at}});
+  S.status={};if(!st.error)(st.data||[]).forEach(x=>{(S.status[x.round_id]??={})[x.user_id]={filled:x.filled,gg:x.has_gg,at:x.last_at,saves:x.saves}});
   S.isAdmin=!!S.players[S.uid]?.isAdmin;
   const cr=current();S.counts={};if(cr&&!isLocked(cr)&&S.players[S.uid]){const {data}=await sb.rpc("pick_count",{r:cr.id});S.counts[cr.id]=data??0}
   if(S.isAdmin&&S.page==="admin"&&S.invite==null){const {data}=await sb.rpc("invite_code");S.invite=data}
@@ -560,6 +572,7 @@ function loadSample(){
   nm.forEach((n,i)=>{const u="s"+(i+1);S.players[u]={nick:n};S.profiles[u]={name:n,avatarUrl:""};
     S.picks[u]={rounds:{s1:{s:mk(g1[i]),gg:[12,20,8,15,30][i]},s2:{s:mk(g2[i]),gg:[6,12,4,30,9][i]}}}});
   S.picks.s1.rounds.s3={s:{f1:[2,0],f2:[1,1],f3:[0,0]},gg:null};
+  S.status={s3:{s1:{filled:3,gg:false,at:"2026-10-08T15:40:00Z"},s3:{filled:6,gg:true,at:"2026-10-08T16:12:00Z"},s4:{filled:6,gg:true,at:"2026-10-08T14:02:00Z"}}};
   S.ready=true;
 }
 
@@ -628,7 +641,7 @@ function home(){
   const cards=r.fixtures.map((f,i)=>card(f,i,d.s[f.id],locked)).join("");
   const fx=`<section id="fixtures" aria-labelledby="fxh"><div class="sec-head"><div><p class="over">${t.fixturesO}</p><h2 class="disp" id="fxh">${t.fixturesH}</h2></div><span class="counter" id="counter">${t.ready(ready)}</span></div>
     <div class="fixtures">${cards}</div></section>${ggCard(r,locked)}<div id="dock"></div>`;
-  return `${hero}<div class="grid"><div class="col">${fx}</div><div class="col">${lastRound()}${sideTable()}${rules()}</div></div>`;
+  return `${hero}<div class="grid"><div class="col">${fx}</div><div class="col">${whosIn(r)}${lastRound()}${sideTable()}${rules()}</div></div>`;
 }
 function heroTags(r,ready){const locked=isLocked(r);
   return `<span>${isSettled(r)?t.entries.done:locked?t.entries.locked:t.entries.open}</span><span class="sl">/</span><span>${t.ready(ready)}</span><span class="sl">/</span><span>${t.ggTag(S.draft?.gg)}</span>${locked?"":`<span class="sl opt">/</span><span class="opt">${t.locks(fShort(r.deadline),fTime(r.deadline))}</span>`}`}
@@ -692,6 +705,16 @@ function dock(){const el=$("#dock");if(!el)return;const st=dockState();if(!st){e
   const m=typeof t.ds[st.k]==="function"?t.ds[st.k](st.n):t.ds[st.k];const canSave=S.dirty&&st.k!=="partial"&&st.k!=="saving";
   el.innerHTML=`<div class="savebar ${st.k}"><div class="msg" role="status"><b>${m[0]}</b><span>${m[1]}</span></div>
     <button class="btn" type="button" data-act="save" ${canSave?"":"disabled"}>${st.k==="saving"?t.saving:st.k==="failed"?t.retry:t.save}<span class="arr">↗</span></button></div>`}
+function whosIn(r){const st=S.status?.[r.id]||{},ids=Object.keys(S.players),locked=isLocked(r);
+  const rows=ids.map(u=>({u,s:st[u]})).sort((a,b)=>(b.s?1:0)-(a.s?1:0)||(b.s&&a.s?new Date(b.s.at)-new Date(a.s.at):dname(a.u).localeCompare(dname(b.u))));
+  const n=rows.filter(x=>x.s).length;
+  return `<section class="side" aria-labelledby="roomh"><div class="sec-head"><div><p class="over">${t.roomO}</p><h2 class="disp" id="roomh" style="margin-top:9px">${t.roomH}</h2></div><span class="counter">${t.roomIn(n,ids.length)}</span></div>
+    <div class="room">${rows.map(({u,s})=>`<button class="room-row ${u===S.uid?"me":""}" type="button" data-player="${esc(u)}">${av(u)}
+      <span class="who"><span class="nm">${esc(dname(u))}${u===S.uid?`<span class="you">${t.you}</span>`:""}</span>
+        <small>${s?`${s.filled} / 6 · ${s.gg?t.ggOk:t.ggNo}`:t.notYet}</small></span>
+      <span class="pips" aria-label="${s?s.filled:0} of 6">${Array.from({length:6},(_,i)=>`<i class="${s&&i<s.filled?"on":""}"></i>`).join("")}</span>
+      <span class="when">${s?`${esc(fShort(s.at))}<br>${fTime(s.at)}`:"—"}</span></button>`).join("")}</div>
+    <p class="footnote">${locked?t.roomLocked:t.roomOpen}</p></section>`}
 function lastRound(){const set=roundList().filter(isSettled),r=set.at(-1);
   const head=`<div class="sec-head"><div><p class="over">${t.lastO}</p><h2 class="disp" style="margin-top:9px">${t.lastH}</h2></div>${r?`<span class="counter">${t.roundN(r.n)}</span>`:""}</div>`;
   if(!r)return `<section class="side field-map">${head}<p class="body" style="font-size:13px">${t.lastNone}</p></section>`;
@@ -726,10 +749,10 @@ function roundView(){
   let body;
   if(!locked) body=empty(t.hiddenT,t.hiddenM(S.counts?.[r.id]??sc.length,Object.keys(S.players).length),I.lock);
   else if(!sc.length) body=empty(t.everyone,t.nobody);
-  else body=`<div class="tablewrap"><table><thead><tr><th>${t.player}</th>${r.fixtures.map(f=>`<th><span style="display:inline-flex;gap:4px">${crest(f.h,22)||f.h}${crest(f.a,22)||f.a}</span><br><span style="color:var(--white);font-size:13px;letter-spacing:0">${f.res?f.res.join("–"):"·"}</span></th>`).join("")}<th>${t.gg}</th><th>${t.total}</th></tr></thead><tbody>
+  else body=`<div class="tablewrap"><table><thead><tr><th>${t.player}</th>${r.fixtures.map(f=>`<th><span style="display:inline-flex;gap:4px">${crest(f.h,22)||f.h}${crest(f.a,22)||f.a}</span><br><span style="color:var(--white);font-size:13px;letter-spacing:0">${f.res?f.res.join("–"):"·"}</span></th>`).join("")}<th>${t.gg}</th><th>${t.total}</th><th>${t.savedAt}</th></tr></thead><tbody>
     ${sc.map(x=>{const p=pickOf(x.uid,r.id);return `<tr><td><span style="display:flex;gap:9px;align-items:center">${av(x.uid)}<span style="text-transform:uppercase">${esc(dname(x.uid))}</span>${x.uid===S.uid?`<span class="you" style="margin:0">${t.you}</span>`:""}</span></td>
       ${r.fixtures.map(f=>{const v=p?.s?.[f.id];const pt=f.res&&v?ptsFor(v,f.res):null;return `<td><span class="pick ${pt==null?"":"p"+pt}">${v?`${v[0]}–${v[1]}`:"–"}</span></td>`}).join("")}
-      <td>${x.gg??"–"}′</td><td style="font-size:20px;color:var(--white)">${x.pts}</td></tr>`}).join("")}</tbody></table></div>
+      <td>${x.gg??"–"}′</td><td style="font-size:20px;color:var(--white)">${x.pts}</td><td class="sil" style="font-size:11px">${(()=>{const a=S.status?.[r.id]?.[x.uid]?.at||p?.at;return a?`${esc(fShort(a))} ${fTime(a)}`:"–"})()}</td></tr>`}).join("")}</tbody></table></div>
     <div class="legend"><span><i style="background:var(--mint)"></i>${t.exact5}</span><span><i style="border:1px solid var(--ice)"></i>${t.right2}</span>${r.firstGoal!=null?`<span>${t.ggWas(r.firstGoal)}</span>`:""}</div>`;
   return `<div class="stack-lg fade"><div class="page-head"><p class="over">${t.roundO}</p><h1 class="disp">${t.roundH}</h1>${seg}</div>
     <div class="stack"><div class="panel flush">${rows}</div><p class="meta" style="font-size:11px">${t.resultsLegend}</p></div>
