@@ -1,0 +1,14 @@
+{
+  "name": "Subar Sitta",
+  "short_name": "Subar Sitta",
+  "description": "The private game. Six fixtures. One inner circle.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070E1D",
+  "theme_color": "#070E1D",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
