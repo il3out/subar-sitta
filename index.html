@@ -403,7 +403,7 @@ const CLUBS={ARS:"Arsenal",AVL:"Aston Villa",BOU:"Bournemouth",BRE:"Brentford",B
  HUL:"Hull City",IPS:"Ipswich Town",LEE:"Leeds United",LEI:"Leicester City",LFC:"Liverpool",MCI:"Manchester City",MUN:"Manchester United",NEW:"Newcastle United",NFO:"Nottingham Forest",
  SOU:"Southampton",SUN:"Sunderland",TOT:"Tottenham Hotspur",WHU:"West Ham United",WOL:"Wolves"};
 /* crests bundled with the page (cut from the supplied sheet); an admin upload overrides any of them */
-const BUNDLED=new Set(["SUN","ARS","AVL","BOU","BRE","BRI","CFC","CRY","EVE","FUL","LEE","LEI","LFC","MCI","MUN","NEW","NFO","SOU","TOT","WHU","WOL"]);
+const BUNDLED=new Set(["SUN","COV","HUL","IPS","ARS","AVL","BOU","BRE","BRI","CFC","CRY","EVE","FUL","LEE","LEI","LFC","MCI","MUN","NEW","NFO","SOU","TOT","WHU","WOL"]);
 const PL_IDS={3:"ARS",7:"AVL",91:"BOU",94:"BRE",36:"BRI",8:"CFC",31:"CRY",11:"EVE",54:"FUL",40:"IPS",2:"LEE",14:"LFC",43:"MCI",1:"MUN",4:"NEW",17:"NFO",56:"SUN",6:"TOT"};
 function clubFromFile(fn){const f=fn.toLowerCase().replace(/\.[a-z0-9]+$/,"");const m=f.match(/(?:^|[^a-z0-9])t(\d{1,3})(?:[^0-9]|$)/)||f.match(/^t(\d{1,3})$/);if(m&&PL_IDS[+m[1]])return PL_IDS[+m[1]];
   const code=Object.keys(CLUBS).find(c=>new RegExp(`(^|[^a-z])${c.toLowerCase()}([^a-z]|$)`).test(f));if(code)return code;
