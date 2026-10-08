@@ -364,9 +364,9 @@ select{-webkit-appearance:none;appearance:none;background-image:linear-gradient(
 .sb-btn.bad{background:var(--coral);flex:1}
 .sb-btn:active{transform:translateY(1px)}
 @keyframes pop{0%{transform:scale(.9);opacity:0}60%{transform:scale(1.04)}100%{transform:none;opacity:1}}
-.float-watch{position:absolute;z-index:0;width:58px;left:46%;top:12px;pointer-events:none;filter:drop-shadow(0 14px 18px rgba(0,0,0,.5));animation:drift 16s ease-in-out infinite}
-.fw-sec{transform-origin:60px 85px;animation:sweep 60s linear infinite}
+.float-watch{position:absolute;z-index:0;width:78px;left:44%;top:6px;pointer-events:none;filter:drop-shadow(0 14px 18px rgba(0,0,0,.5));animation:drift 16s ease-in-out infinite}
+.fw-sec{transform-origin:60px 88px;animation:sweep 60s linear infinite}
 @keyframes drift{0%{transform:translate(0,0) rotate(-12deg)}25%{transform:translate(-26px,20px) rotate(4deg)}50%{transform:translate(8px,38px) rotate(14deg)}75%{transform:translate(22px,10px) rotate(-2deg)}100%{transform:translate(0,0) rotate(-12deg)}}
 @keyframes sweep{to{transform:rotate(360deg)}}
-@media (min-width:1024px){.md-title{font-size:106px}.float-watch{width:96px;left:52%;top:30px}}
+@media (min-width:1024px){.md-title{font-size:106px}.float-watch{width:124px;left:52%;top:24px}}
 @media (prefers-reduced-motion:reduce){.float-watch,.fw-sec,.banner span.in,.savebar .sb-msg{animation:none}}

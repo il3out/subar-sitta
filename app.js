@@ -222,20 +222,27 @@ function joinView(){
       <p class="err" id="autherr" role="alert"></p>
       <div class="row"><button class="btn" type="button" data-act="join">${t.join}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></div></form></section></div>`}
 
-/* floating watch: original Subar Sitta chronograph clip art */
-const WATCH=`<svg class="float-watch" viewBox="0 0 120 170" aria-hidden="true" focusable="false">
-<defs><linearGradient id="wc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F7FA"/><stop offset=".5" stop-color="#AEB9C6"/><stop offset="1" stop-color="#E3E9EF"/></linearGradient>
-<radialGradient id="wd" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#1B3462"/><stop offset="1" stop-color="#0A1830"/></radialGradient></defs>
-<path d="M42 4h36l4 34H38z" fill="#13254A"/><path d="M38 132h44l-4 34H42z" fill="#13254A"/>
-<path d="M45 8v26M75 8v26M45 136v26M75 136v26" stroke="#5C7BA8" stroke-width="1" stroke-dasharray="3 3"/>
-<rect x="100" y="78" width="9" height="14" rx="3" fill="url(#wc)"/>
-<circle cx="60" cy="85" r="48" fill="url(#wc)"/><circle cx="60" cy="85" r="40" fill="url(#wd)"/>
-<g stroke="#DCE4EC" stroke-linecap="round">${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6,r1=37,r2=i%3?33:30;return `<line x1="${(60+Math.sin(a)*r1).toFixed(1)}" y1="${(85-Math.cos(a)*r1).toFixed(1)}" x2="${(60+Math.sin(a)*r2).toFixed(1)}" y2="${(85-Math.cos(a)*r2).toFixed(1)}" stroke-width="${i%3?1.2:2.2}"/>`}).join("")}</g>
-<circle cx="45" cy="92" r="9" fill="#A9D9F2" opacity=".9"/><circle cx="75" cy="92" r="9" fill="#A9D9F2" opacity=".9"/>
-<line x1="45" y1="92" x2="45" y2="85" stroke="#0A1830" stroke-width="1.4"/><line x1="75" y1="92" x2="80" y2="95" stroke="#0A1830" stroke-width="1.4"/>
-<text x="60" y="72" text-anchor="middle" font-family="Sofia Sans Extra Condensed,sans-serif" font-weight="800" font-size="16" fill="#F8FAFD">6</text>
-<line x1="60" y1="85" x2="60" y2="58" stroke="#F8FAFD" stroke-width="2.4" stroke-linecap="round"/><line x1="60" y1="85" x2="78" y2="77" stroke="#F8FAFD" stroke-width="2.4" stroke-linecap="round"/>
-<line class="fw-sec" x1="60" y1="90" x2="60" y2="50" stroke="#9CDEC2" stroke-width="1"/><circle cx="60" cy="85" r="2.6" fill="#F8FAFD"/></svg>`;
+/* floating watch: original Subar Sitta street-art watch (rainbow case, graffiti dial) */
+const WATCH=`<svg class="float-watch" viewBox="0 0 120 176" aria-hidden="true" focusable="false">
+<defs><linearGradient id="wr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF3B3B"/><stop offset=".2" stop-color="#FFB13B"/><stop offset=".38" stop-color="#FFE23B"/><stop offset=".55" stop-color="#3BD18A"/><stop offset=".72" stop-color="#3B8BFF"/><stop offset=".88" stop-color="#9B4BFF"/><stop offset="1" stop-color="#FF3BA8"/></linearGradient>
+<linearGradient id="ws" x1="0" x2="1"><stop offset="0" stop-color="#1B1F2A"/><stop offset=".5" stop-color="#2E3646"/><stop offset="1" stop-color="#1B1F2A"/></linearGradient>
+<clipPath id="wdc"><circle cx="60" cy="88" r="38"/></clipPath></defs>
+<path d="M40 2h40l3 40H37z" fill="url(#ws)"/><path d="M37 134h46l-3 40H40z" fill="url(#ws)"/>
+<g fill="url(#wr)" opacity=".9"><rect x="44" y="8" width="32" height="3" rx="1.5"/><rect x="44" y="16" width="32" height="3" rx="1.5"/><rect x="44" y="157" width="32" height="3" rx="1.5"/><rect x="44" y="165" width="32" height="3" rx="1.5"/></g>
+<rect x="102" y="81" width="10" height="14" rx="4" fill="url(#wr)"/>
+<circle cx="60" cy="88" r="50" fill="url(#wr)"/><circle cx="60" cy="88" r="44" fill="#F5F1EA"/>
+<g clip-path="url(#wdc)"><circle cx="60" cy="88" r="38" fill="#FBF7F0"/>
+<path d="M22 70c14-6 24 6 40-4s30-6 40 2v12c-14-4-24 6-40 2s-28 4-40-2z" fill="#E4252B" opacity=".85"/>
+<path d="M24 104c10 2 18-8 30-2s26 8 44-2v8c-14 8-28 2-42 0s-22 6-32 2z" fill="#1E3A8A" opacity=".75"/>
+<circle cx="34" cy="62" r="3" fill="#E4252B"/><circle cx="88" cy="112" r="2.4" fill="#E4252B"/><circle cx="84" cy="60" r="2" fill="#D4A72C"/><circle cx="30" cy="114" r="2" fill="#1E3A8A"/>
+<path d="M78 66l2 10M82 64l1 7M40 108l-1 8" stroke="#E4252B" stroke-width="1.6" stroke-linecap="round"/></g>
+<text x="60" y="68" text-anchor="middle" font-family="Sofia Sans Extra Condensed,sans-serif" font-weight="800" font-size="15" fill="#1E3A8A">6</text>
+<circle cx="45" cy="92" r="9" fill="#FBF7F0" stroke="#1E3A8A" stroke-width="2.4"/><circle cx="75" cy="92" r="9" fill="#FBF7F0" stroke="#E4252B" stroke-width="2.4"/>
+<line x1="45" y1="92" x2="45" y2="86" stroke="#E4252B" stroke-width="1.3"/><line x1="75" y1="92" x2="80" y2="94" stroke="#E4252B" stroke-width="1.3"/>
+<g transform="translate(60 110)"><circle r="5" fill="#fff" stroke="#111" stroke-width=".8"/><path d="M0-2.2l2.1 1.5-.8 2.5h-2.6l-.8-2.5z" fill="#111"/></g>
+<g fill="#D4A72C">${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6;return i%3?`<circle cx="${(60+Math.sin(a)*35).toFixed(1)}" cy="${(88-Math.cos(a)*35).toFixed(1)}" r="1.3"/>`:""}).join("")}</g>
+<line x1="60" y1="88" x2="60" y2="60" stroke="#111" stroke-width="2.6" stroke-linecap="round"/><line x1="60" y1="88" x2="79" y2="80" stroke="#111" stroke-width="2.6" stroke-linecap="round"/>
+<line class="fw-sec" x1="60" y1="94" x2="60" y2="53" stroke="#E4252B" stroke-width="1"/><circle cx="60" cy="88" r="2.8" fill="#E4252B"/></svg>`;
 /* ===================== matchday ===================== */
 function home(){
   const r=current();
