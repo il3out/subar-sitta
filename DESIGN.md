@@ -37,3 +37,7 @@ Status never relies on colour alone: saved = royal + check + "Saved"; failed = n
 
 ## Components
 Mast (wordmark + club label, pill nav), floating dock (mobile/tablet), hero countdown, match ticket with score drums, Golden Goal minute rail, save bar (clean/pending/saving/saved/all/half/failed), rail cards, standings rows, podium, results boards with 1/X/2 split, member pass, door (onboarding, sign in, join, recovery), admin panels, toast.
+
+## Dark theme
+Follows the device setting until a member taps the half-circle button in the header; the choice is remembered on that device.
+Roles: bg #050E24, well #0A1A3D, card #0C2050, raised #163170, tint #13306B, stub #081738; text #EEF5FB / #BCCDE8 / #93A8CB; brand text #C7DDFF; selected fills cobalt #2563EB; heroes royal #0E46A8 with pitch lines; accent links #8CBBFF; failed-save bar inverts to light #DCE8F8 with navy text. Ivory label tabs stay ivory on royal in both themes.

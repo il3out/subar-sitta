@@ -50,11 +50,18 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  err:{perm:"You don't have permission for that change.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
  private:"Private league. Invitation only.",
  allSaved:tm=>`All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"Six scores saved. Now the Golden Goal.",saveNow:"Save now",cheer:"All six saved. Good luck.",
- units:{d:"d",h:"h",m:"m",s:"s"},yourName:"Your membership",langSwitch:"Switch to Arabic",
+ units:{d:"d",h:"h",m:"m",s:"s"},toDark:"Switch to dark mode",toLight:"Switch to light mode",yourName:"Your membership",langSwitch:"Switch to Arabic",
  hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"Who's in",yourSix:"Your six",matchday:"Matchday",viewAll:"View all",winnerSub:p=>`Round winner with ${p} points`,
  onb:[["Six matches. One perfect six.","Predict the full-time score of six Premier League fixtures every round."],["Name the minute.","Pick the minute of the first goal. The Golden Goal settles every tie."],["Climb the table.","Exact scores are worth five. Bragging rights last all week. Town House 10 only."]],
  skip:"Skip",next:"Next",getStarted:"Get started"}};
 const LANG="en";
+/* theme: follows the device until the member picks one in the header */
+const DARKQ=matchMedia("(prefers-color-scheme: dark)");
+const isDark=()=>{const v=document.documentElement.dataset.theme;return v?v==="dark":DARKQ.matches};
+function applyTheme(v){const h=document.documentElement;if(v)h.dataset.theme=v;else delete h.dataset.theme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content",isDark()?"#050E24":"#0B3D91")}
+try{applyTheme(localStorage.getItem("ss-theme"))}catch(_){applyTheme(null)}
+DARKQ.addEventListener?.("change",()=>{applyTheme(document.documentElement.dataset.theme);if(S.ready)shell()});
 let t=T[LANG];
 function applyLang(){t=T[LANG];const h=document.documentElement;h.lang=t.lang;h.dir=t.dir;document.title="SUBAR 6"}
 
@@ -74,6 +81,7 @@ const I={
  globe:sv('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/><path d="M4.6 7.5h14.8M4.6 16.5h14.8"/>'),
  ticket:sv('<path d="M3 8a2 2 0 0 0 0 4v0a2 2 0 0 1 0 4v1.5A1.5 1.5 0 0 0 4.5 19h15a1.5 1.5 0 0 0 1.5-1.5V16a2 2 0 0 1 0-4 2 2 0 0 0 0-4V6.5A1.5 1.5 0 0 0 19.5 5h-15A1.5 1.5 0 0 0 3 6.5z"/><path d="M15 5v14" stroke-dasharray="2 2.4"/>'),
  clock:sv('<circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M10 2.5h4M18 6.5l1.5-1.5"/>'),
+  theme:sv('<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor"/>'),
  err:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.2v.3"/>')};
 
 /* ===================== state ===================== */
@@ -205,6 +213,7 @@ function shell(){
   $("#mast").innerHTML=`<div class="wrap mast-in"><button class="brand" type="button" data-go="home" aria-label="${esc(t.brand)}, ${esc(t.nav.home)}">${WM}<small class="bw-club">${t.club}</small></button>
     <nav class="mnav" aria-label="Sections">${pages.map(p=>`<button type="button" data-go="${p}" ${cur(p)}>${t.nav[p]}</button>`).join("")}</nav>
     <div class="mast-r">${S.demo?`<span class="flag">${t.sample}</span>`:""}
+      <button class="circ" type="button" data-act="theme" aria-label="${isDark()?t.toLight:t.toDark}">${I.theme}</button>
       ${inLeague&&S.isAdmin?`<button class="circ adm-ico" type="button" data-go="admin" aria-label="${t.nav.admin}" ${cur("admin")}>${I.admin}</button>`:""}
       ${inLeague?`<button class="me" type="button" data-go="player" data-self aria-label="${t.yourName}">${esc(initials(S.uid))}</button>`:""}</div></div>`;
   const tb=$("#tabbar");tb.hidden=!inLeague;
@@ -530,6 +539,8 @@ document.addEventListener("click",async e=>{
   const authErr=m=>{const el=$("#autherr");if(el)el.textContent=m};
   if(a==="next"){S.onb=(S.onb||0)+1;const sl=$(".slides");if(sl&&!RM.matches){sl.style.setProperty("--s",S.onb);sl.querySelectorAll(".slide").forEach((x,i)=>x.setAttribute("aria-hidden",i!==S.onb));$$(".dots i").forEach((x,i)=>x.classList.toggle("on",i===S.onb));if(S.onb>=t.onb.length-1){act.dataset.act="start";act.textContent=t.getStarted}}else render();return}
   if(a==="start"||a==="skip"){S.onbDone=true;try{localStorage.setItem("ss-onb","1")}catch(_){}if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(render)}else render();return}
+  if(a==="theme"){const v=isDark()?"light":"dark";try{localStorage.setItem("ss-theme",v)}catch(_){}
+    const run=()=>{applyTheme(v);shell()};if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(run)}else run();return}
   if(a==="retrysave"){S.saveState="dirty";S.dirty=true;save();return}
   if(a==="savenow"){if(S.dirty)flushSave();else toast(t.save.saved(S.savedAt?fTime(S.savedAt):""));return}
   if(a==="join"||a==="signup"){const code=($("#code").value||"").trim(),nick=($("#nick").value||"").trim().slice(0,24);
