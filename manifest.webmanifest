@@ -4,8 +4,8 @@
   "description": "Town House 10. A private Premier League prediction league.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#09130E",
-  "theme_color": "#09130E",
+  "background_color": "#F4F5F3",
+  "theme_color": "#F4F5F3",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
