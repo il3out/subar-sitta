@@ -1,4 +1,4 @@
-/* Subar Sitta v4. Porcelain. Data, auth, scoring and the autopilot contract are unchanged; identity, views and interaction are new. */
+/* SUBAR 6 (v6). Blue and white brand system. Data, auth, scoring and the autopilot contract are unchanged; identity, views and interaction are new. */
 "use strict";
 
 /* ===================== clubs ===================== */
@@ -6,17 +6,14 @@ const CLUBS={ARS:"Arsenal",AVL:"Aston Villa",BOU:"Bournemouth",BRE:"Brentford",B
  HUL:"Hull City",IPS:"Ipswich Town",LEE:"Leeds United",LEI:"Leicester City",LFC:"Liverpool",MCI:"Manchester City",MUN:"Manchester United",NEW:"Newcastle United",NFO:"Nottingham Forest",
  SOU:"Southampton",SUN:"Sunderland",TOT:"Tottenham Hotspur",WHU:"West Ham United",WOL:"Wolves"};
 const SHORT={MCI:"Man City",MUN:"Man United",NEW:"Newcastle",NFO:"Nott'm Forest",TOT:"Tottenham",LEE:"Leeds",IPS:"Ipswich",COV:"Coventry",HUL:"Hull",LEI:"Leicester",WHU:"West Ham"};
-const CLUBS_AR={ARS:"آرسنال",AVL:"أستون فيلا",BOU:"بورنموث",BRE:"برينتفورد",BRI:"برايتون",CFC:"تشيلسي",COV:"كوفنتري",CRY:"كريستال بالاس",EVE:"إيفرتون",FUL:"فولهام",
- HUL:"هال سيتي",IPS:"إيبسويتش",LEE:"ليدز",LEI:"ليستر",LFC:"ليفربول",MCI:"مان سيتي",MUN:"مان يونايتد",NEW:"نيوكاسل",NFO:"نوتنغهام فورست",
- SOU:"ساوثهامبتون",SUN:"سندرلاند",TOT:"توتنهام",WHU:"وست هام",WOL:"وولفرهامبتون"};
 const KIT={ARS:"#EF0107",AVL:"#95BFE5",BOU:"#DA291C",BRE:"#E30613",BRI:"#0057B8",CFC:"#034694",COV:"#59CBE8",CRY:"#1B458F",EVE:"#274488",FUL:"#9AA0A6",
  HUL:"#F5A12D",IPS:"#3A64A3",LEE:"#E8B800",LEI:"#003090",LFC:"#C8102E",MCI:"#6CABDD",MUN:"#DA291C",NEW:"#5F6368",NFO:"#DD0000",SOU:"#D71920",SUN:"#EB172B",TOT:"#132257",WHU:"#7A263A",WOL:"#FDB913"};
 const BUNDLED=new Set(Object.keys(CLUBS));
 
-/* ===================== copy: English and Arabic, written for each language ===================== */
+/* ===================== copy (English only) ===================== */
 const T={
 en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
- brand:"Subar Sitta",club:"Town House 10",members:"Members only",
+ brand:"SUBAR 6",club:"Town House 10",members:"Members only",
  nav:{home:"Matchday",round:"Results",table:"Table",player:"Member",admin:"Admin"},
  sample:"Sample",loading:"Loading the league",
  mw:"Matchweek",round:n=>`Round ${n}`,
@@ -34,7 +31,7 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  behind:(p,n)=>p===0?`Level with ${n}`:`${p} behind ${n}`,leads:p=>p===0?"Level at the top":`Leads by ${p}`,you:"you",lastRd:p=>`${p} last round`,
  rulesH:"How it works",rules:["Six fixtures every round. Predict the full-time score of each.","An exact score is worth 5 points. The right result is worth 2.","The Golden Goal is the minute of the first goal across all six. It settles ties.","Picks lock at the first kick-off. Then everyone's picks are revealed."],
  joinH:"A private season.",joinM:"Six fixtures every round. Call the scores, pick the minute of the first goal, and climb the table.",
- nick:"Your name in the league",nickPh:"For example Bu Salem",nickErr:"Use at least two characters.",join:"Join the league",joined:"Welcome to Subar Sitta",
+ nick:"Your name in the league",nickPh:"For example Bu Salem",nickErr:"Use at least two characters.",join:"Join the league",joined:"Welcome to SUBAR 6",
  signInT:"Sign in",joinT:"Join",email:"Email",password:"Password",pwHint:"At least 8 characters",code:"Invite code",codeHint:"From the member who invited you",
  signIn:"Sign in",signUp:"Create account and join",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"Password saved",
  confirmEmail:"Check your email to confirm your account, then sign in.",signOut:"Sign out",authErr:"Email or password is not right.",
@@ -52,66 +49,32 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  needSix:"Fill all six fixtures: two different teams and a kick-off for each.",dup:"A team appears in more than one fixture.",curChanged:"Current round updated",choosePh:"Choose",lockedS:"Locked",openS:"Open",
  err:{perm:"You don't have permission for that change.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
  private:"Private league. Invitation only.",
- allSaved:tm=>`All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"Six scores saved. Now the Golden Goal.",saveNow:"Save now",cheer:"✅ All six saved. Good luck 🍀",
+ allSaved:tm=>`All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"Six scores saved. Now the Golden Goal.",saveNow:"Save now",cheer:"All six saved. Good luck.",
  units:{d:"d",h:"h",m:"m",s:"s"},yourName:"Your membership",langSwitch:"Switch to Arabic",
  hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"Who's in",yourSix:"Your six",matchday:"Matchday",viewAll:"View all",winnerSub:p=>`Round winner with ${p} points`,
  onb:[["Six matches. One perfect six.","Predict the full-time score of six Premier League fixtures every round."],["Name the minute.","Pick the minute of the first goal. The Golden Goal settles every tie."],["Climb the table.","Exact scores are worth five. Bragging rights last all week. Town House 10 only."]],
- skip:"Skip",next:"Next",getStarted:"Get started"},
-ar:{dir:"rtl",lang:"ar",other:"EN",otherLabel:"English",
- brand:"سوبر ستة",club:"تاون هاوس ١٠",members:"للأعضاء فقط",
- nav:{home:"الجولة",round:"النتائج",table:"الترتيب",player:"العضوية",admin:"الإدارة"},
- sample:"تجريبي",loading:"جاري تحميل الدوري",
- mw:"الجولة",round:n=>`الجولة ${n}`,
- locksIn:"تُقفل بعد",lockedAt:(d,tm)=>`أُقفلت ${d}، ${tm}`,locksAt:(d,tm)=>`${d}، ${tm} بتوقيت الكويت`,
- of6:n=>`${n} من ٦`,gg:m=>m==null?"الهدف الذهبي لم يُحدد":`الهدف الذهبي ${m}′`,
- save:{clean:"",pending:"جاري الحفظ",saving:"جاري الحفظ",saved:tm=>`حُفظت ${tm}`,failed:"لم تُحفظ. اضغط للمحاولة",half:"أكمل النتيجة الأخرى"},
- st:{todo:"",half:"أكمل النتيجة الأخرى",edited:"جاري الحفظ",saving:"جاري الحفظ",saved:"حُفظت",failed:"لم تُحفظ",locked:"مُقفلة",none:"بلا توقع"},
- final:"نهاية المباراة",awaiting:"بانتظار النتيجة",voidF:"مؤجلة، لا تُحتسب",
- goalsOf:c=>`أهداف ${c}`,swipe:"اسحب الرقم أو اضغط عليه",
- ggH:"الهدف الذهبي",ggP:"دقيقة أول هدف في المباريات الست. يحسم التعادل في النقاط.",ggSet:"اسحب إلى الدقيقة",ggWas:m=>`أول هدف: الدقيقة ${m}`,ggUnset:"لم يُحدد",
- roomH:"من سجّل",roomOpen:"التوقعات مخفية حتى انطلاق المباريات.",roomLocked:"توقعات الجميع في صفحة النتائج.",notYet:"لم يسجّل بعد",ggShort:"ذهبي",
- lastH:"الجولة الماضية",lastNone:"تظهر النتائج هنا بعد اكتمال الجولة.",yourPick:"توقعك",winner:(n,who,p)=>`فاز ${who} بالجولة ${n} بـ ${p} نقطة`,
- tableH:"الترتيب",fullTable:"الترتيب الكامل",noTable:"يبدأ الترتيب بعد اكتمال الجولة الأولى.",
- after:n=>n===1?"بعد جولة واحدة":`بعد ${n} جولات`,exactWon:(e,w)=>`${e} صحيحة، فاز بـ ${w}`,
- behind:(p,n)=>p===0?`متعادل مع ${n}`:`خلف ${n} بـ ${p}`,leads:p=>p===0?"تعادل في الصدارة":`متصدر بفارق ${p}`,you:"أنت",lastRd:p=>`${p} في الجولة الماضية`,
- rulesH:"طريقة اللعب",rules:["ست مباريات في كل جولة. توقّع النتيجة النهائية لكل مباراة.","النتيجة الصحيحة بخمس نقاط، والنتيجة الصحيحة للفائز أو التعادل بنقطتين.","الهدف الذهبي هو دقيقة أول هدف في المباريات الست، ويحسم التعادل.","تُقفل التوقعات مع أول صافرة، ثم تُكشف توقعات الجميع."],
- joinH:"موسم خاص.",joinM:"ست مباريات في كل جولة. توقّع النتائج، واختر دقيقة أول هدف، واصعد في الترتيب.",
- nick:"اسمك في الدوري",nickPh:"مثلاً بو سالم",nickErr:"استخدم حرفين على الأقل.",join:"انضم إلى الدوري",joined:"أهلاً بك في سوبر ستة",
- signInT:"تسجيل الدخول",joinT:"انضمام",email:"البريد الإلكتروني",password:"كلمة المرور",pwHint:"٨ أحرف على الأقل",code:"رمز الدعوة",codeHint:"من العضو الذي دعاك",
- signIn:"تسجيل الدخول",signUp:"أنشئ حسابك وانضم",forgot:"نسيت كلمة المرور",resetSent:"تحقق من بريدك لرابط إعادة التعيين.",newPw:"كلمة مرور جديدة",setPw:"احفظ كلمة المرور",pwSaved:"حُفظت كلمة المرور",
- confirmEmail:"تحقق من بريدك لتأكيد الحساب، ثم سجّل الدخول.",signOut:"تسجيل الخروج",authErr:"البريد أو كلمة المرور غير صحيحة.",
- badCode:"رمز الدعوة غير صحيح.",weakPw:"استخدم ٨ أحرف على الأقل.",badEmail:"أدخل بريداً صحيحاً.",locked:"التوقعات مُقفلة لهذه الجولة.",
- noRound:"لا توجد جولة مفتوحة",noRoundUser:"تُفتح الجولة القادمة تلقائياً عند نشر المباريات.",noRoundAdmin:"يفتح الطيار الآلي الجولات تلقائياً، ويمكنك فتح جولة من الإدارة.",
- resultsH:"النتائج",everyone:"توقعات الجميع",hiddenH:"مخفية حتى انطلاق المباريات",hiddenM:(a,b)=>`حفظ ${a} من ${b} أعضاء توقعاتهم حتى الآن.`,nobody:"لم يتوقع أحد هذه الجولة.",
- member:"العضو",total:"النقاط",savedAt:"الحفظ",exact5:"نتيجة صحيحة، ٥",right2:"فائز صحيح، ٢",live:"مباشر",ft:"انتهت",draw:"تعادل",
- no:n=>`رقم ${String(n).padStart(3,"0")}`,since:"عضو منذ",position:"المركز",points:"النقاط",avg:"لكل جولة",exactN:"نتائج صحيحة",rightN:"فائز صحيح",wonN:"جولات فاز بها",
- choose:"العضو",h2h:"المواجهة",vs:"ضد",h2hNeed:"تبدأ المواجهة عند انضمام عضو آخر.",h2hAfter:"تبدأ المواجهة بعد اكتمال الجولة الأولى.",wins:"فوز",draws:"تعادل",
- adminH:"الإدارة",adminOnly:"هذه الصفحة للمشرفين فقط.",adminSub:n=>`${n} أعضاء في الدوري.`,current:"الجولة الحالية",
- autoH:"الطيار الآلي",autoM:"يفتح كل جولة من مباريات الدوري الإنجليزي الحقيقية، ويقفلها مع أول صافرة، ويحسب النتائج والهدف الذهبي.",autoOn:"تشغيل",autoOff:"إيقاف",runNow:"شغّل الآن",lastRun:"آخر إجراء",callsToday:n=>`${n} من ٨٠ طلب بيانات اليوم`,never:"لا شيء بعد",
- inviteH:"رمز الدعوة",inviteM:"شاركه مع أصدقائك لينضموا. الرمز الجديد يلغي القديم.",newCode:"رمز جديد",copy:"نسخ",copied:"نُسخ",
- resultsT:n=>`نتائج الجولة ${n}`,fg:"دقيقة أول هدف (٩٠ إن لم تُسجل أهداف)",saveResults:"احفظ النتائج",resultsSaved:"حُفظت النتائج",lockNow:"أقفل التوقعات الآن",reopen:"أعد فتح التوقعات",lockedMsg:"أُقفلت التوقعات",reopenedMsg:"أُعيد فتح التوقعات",resNote:"تُحتسب الجولة في الترتيب بعد اكتمال النتائج الست.",
- newT:n=>`افتح الجولة ${n} يدوياً`,homeN:i=>`المضيف ${i}`,awayL:"الضيف",ko:"موعد المباراة (بتوقيت الكويت)",deadline:"آخر موعد للتوقع (فارغ يعني أول صافرة)",openN:n=>`افتح الجولة ${n}`,opened:n=>`فُتحت الجولة ${n}`,
- needSix:"أكمل المباريات الست: فريقان مختلفان وموعد لكل مباراة.",dup:"فريق مكرر في أكثر من مباراة.",curChanged:"تم تحديث الجولة الحالية",choosePh:"اختر",lockedS:"مُقفلة",openS:"مفتوحة",
- err:{perm:"لا تملك صلاحية هذا التغيير.",gen:"تعذر الحفظ. تحقق من الاتصال وحاول مجدداً.",load:"تعذر تحميل الدوري. تحقق من الاتصال."},retry:"حاول مجدداً",
- private:"دوري خاص. بالدعوة فقط.",
- allSaved:tm=>`حُفظت التوقعات الست${tm?`، ${tm}`:""}`,allSavedNoGG:"حُفظت النتائج الست. بقي الهدف الذهبي.",saveNow:"احفظ الآن",cheer:"✅ حُفظت التوقعات الست. بالتوفيق 🍀",
- units:{d:"ي",h:"س",m:"د",s:"ث"},yourName:"عضويتك",langSwitch:"التبديل إلى الإنجليزية",
- hi:{m:"صباح الخير",a:"مساء الخير",e:"مساء الخير"},whoIn:"من سجّل",yourSix:"توقعاتك الست",matchday:"الجولة",viewAll:"عرض الكل",winnerSub:p=>`بطل الجولة بـ ${p} نقطة`,
- onb:[["ست مباريات. ستة مثالية.","توقّع النتيجة النهائية لست مباريات من الدوري الإنجليزي في كل جولة."],["حدد الدقيقة.","اختر دقيقة أول هدف. الهدف الذهبي يحسم أي تعادل."],["اصعد في الترتيب.","النتيجة الصحيحة بخمس نقاط، والتفاخر يستمر طوال الأسبوع. لأعضاء تاون هاوس ١٠ فقط."]],
- skip:"تخطي",next:"التالي",getStarted:"ابدأ"}};
-let LANG=(()=>{try{return localStorage.getItem("ss-lang")==="ar"?"ar":"en"}catch(_){return"en"}})();
+ skip:"Skip",next:"Next",getStarted:"Get started"}};
+const LANG="en";
 let t=T[LANG];
-function applyLang(){t=T[LANG];const h=document.documentElement;h.lang=t.lang;h.dir=t.dir;document.title=LANG==="ar"?"سوبر ستة":"Subar Sitta"}
+function applyLang(){t=T[LANG];const h=document.documentElement;h.lang=t.lang;h.dir=t.dir;document.title="SUBAR 6"}
 
-/* ===================== icons: one 1.5 stroke, round caps ===================== */
-const sv=b=>`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${b}</g></svg>`;
+/* ===================== icons: SUBAR 6 library, 24 grid, 2 stroke ===================== */
+const sv=b=>`<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${b}</g></svg>`;
 const I={
- home:sv('<rect x="4" y="3.5" width="16" height="17" rx="4"/><circle cx="9.5" cy="8" r=".9" fill="currentColor"/><circle cx="14.5" cy="8" r=".9" fill="currentColor"/><circle cx="9.5" cy="12" r=".9" fill="currentColor"/><circle cx="14.5" cy="12" r=".9" fill="currentColor"/><circle cx="9.5" cy="16" r=".9" fill="currentColor"/><circle cx="14.5" cy="16" r=".9" fill="currentColor"/>'),
- round:sv('<path d="M4 12h3l2-5 3 10 2-5h6"/>'),
- table:sv('<path d="M5 7h14M5 12h10M5 17h6"/>'),
- player:sv('<circle cx="12" cy="9" r="3.5"/><path d="M5.5 19.5c1.3-3 3.7-4.5 6.5-4.5s5.2 1.5 6.5 4.5"/>'),
- admin:sv('<path d="M6 4v4m0 4v8M12 4v10m0 4v2M18 4v2m0 4v10"/><path d="M4 10h4M10 16h4M16 8h4"/>'),
- check:sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>')};
+ home:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7.6l3.6 2.6-1.4 4.2H9.8L8.4 10.2z"/><path d="M12 3v4.6M15.6 10.2l4.6-1.4M14.2 14.4l2.8 3.8M9.8 14.4L7 18.2M8.4 10.2L3.8 8.8"/>'),
+ round:sv('<rect x="3" y="5" width="18" height="12" rx="2.5"/><path d="M12 5v12M7.5 9v4M15 9h2.5v2h-2.5v2h2.5M8 21h8"/>'),
+ table:sv('<path d="M4 20h16"/><rect x="5" y="11" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="15" y="14" width="4" height="6" rx="1"/>'),
+ player:sv('<circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.4-3.6 4.3-5.5 7.5-5.5s6.1 1.9 7.5 5.5"/>'),
+ admin:sv('<path d="M6 4v3m0 4v9M12 4v9m0 4v3M18 4v1m0 4v11"/><path d="M4 9h4M10 15h4M16 7h4"/>'),
+ check:sv('<path d="M4.5 12.5l5 5L19.5 7"/>'),
+ pennant:sv('<path d="M5 3v18"/><path d="M5 4.5l14 4.5-14 4.5z"/>'),
+ gg:sv('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><path d="M12 3v2M21 12h-2"/>'),
+ lock:sv('<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><path d="M12 14.5v2"/>'),
+ live:sv('<circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/>'),
+ globe:sv('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/><path d="M4.6 7.5h14.8M4.6 16.5h14.8"/>'),
+ ticket:sv('<path d="M3 8a2 2 0 0 0 0 4v0a2 2 0 0 1 0 4v1.5A1.5 1.5 0 0 0 4.5 19h15a1.5 1.5 0 0 0 1.5-1.5V16a2 2 0 0 1 0-4 2 2 0 0 0 0-4V6.5A1.5 1.5 0 0 0 19.5 5h-15A1.5 1.5 0 0 0 3 6.5z"/><path d="M15 5v14" stroke-dasharray="2 2.4"/>'),
+ clock:sv('<circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M10 2.5h4M18 6.5l1.5-1.5"/>'),
+ err:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.2v.3"/>')};
 
 /* ===================== state ===================== */
 const S={uid:null,isAdmin:false,demo:false,ready:false,loadFailed:false,
@@ -125,14 +88,14 @@ const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const KW={timeZone:"Asia/Kuwait"};
-const LOC=()=>LANG==="ar"?"ar-KW-u-nu-latn":"en-GB";
+const LOC=()=>"en-GB";
 const fDay=iso=>new Date(iso).toLocaleDateString(LOC(),{...KW,weekday:"short",day:"numeric",month:"short"}).replace(",","");
 const fLong=iso=>new Date(iso).toLocaleDateString(LOC(),{...KW,weekday:"long",day:"numeric",month:"long"}).replace(",","");
 const fWd=iso=>new Date(iso).toLocaleDateString(LOC(),{...KW,weekday:"short"});
 const fTime=iso=>new Date(iso).toLocaleTimeString("en-GB",{...KW,hour:"2-digit",minute:"2-digit"});
 const pad=(n,l=2)=>String(n).padStart(l,"0");
-const name=c=>LANG==="ar"?(CLUBS_AR[c]||CLUBS[c]||c):(CLUBS[c]||c);
-const sname=c=>LANG==="ar"?(CLUBS_AR[c]||CLUBS[c]||c):(SHORT[c]||CLUBS[c]||c);
+const name=c=>CLUBS[c]||c;
+const sname=c=>SHORT[c]||CLUBS[c]||c;
 const sgn=(h,a)=>Math.sign(h-a);
 const ptsFor=(p,r)=>!Array.isArray(p)||!Array.isArray(r)?0:(p[0]===r[0]&&p[1]===r[1]?5:(sgn(p[0],p[1])===sgn(r[0],r[1])?2:0));
 const RM=matchMedia("(prefers-reduced-motion: reduce)");
@@ -226,14 +189,9 @@ function loadSample(){
 }
 
 
-/* ===================== the mark: a 6 whose bowl holds a match ball's patch ===================== */
-let markN=0;
-const MARK6=(cls="",size)=>{const g="m6g"+(++markN);return `<svg class="mark6 ${cls}" viewBox="0 0 64 64" ${size?`width="${size}" height="${size}"`:""} aria-hidden="true" focusable="false">
-  <defs><linearGradient id="${g}" x1="14" y1="8" x2="50" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#C8F55A"/><stop offset="1" stop-color="#25D9B4"/></linearGradient></defs>
-  <rect class="m6-tile" x="1" y="1" width="62" height="62" rx="19"/>
-  <circle cx="32" cy="40" r="13" fill="none" stroke="url(#${g})" stroke-width="7.5"/>
-  <path d="M19 40C19 24 26.5 14.5 41.5 12" fill="none" stroke="url(#${g})" stroke-width="7.5" stroke-linecap="round"/>
-  <path d="M32 34.6l5.1 3.7-1.95 6h-6.3l-1.95-6z" fill="url(#${g})"/></svg>`};
+/* ===================== the mark: the SUBAR 6 monogram ===================== */
+const MARK6=(cls="",size)=>`<svg class="mark6 ${cls}" viewBox="250 130 500 740" ${size?`height="${size}"`:""} aria-hidden="true" focusable="false"><g fill="currentColor"><path fill-rule="evenodd" d="M303.6 643.6A196.4 196.4 0 1 0 696.4 643.6A196.4 196.4 0 1 0 303.6 643.6Z M407.8 643.6A92.2 92.2 0 1 1 592.2 643.6A92.2 92.2 0 1 1 407.8 643.6Z"/><path d="M303.6 643.6C303.6 401.8 424.4 205.3 660.2 160.0L685.0 265.8C497.0 302.0 400.3 456.2 400.3 643.6Z"/></g></svg>`;
+const WM=`<svg class="wm" viewBox="0 0 920 450" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M67.63636363636363 452.72727272727275Q34.77272727272727 452.72727272727275 20.25 432.27272727272725Q5.727272727272727 411.8181818181818 5.727272727272727 367.15909090909093V337.8409090909091H53.18181818181818V375.3409090909091Q53.18181818181818 385.7386363636364 55.70454545454545 391.6193181818182Q58.22727272727272 397.5 64.5 397.5Q71.04545454545455 397.5 73.56818181818181 392.72727272727275Q76.09090909090908 387.95454545454544 76.09090909090908 377.04545454545456Q76.09090909090908 363.2386363636364 73.9090909090909 353.9488636363636Q71.72727272727272 344.65909090909093 66.3409090909091 336.22159090909093Q60.95454545454545 327.78409090909093 51.40909090909091 316.5340909090909L29.86363636363636 290.9659090909091Q5.727272727272727 262.5 5.727272727272727 225.85227272727275Q5.727272727272727 187.5 19.977272727272727 167.38636363636365Q34.22727272727273 147.2727272727273 61.22727272727272 147.2727272727273Q94.22727272727272 147.2727272727273 108.06818181818181 169.26136363636365Q121.9090909090909 191.25 121.9090909090909 236.07954545454547H73.09090909090908V215.45454545454547Q73.09090909090908 209.31818181818184 70.29545454545453 205.90909090909093Q67.5 202.50000000000003 62.72727272727272 202.50000000000003Q56.99999999999999 202.50000000000003 54.340909090909086 206.50568181818184Q51.68181818181818 210.51136363636365 51.68181818181818 216.81818181818184Q51.68181818181818 223.12500000000003 54.40909090909091 230.4545454545455Q57.13636363636363 237.78409090909093 65.18181818181817 247.32954545454547L92.86363636363636 280.56818181818187Q101.18181818181817 290.4545454545455 108.13636363636363 301.4488636363637Q115.09090909090908 312.44318181818187 119.31818181818181 327.0170454545455Q123.54545454545453 341.5909090909091 123.54545454545453 362.5568181818182Q123.54545454545453 404.82954545454544 111.06818181818181 428.7784090909091Q98.59090909090908 452.72727272727275 67.63636363636363 452.72727272727275Z M191.5090909090909 452.72727272727275Q161.5090909090909 452.72727272727275 147.3272727272727 431.6761363636364Q133.14545454545453 410.625 133.14545454545453 369.7159090909091V150.0H179.78181818181815V367.3295454545455Q179.78181818181815 374.82954545454544 180.46363636363634 381.7329545454545Q181.14545454545453 388.6363636363636 183.59999999999997 393.0681818181818Q186.05454545454543 397.5 191.5090909090909 397.5Q197.09999999999997 397.5 199.55454545454543 393.1534090909091Q202.0090909090909 388.8068181818182 202.62272727272727 381.8181818181818Q203.23636363636362 374.82954545454544 203.23636363636362 367.3295454545455V150.0H249.87272727272725V369.7159090909091Q249.87272727272725 410.625 235.6909090909091 431.6761363636364Q221.5090909090909 452.72727272727275 191.5090909090909 452.72727272727275Z M264.79090909090905 450.0V150.0H329.8363636363636Q356.0181818181818 150.0 367.95 165.9375Q379.8818181818182 181.875 379.8818181818182 218.52272727272728V231.64772727272728Q379.8818181818182 252.78409090909093 373.8136363636363 265.90909090909093Q367.7454545454545 279.03409090909093 355.3363636363636 283.125Q371.5636363636363 288.2386363636364 377.08636363636356 307.0738636363636Q382.60909090909087 325.90909090909093 382.60909090909087 353.0113636363636Q382.60909090909087 382.15909090909093 378.24545454545455 403.97727272727275Q373.8818181818182 425.79545454545456 362.4272727272727 437.89772727272725Q350.97272727272724 450.0 329.8363636363636 450.0ZM311.7 263.0113636363636H321.5181818181818Q328.2 263.0113636363636 330.1090909090909 256.5340909090909Q332.0181818181818 250.0568181818182 332.0181818181818 241.02272727272728V210.85227272727275Q332.0181818181818 196.36363636363637 321.79090909090905 196.36363636363637H311.7ZM316.47272727272724 397.15909090909093Q335.1545454545454 397.15909090909093 335.1545454545454 375.0V337.5Q335.1545454545454 324.7159090909091 332.0863636363636 317.3011363636364Q329.0181818181818 309.8863636363636 320.5636363636363 309.8863636363636H311.7V396.8181818181818Q314.7 397.15909090909093 316.47272727272724 397.15909090909093Z M388.390909090909 450.0 411.5727272727272 150.0H492.98181818181814L515.7545454545455 450.0H470.34545454545446L466.9363636363636 401.5909090909091H438.0272727272727L435.0272727272727 450.0ZM441.4363636363636 353.6931818181818H463.2545454545454L452.7545454545454 201.13636363636365H450.5727272727272Z M526.990909090909 450.0V150.0H600.6272727272726Q619.0363636363635 150.0 628.4454545454544 160.48295454545456Q637.8545454545454 170.96590909090912 641.0590909090909 189.80113636363637Q644.2636363636362 208.63636363636365 644.2636363636362 234.03409090909093Q644.2636363636362 258.5795454545455 639.2863636363636 273.2386363636364Q634.3090909090909 287.89772727272725 620.5363636363635 293.52272727272725Q631.8545454545454 296.42045454545456 636.4227272727271 307.58522727272725Q640.990909090909 318.75 640.990909090909 336.47727272727275V450.0H593.6727272727271V332.5568181818182Q593.6727272727271 319.4318181818182 589.3772727272726 316.2784090909091Q585.0818181818181 313.125 575.5363636363635 313.125V450.0ZM575.8090909090909 261.1363636363636H587.3999999999999Q597.3545454545454 261.1363636363636 597.3545454545454 234.03409090909093Q597.3545454545454 216.47727272727275 595.1727272727271 211.0227272727273Q592.990909090909 205.56818181818184 586.990909090909 205.56818181818184H575.8090909090909Z"/><path d="M659.9 320.0A130.0 130.0 0 1 0 919.9 320.0A130.0 130.0 0 1 0 659.9 320.0Z M728.9 320.0A61.0 61.0 0 1 1 850.9 320.0A61.0 61.0 0 1 1 728.9 320.0Z" fill-rule="evenodd"/><path d="M659.9 320.0C659.9 160.0 739.9 30.0 895.9 0.0L912.3 70.0C787.9 94.0 723.9 196.0 723.9 320.0Z"/></g></svg>`;
 /* six progress pips in a row: one per fixture */
 const SIX=(n,cls="")=>`<span class="six ${cls}" aria-hidden="true">${Array.from({length:6},(_,i)=>`<i class="${i<n?"on":""}" style="--i:${i}"></i>`).join("")}</span>`;
 const greet=()=>{const h=+new Date().toLocaleString("en-GB",{...KW,hour:"2-digit",hour12:false});return h<12?t.hi.m:h<17?t.hi.a:t.hi.e};
@@ -244,10 +202,9 @@ function shell(){
   const inLeague=S.demo||!!(S.uid&&S.players[S.uid]);
   const cur=p=>S.page===p?'aria-current="page"':"";
   const pages=inLeague?[...PAGES,...(S.isAdmin?["admin"]:[])]:[];
-  $("#mast").innerHTML=`<div class="wrap mast-in"><button class="brand" type="button" data-go="home" aria-label="${esc(t.brand)}, ${esc(t.nav.home)}">${MARK6("brand-mark")}<span class="bw"><b>${t.brand}</b><small>${t.club}</small></span></button>
+  $("#mast").innerHTML=`<div class="wrap mast-in"><button class="brand" type="button" data-go="home" aria-label="${esc(t.brand)}, ${esc(t.nav.home)}">${WM}<small class="bw-club">${t.club}</small></button>
     <nav class="mnav" aria-label="Sections">${pages.map(p=>`<button type="button" data-go="${p}" ${cur(p)}>${t.nav[p]}</button>`).join("")}</nav>
     <div class="mast-r">${S.demo?`<span class="flag">${t.sample}</span>`:""}
-      <button class="circ lang" type="button" data-act="lang" aria-label="${t.langSwitch}" lang="${LANG==="ar"?"en":"ar"}">${t.other}</button>
       ${inLeague&&S.isAdmin?`<button class="circ adm-ico" type="button" data-go="admin" aria-label="${t.nav.admin}" ${cur("admin")}>${I.admin}</button>`:""}
       ${inLeague?`<button class="me" type="button" data-go="player" data-self aria-label="${t.yourName}">${esc(initials(S.uid))}</button>`:""}</div></div>`;
   const tb=$("#tabbar");tb.hidden=!inLeague;
@@ -278,9 +235,9 @@ function go(pg,after){
 const empty=(h,m,extra="")=>`<div class="empty card"><h2 class="h2">${esc(h)}</h2><p class="sub">${esc(m)}</p>${extra}</div>`;
 
 /* ===================== the door: onboarding and access ===================== */
-const STADIUM=`<div class="stadium" aria-hidden="true"><i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i>
-  <svg class="turf" viewBox="0 0 400 220" preserveAspectRatio="none"><g fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.2"><path d="M40 220L150 40h100l110 180"/><path d="M200 40v180"/><ellipse cx="200" cy="120" rx="46" ry="16"/><path d="M118 90h164M70 170h260"/></g></svg>
-  <div class="stadium-mark">${MARK6("hero-mark")}</div></div>`;
+/* the door: the hero logo over pitch markings and the globe grid */
+const STADIUM=`<div class="stadium" aria-hidden="true"><svg class="pitch" viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="20" y="20" width="360" height="200"/><path d="M200 20v200"/><circle cx="200" cy="120" r="34"/><rect x="20" y="70" width="44" height="100"/><rect x="336" y="70" width="44" height="100"/><path d="M64 98a24 24 0 0 1 0 44M336 98a24 24 0 0 0 0 44"/></g></svg>
+  <img class="door-logo" src="brand/logo-hero-royal.svg" alt="" width="1860" height="960"></div>`;
 function onboardSlides(){return t.onb.map(([h,p],i)=>`<div class="slide" aria-hidden="${i!==(S.onb||0)}"><h1 class="door-title">${h}</h1><p class="sub">${p}</p></div>`).join("")}
 function authView(){const up=S.authTab==="up";
   let done=S.onbDone;if(done==null){try{done=localStorage.getItem("ss-onb")==="1"}catch(_){done=false}S.onbDone=done}
@@ -385,7 +342,7 @@ function celebrate(){const d=$(".hero-card");if(!d||RM.matches)return;d.classLis
 
 /* ===================== the rail ===================== */
 function winCard(){const r=roundList().filter(isSettled).at(-1);if(!r)return"";const top=roundScores(r).filter(x=>x.played)[0];if(!top||top.pts<=0)return"";
-  return `<section class="win-card" aria-label="${esc(t.winner(r.n,dname(top.uid),top.pts))}"><span class="notch">${t.round(r.n)}</span><span class="crown" aria-hidden="true">👑</span>
+  return `<section class="win-card" aria-label="${esc(t.winner(r.n,dname(top.uid),top.pts))}"><span class="notch">${t.round(r.n)}</span><span class="crown" aria-hidden="true">${I.pennant}</span>
     <span class="avatar xl">${esc(initials(top.uid))}</span><p class="win-name">${bn(top.uid)}</p><p class="win-sub">${t.winnerSub(top.pts)}</p></section>`}
 function room(r){const st=S.status?.[r.id]||{},ids=Object.keys(S.players),locked=isLocked(r);
   const rows=ids.map(u=>({u,s:st[u]})).sort((a,b)=>(b.s?1:0)-(a.s?1:0)||(b.s&&a.s?new Date(b.s.at)-new Date(a.s.at):dname(a.u).localeCompare(dname(b.u))));
@@ -440,7 +397,7 @@ function standRow(s,tb,mini){const above=tb[s.rank-2];const below=tb[s.rank];
   const rival=s.rank===1?(below?t.leads(s.pts-below.pts):""):t.behind(above.pts-s.pts,dname(above.uid));
   return `<li><button class="st ${s.rank===1?"lead":""} ${s.uid===S.uid?"mine":""}" type="button" data-player="${esc(s.uid)}" data-move="${s.move||0}">
     <span class="st-rank num">${s.rank}</span><span class="avatar">${esc(initials(s.uid))}</span>
-    <span class="st-mid"><span class="st-name">${bn(s.uid)}${s.rank===1?' <span aria-hidden="true">👑</span>':""}${mv}</span>${mini?"":`<span class="st-sub">${esc(t.exactWon(s.ex,s.won))}</span>`}<span class="st-rival">${esc(rival)}</span></span>
+    <span class="st-mid"><span class="st-name">${bn(s.uid)}${s.rank===1?`<span class="lead-ico" aria-hidden="true">${I.pennant}</span>`:""}${mv}</span>${mini?"":`<span class="st-sub">${esc(t.exactWon(s.ex,s.won))}</span>`}<span class="st-rival">${esc(rival)}</span></span>
     <span class="st-pts num">${s.pts}${s.last!=null&&!mini?`<small>${t.lastRd(s.last)}</small>`:""}</span></button></li>`}
 function tableView(){const tb=table();const n=roundList().filter(isSettled).length;
   const head=`<header class="page-head"><h1 class="title">${t.tableH}</h1><p class="sub">${n?esc(t.after(n)):""}</p></header>`;
@@ -573,8 +530,6 @@ document.addEventListener("click",async e=>{
   const authErr=m=>{const el=$("#autherr");if(el)el.textContent=m};
   if(a==="next"){S.onb=(S.onb||0)+1;const sl=$(".slides");if(sl&&!RM.matches){sl.style.setProperty("--s",S.onb);sl.querySelectorAll(".slide").forEach((x,i)=>x.setAttribute("aria-hidden",i!==S.onb));$$(".dots i").forEach((x,i)=>x.classList.toggle("on",i===S.onb));if(S.onb>=t.onb.length-1){act.dataset.act="start";act.textContent=t.getStarted}}else render();return}
   if(a==="start"||a==="skip"){S.onbDone=true;try{localStorage.setItem("ss-onb","1")}catch(_){}if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(render)}else render();return}
-  if(a==="lang"){LANG=LANG==="ar"?"en":"ar";try{localStorage.setItem("ss-lang",LANG)}catch(_){}
-    if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(render)}else render();return}
   if(a==="retrysave"){S.saveState="dirty";S.dirty=true;save();return}
   if(a==="savenow"){if(S.dirty)flushSave();else toast(t.save.saved(S.savedAt?fTime(S.savedAt):""));return}
   if(a==="join"||a==="signup"){const code=($("#code").value||"").trim(),nick=($("#nick").value||"").trim().slice(0,24);

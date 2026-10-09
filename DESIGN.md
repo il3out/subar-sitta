@@ -1,31 +1,39 @@
-# Subar Sitta design system (v5, Night Pitch)
+# SUBAR 6 — design system (v6)
 
-The approved art direction is the dark football app reference the owner supplied: deep forest greens, glass cards and lime-to-turquoise light.
+Private football predictions for Town House 10. English only. No stars, no green, no red, no trophies.
 
-## Mark
-A modern 6 drawn as one stroke. Its bowl holds a match ball's pentagon patch. It is lime to turquoise on a near-black tile (`MARK6()`, `mark.svg`). It works as the app icon, in the masthead, on the membership card and at hero scale on the entry screen. The name is set as Subar Sitta / سوبر ستة, always with Town House 10.
+## Colour (blues, whites, neutrals only)
+| Token | Hex | Use |
+|---|---|---|
+| royal | #0B3D91 | Primary brand, hero surfaces, selected states, points |
+| royal-2 | #0A3380 | Primary hover |
+| cobalt | #2563EB | Links, focus ring, live, "right result" outline, attention |
+| powder | #93C5FD | Motif lines on royal, secondary podium, saved ring |
+| pale | #DEEFF7 | Door background, your row, saved ticket stub |
+| ice | #EEF5FB | Page background, drum wells |
+| ivory | #FBF6EE | Text on royal, ticket stubs, label tabs on royal |
+| white | #FFFFFF | Cards |
+| navy / ink | #061A40 | Body text, failed-save bar, toasts |
+| ink-2 / ink-3 | #2D4167 / #536583 | Secondary and tertiary text (AA on white and ice) |
+Status never relies on colour alone: saved = royal + check + "Saved"; failed = navy bar + "Not saved" + Try again; live = cobalt label + pulsing dot + "Live".
 
-## Colour
-- Canvas: #060B08 under a forest glow (#2C6338 to #163A22) at the top of the screen.
-- Cards: translucent white at 4.5 to 6% with a 1px light edge, a backdrop blur and a soft drop shadow, 28px radius.
-- Light: `--grad` (#C8F55A to #79EA8F to #25D9B4). Used for the hero card, the active navigation pill, primary buttons, exact scores, the member card and the round winner. Text on light uses #07140D.
-- Text: #F2F6F1, #B5C1B8 and #8A988E (meta, AA on the canvas).
-- Live and errors: #E5383B.
+## Type (all SIL OFL, self-hosted)
+- Display: Anton 400, uppercase, no added tracking. Titles, names, clocks, scores, points.
+- Labels: Barlow Condensed 700, uppercase, +0.02–0.06em. Section heads, tabs, stubs, field labels.
+- UI/body: Barlow 400–700.
 
-## Type
-Manrope for Latin and Alexandria for Arabic, joined into one family ("SS") by unicode range. Weights 500 to 800. Numbers are tabular and bold, like the reference's scores.
+## Shape, depth, motion
+- Radii 8 / 14 / 22 / 32 / pill. Buttons and nav are pill; cards 22; hero 32; labels 8.
+- Shadows are blue-tinted: sh1 (rest), sh2 (raised), sh3 (floating).
+- Spacing on a 4px base; gutters 16 / 32 / 44 at <600 / 600–1023 / ≥1024.
+- Motion: spring `linear()` curve; durations 140 / 240 / 420ms. View transitions slide by nav direction. `prefers-reduced-motion` turns all of it off.
+
+## Motifs
+- Label tab (`.notch`): royal or ivory strip hanging from a card's top edge.
+- Match ticket (`.fx`): perforation notches + dashed tear line + ivory stub carrying the save state.
+- Pitch markings: hero card, podium leader, door background.
+- Globe grid: winner pennant, member pass.
+- Pennant: round winner banner and leader marker in the table.
 
 ## Components
-- **Notch tab:** sits at the top centre of a card ("Round 3", "Live").
-- **Floating dock:** round buttons. The active one stretches into a gradient pill with its label (spring).
-- **Fixture card:** crests at 52px, the date and kick-off time, and two score drums (picker wheels on native scroll snapping, with tap and keyboard input).
-- **Golden Goal:** a 90-minute rail under a glowing cursor.
-- **Pick split:** after the lock, the group's split appears as 1 / X / 2 pills, in the place of the reference's odds.
-- **Who's in:** a row of avatars with progress rings that fill as each member predicts.
-- **Round winner:** a gradient card with a crown. The table opens with a podium.
-- **Save bar:** a glass pill that floats only when it has something to say, and turns gradient when all six are saved.
-
-## Motion
-- Spring easing through CSS `linear()`.
-- Sections slide in from the side they sit on (View Transitions; mirrored in Arabic). Onboarding slides spring between steps.
-- Reduced motion switches every animation off.
+Mast (wordmark + club label, pill nav), floating dock (mobile/tablet), hero countdown, match ticket with score drums, Golden Goal minute rail, save bar (clean/pending/saving/saved/all/half/failed), rail cards, standings rows, podium, results boards with 1/X/2 split, member pass, door (onboarding, sign in, join, recovery), admin panels, toast.

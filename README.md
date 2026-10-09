@@ -49,7 +49,8 @@ Open the site, choose **Join**, and use the invite code. **The first person to j
 - `config.js`: the Supabase project URL and publishable key. Both are public by design; the database rules protect the data.
 - `supabase/setup.sql`: tables, access rules, invite join, autopilot and schedule
 - `crests/`, `mark.svg`, icons: brand and club artwork
-- `fonts/`: Alexandria (Arabic and Latin), SIL Open Font License 1.1
+- `fonts/`: Anton, Barlow and Barlow Condensed, SIL Open Font License 1.1 (licences alongside)
+- `brand/`: SUBAR 6 logo SVGs (hero, badge, wordmark, monogram, app icon)
 - `vendor/supabase.js`: the Supabase browser library (MIT)
 
 ## Changing things later
