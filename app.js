@@ -172,7 +172,7 @@ function shell(){
   const inLeague=S.demo||!!(S.uid&&S.players[S.uid]);
   const cur=p=>S.page===p?'aria-current="page"':"";
   const pages=inLeague?[...PAGES,...(S.isAdmin?["admin"]:[])]:[];
-  $("#mast").innerHTML=`<div class="wrap"><button class="brand" type="button" data-go="home" aria-label="Subar Sitta, Matchday"><img src="six-mark.webp" alt="" width="34" height="34"><span>Subar Sitta</span></button>
+  $("#mast").innerHTML=`<div class="wrap"><button class="brand" type="button" data-go="home" aria-label="Subar Sitta, Matchday">${MARK()}<span class="bw">Subar Sitta<small>Town House 10</small></span></button>
     <nav class="mnav" aria-label="Sections">${pages.map(p=>`<button type="button" data-go="${p}" ${cur(p)}>${t.nav[p]}</button>`).join("")}</nav>
     <div class="mast-r">${S.demo?`<span class="flag">${t.sample}</span>`:""}
       ${inLeague&&S.isAdmin?`<button class="icon-btn adm-ico" type="button" data-go="admin" aria-label="${t.nav.admin}" ${cur("admin")}>${I.admin}</button>`:""}
@@ -199,13 +199,13 @@ function refreshQuiet(){const kp=S.kp;render();if(kp&&S.page==="home"){S.kp=kp;o
 const empty=(h,m,extra="")=>`<div class="empty"><h2 class="h2">${esc(h)}</h2><p class="sub">${esc(m)}</p>${extra}</div>`;
 
 /* ===================== auth ===================== */
-function recoveryView(){return `<div class="wrap"><section class="auth"><img class="auth-six" src="six.webp" alt="" width="120" height="118"><h1 class="title" style="font-size:64px">${t.newPw}</h1>
+function recoveryView(){return `<div class="wrap"><section class="auth">${MARK("auth-mark draw")}<p class="lockup">Town House 10<span>Members only</span></p><h1 class="title" style="font-size:64px">${t.newPw}</h1>
   <form onsubmit="return false"><div class="field"><label for="npw">${t.newPw}</label><input class="inp" id="npw" type="password" autocomplete="new-password" minlength="8"></div>
   <div><button class="btn" type="button" data-act="setpw">${t.setPw}</button></div></form></section></div>`}
 function authView(){const up=S.authTab==="up";
   const f=(id,l,type,ac,hint="")=>`<div class="field"><label for="${id}">${l}</label><input class="inp" id="${id}" type="${type}" autocomplete="${ac}" ${hint?`aria-describedby="${id}-h"`:""}>${hint?`<span class="meta" id="${id}-h">${hint}</span>`:""}</div>`;
-  return `<div class="wrap"><section class="auth"><img class="auth-six" src="six.webp" alt="" width="120" height="118">
-    <h1 class="title" style="font-size:clamp(56px,16vw,96px)">${t.joinH[0]}<br><span class="t2">${t.joinH[1]}</span></h1>
+  return `<div class="wrap"><section class="auth">${MARK("auth-mark draw")}<p class="lockup">Town House 10<span>Members only</span></p>
+    <h1 class="title" style="font-size:clamp(34px,11vw,72px)">${t.joinH[0]}<br><span class="t2">${t.joinH[1]}</span></h1>
     <p class="sub">${t.joinM}</p>
     <form onsubmit="return false">
       <div class="toggle" role="group" aria-label="Sign in or join"><button type="button" data-tab="in" aria-pressed="${!up}">${t.signInT}</button><button type="button" data-tab="up" aria-pressed="${up}">${t.joinT}</button></div>
@@ -215,19 +215,24 @@ function authView(){const up=S.authTab==="up";
       <div class="row"><button class="btn" type="button" data-act="${up?"signup":"signin"}">${up?t.signUp:t.signIn}</button>${up?"":`<button class="link" type="button" data-act="forgot">${t.forgot}</button>`}</div>
     </form><p class="meta" style="margin-top:34px">${t.private}</p></section></div>`}
 function joinView(){
-  return `<div class="wrap"><section class="auth"><img class="auth-six" src="six.webp" alt="" width="120" height="118">
-    <h1 class="title" style="font-size:clamp(56px,16vw,96px)">${t.joinH[0]}<br><span class="t2">${t.joinH[1]}</span></h1><p class="sub">${t.joinM}</p>
+  return `<div class="wrap"><section class="auth">${MARK("auth-mark draw")}<p class="lockup">Town House 10<span>Members only</span></p>
+    <h1 class="title" style="font-size:clamp(34px,11vw,72px)">${t.joinH[0]}<br><span class="t2">${t.joinH[1]}</span></h1><p class="sub">${t.joinM}</p>
     <form onsubmit="return false"><div class="field"><label for="code">${t.code}</label><input class="inp" id="code" autocomplete="off" aria-describedby="code-h"><span class="meta" id="code-h">${t.codeHint}</span></div>
       <div class="field"><label for="nick">${t.nick}</label><input class="inp" id="nick" maxlength="24" autocomplete="nickname"></div>
       <p class="err" id="autherr" role="alert"></p>
       <div class="row"><button class="btn" type="button" data-act="join">${t.join}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></div></form></section></div>`}
 
+/* the mark: a centre circle and spot that read as a 6 */
+const MARK=(c="")=>`<svg class="mk ${c}" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle class="mk-ring" cx="50" cy="62" r="27"/><path class="mk-stem" d="M23 62C23 32 40 12 70 9"/><circle class="mk-spot" cx="50" cy="62" r="6.5"/></svg>`;
+/* matchday hero art: chalk pitch geometry, the 6 drawn at stadium scale */
+const PITCH=`<svg class="md-art" viewBox="0 0 400 400" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+<circle cx="230" cy="250" r="118"/><path d="M112 250C112 118 186 32 318 20"/><line x1="230" y1="0" x2="230" y2="400" stroke-dasharray="2 6"/><circle cx="230" cy="250" r="160" stroke-dasharray="1 7"/></g><circle class="md-spot" cx="230" cy="250" r="9"/></svg>`;
 /* ===================== matchday ===================== */
 function home(){
   const r=current();
   if(!r)return `<div class="wrap">${empty(t.noRound,S.isAdmin?t.noRoundAdmin:t.noRoundUser)}${railTable()}</div>`;
   ensureDraft(r);const locked=isLocked(r),settled=isSettled(r);
-  const head=`<div class="banner" role="note"><span id="bannerTxt">${t.banner[0]}</span></div><header class="md-head"><img class="md-six" src="six.webp" alt="" width="640" height="631">
+  const head=`<div class="banner" role="note"><span id="bannerTxt">${t.banner[0]}</span></div><header class="md-head">${PITCH}
       <p class="md-round"><span>${t.round(r.n)}</span><span>${esc(S.meta?.season||"2026/27")}</span></p>
       <h1 class="title md-title">${locked?(settled?"Full time":"Locked"):"Matchweek"} <span class="t2 num">${pad(r.n)}</span></h1>
       ${locked?`<p class="when">${esc(t.lockedAt(fDay(r.deadline),fTime(r.deadline)))}</p>`
@@ -407,7 +412,7 @@ function playerView(){const ids=Object.keys(S.players);const uid=ids.includes(S.
   const h=per.reduce((o,p)=>(p.a>p.b?o.a++:p.b>p.a?o.b++:o.d++,o),{a:0,b:0,d:0});
   const opts=(l,v)=>l.map(x=>`<option value="${esc(x)}" ${x===v?"selected":""}>${esc(dname(x))}</option>`).join("");
   const joined=S.players[uid]?.joinedAt;
-  const pass=`<section class="pass" aria-label="Membership pass"><img class="pass-six" src="six.webp" alt="" width="190" height="187">
+  const pass=`<section class="pass" aria-label="Membership pass">${MARK("pass-mark")}
       <div class="pass-top"><span>Subar Sitta</span><span class="num" style="font-size:16px;color:var(--fg)">${t.no(memberNo(uid)||1)}</span></div>
       <h1 class="pass-name">${esc(dname(uid))}</h1>
       <div class="pass-row"><span>${t.since}<b>${joined?esc(new Date(joined).toLocaleDateString("en-GB",{...KW,month:"short",year:"numeric"})):"2026"}</b></span><span>${t.position}<b>${me.rank?pad(me.rank):"-"}</b></span><span>${t.points}<b>${me.pts}</b></span></div></section>`;

@@ -48,8 +48,8 @@ Open the site, choose **Join**, and use the invite code. **The first person to j
 - `index.html`: the whole app (design, logic, copy)
 - `config.js`: the Supabase project URL and publishable key. Both are public by design; the database rules protect the data.
 - `supabase/setup.sql`: tables, access rules, invite join, autopilot and schedule
-- `crests/`, `six.webp`, `six-mark.webp`, icons: brand and club artwork
-- `Basic-Regular.ttf` and `Basic-OFL.txt`: the Basic typeface (Sorkin Type, SIL Open Font License 1.1)
+- `crests/`, `mark.svg`, icons: brand and club artwork
+- `fonts/`: Archivo (wide and condensed cuts) and Instrument Sans, both SIL Open Font License 1.1
 - `vendor/supabase.js`: the Supabase browser library (MIT)
 
 ## Changing things later

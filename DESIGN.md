@@ -1,63 +1,34 @@
-# Subar Sitta design system (v2)
+# Subar Sitta design system (v3)
 
-Concept: **the chronograph and the scoreboard.** Broadcast score bugs for the fixtures and watch instrumentation for time (countdown, the Golden Goal bezel). There is one luxury object, the member pass. Everything else is quiet, precise and readable at a glance.
+Concept: **the floodlit pitch at night.** A Town House 10 members' league, played under the lights. Night turf, chalk lines and one floodlight gold.
+
+## Mark
+A centre circle with its centre spot, drawn as one continuous 6 (`mark.svg`, `MARK()` in app.js). The ring and stem are chalk white, and the spot is floodlight gold. At stadium scale the same geometry becomes the matchday hero art (`PITCH`), drawn in chalk hairlines with a breathing gold spot. Town House 10 always sits with the wordmark.
 
 ## Type
+| Role | Face |
+|---|---|
+| Headlines, wordmark | Archivo Wide (Archivo pinned at width 125), 800 to 850, uppercase, tracking -0.02em |
+| Every number: scores, countdown, ranks, points, times | Archivo Cond (Archivo pinned at width 62), 250 to 800 |
+| Interface and body | Instrument Sans 400 to 600, sentence case |
 
-| Role | Face | Setting |
-|---|---|---|
-| Display: page titles, matchweek, member name | Sofia Sans Extra Condensed | 820 weight, uppercase, line-height .86, tracking -0.01em |
-| Score and rank numerals | Sofia Sans Extra Condensed | 250 weight (thin, dial-like), tabular figures |
-| Points, countdown, emphasis numerals | Sofia Sans Extra Condensed | 700 weight, tabular figures |
-| Interface, body, labels | Basic Regular | 15/22 body, 13/18 labels, sentence case, no added tracking |
-| Micro meta (kick-off day, units) | Basic Regular | 12px, colour `--fg-3` |
-
-Rules:
-- Uppercase is only for condensed display type, never for labels.
-- Numbers always use the condensed face with `tabular-nums`.
-- No middle-dot chains, em dashes or en dashes in visible text. Scores in running text are written `2-1`.
-- Tosh A was requested but no file was supplied (the supplied archive contains Basic). The display slot is a single token (`--display`), so a licensed Tosh A can replace Sofia Sans Extra Condensed in one line.
+The one family covers both ends of the width axis. Wide type carries the voice, and condensed numerals read like a stadium scoreboard. All fonts are OFL and self-hosted in `fonts/`.
 
 ## Colour
-
 | Token | Hex | Use |
 |---|---|---|
-| `--bg` | #070E1D | Canvas (midnight) |
-| `--plane` | #0B1930 | The few raised planes: keypad, member pass, admin forms |
-| `--rule` | #1A2C46 | Hairlines |
-| `--seam` | #38516C | Stitch at rest, control borders |
-| `--fg` | #DCE4EC | Primary text (platinum) |
-| `--fg-hi` | #F8FAFD | Scores and key numerals |
-| `--fg-2` | #A7B6C8 | Secondary text |
-| `--fg-3` | #8494AA | Meta (at least 4.5:1 on `--bg`) |
-| `--ice` | #A9D9F2 | The one accent: selection, focus, active, the open round |
-| `--mint` | #9CDEC2 | Saved and correct states only |
-| `--amber` | #FFD18C | Deadline under 3 hours, incomplete |
-| `--coral` | #F39C9B | Errors and failed saves |
+| `--bg` | #08120D | Night turf canvas, with faint mowing stripes and a floodlight glow |
+| `--plane` / `--plane-2` | #0E1C15 / #13261C | Keypad, pass, panels |
+| `--rule` / `--seam` / `--ctl` | #1B2E23 / #2F4739 / #55715F | Hairlines and control borders |
+| `--fg` / `--fg-hi` | #E4EBE3 / #F7FAF5 | Chalk text |
+| `--fg-2` / `--fg-3` | #A9BAAE / #8A9E90 | Secondary and meta text |
+| `--ice` (floodlight gold) | #FFC53D | The one accent: active, focus, progress, exact score, primary buttons |
+| `--mint` | #71E3A2 | Saved and right-result states |
+| `--amber` | #FF9D5C | Deadline close, incomplete |
+| `--coral` | #FF7B6E | Errors, live matches |
 
-Club colours (`--club`) appear only as a 3px kit bar beside a club in fixture rows and in the match-centre prediction split. They never fill large areas.
+Text on gold uses `--gold-ink` #1B1403. Club colours appear only as kit bars and in the prediction split.
 
-## Shape
-- Structure is square: rows, sections and rules have no radius.
-- Controls (score cells, keypad keys, buttons, inputs) use a 6px radius.
-- The member pass is the only rounded plate (14px).
-- Avatars are 6px-radius squares with initials, not circles.
-
-## Stitch (functional only)
-1. **Progress ribbon:** six stitched segments under the matchweek title, one per fixture. A segment turns solid ice when that fixture has both scores.
-2. **Saved seam:** the bottom edge of a fixture row. Mint stitching draws left to right once when the row saves. Rows that aren't saved keep a plain hairline.
-3. **Active tab:** a stitched bar marks the current section in the tab bar and masthead.
-4. **Member pass:** a stitched inner edge.
-
-## Motion (engineered, never decorative)
-- Score digit change: the old digit leaves upward and the new one enters, 160ms.
-- Saved seam draw: 260ms.
-- Countdown: the seconds tick once a second. Under 3 hours the countdown turns amber.
-- Rank movement: rows that moved slide from their previous position once per visit, 420ms.
-- Page change: a 140ms fade.
-- Easing `cubic-bezier(.2,.8,.2,1)`. Everything is off under `prefers-reduced-motion`.
-
-## Layout
-- Mobile first (390). The first prediction must be visible without scrolling.
-- 1024px and up: a masthead with inline navigation and an asymmetric two-column layout (fixtures ledger plus a 380px rail).
-- Touch targets are at least 44px. Score cells are 56px.
+## Shape and motion
+- Controls use a 10px radius, and the member pass uses 18px. Structure (rows, rules) stays square.
+- Motion: the mark draws itself on sign in, the score digits roll, a saved row gets a mint seam, ranks slide, the banner rotates, the save bar pops when all six are saved and the hero spot breathes slowly. Everything respects reduced motion.
