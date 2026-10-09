@@ -41,3 +41,11 @@ Mast (wordmark + club label, pill nav), floating dock (mobile/tablet), hero coun
 ## Dark theme
 Follows the device setting until a member taps the half-circle button in the header; the choice is remembered on that device.
 Roles: bg #050E24, well #0A1A3D, card #0C2050, raised #163170, tint #13306B, stub #081738; text #EEF5FB / #BCCDE8 / #93A8CB; brand text #C7DDFF; selected fills cobalt #2563EB; heroes royal #0E46A8 with pitch lines; accent links #8CBBFF; failed-save bar inverts to light #DCE8F8 with navy text. Ivory label tabs stay ivory on royal in both themes.
+
+## Master logo (approved 9 Oct 2026)
+The owner's logo: a royal rounded label with a white keyline, the SUBAR lettering on an arched baseline, the round 6 and the globe dome tucked beneath. Traced to vector from the approved artwork and split into components (brand/):
+- logo-primary-royal / logo-primary-inverse: the full label (sign-in, print).
+- lockup-mask: lettering + 6 + globe without the frame; the header draws it as a mask in currentColor, so it follows the theme.
+- six-mask: the 6 alone (loader, member pass); app-icon / favicon: the 6 on a royal tile with keyline.
+- globe-powder: the dome as a motif (winner pennant, member pass).
+- logo-badge, pennant: applications.
