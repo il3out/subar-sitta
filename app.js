@@ -53,7 +53,10 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  err:{perm:"You don't have permission for that change.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
  private:"Private league. Invitation only.",
  allSaved:tm=>`All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"Six scores saved. Now the Golden Goal.",saveNow:"Save now",cheer:"✅ All six saved. Good luck 🍀",
- units:{d:"d",h:"h",m:"m",s:"s"},yourName:"Your membership",langSwitch:"Switch to Arabic"},
+ units:{d:"d",h:"h",m:"m",s:"s"},yourName:"Your membership",langSwitch:"Switch to Arabic",
+ hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"Who's in",yourSix:"Your six",matchday:"Matchday",viewAll:"View all",winnerSub:p=>`Round winner with ${p} points`,
+ onb:[["Six matches. One perfect six.","Predict the full-time score of six Premier League fixtures every round."],["Name the minute.","Pick the minute of the first goal. The Golden Goal settles every tie."],["Climb the table.","Exact scores are worth five. Bragging rights last all week. Town House 10 only."]],
+ skip:"Skip",next:"Next",getStarted:"Get started"},
 ar:{dir:"rtl",lang:"ar",other:"EN",otherLabel:"English",
  brand:"سوبر ستة",club:"تاون هاوس ١٠",members:"للأعضاء فقط",
  nav:{home:"الجولة",round:"النتائج",table:"الترتيب",player:"العضوية",admin:"الإدارة"},
@@ -92,7 +95,10 @@ ar:{dir:"rtl",lang:"ar",other:"EN",otherLabel:"English",
  err:{perm:"لا تملك صلاحية هذا التغيير.",gen:"تعذر الحفظ. تحقق من الاتصال وحاول مجدداً.",load:"تعذر تحميل الدوري. تحقق من الاتصال."},retry:"حاول مجدداً",
  private:"دوري خاص. بالدعوة فقط.",
  allSaved:tm=>`حُفظت التوقعات الست${tm?`، ${tm}`:""}`,allSavedNoGG:"حُفظت النتائج الست. بقي الهدف الذهبي.",saveNow:"احفظ الآن",cheer:"✅ حُفظت التوقعات الست. بالتوفيق 🍀",
- units:{d:"ي",h:"س",m:"د",s:"ث"},yourName:"عضويتك",langSwitch:"التبديل إلى الإنجليزية"}};
+ units:{d:"ي",h:"س",m:"د",s:"ث"},yourName:"عضويتك",langSwitch:"التبديل إلى الإنجليزية",
+ hi:{m:"صباح الخير",a:"مساء الخير",e:"مساء الخير"},whoIn:"من سجّل",yourSix:"توقعاتك الست",matchday:"الجولة",viewAll:"عرض الكل",winnerSub:p=>`بطل الجولة بـ ${p} نقطة`,
+ onb:[["ست مباريات. ستة مثالية.","توقّع النتيجة النهائية لست مباريات من الدوري الإنجليزي في كل جولة."],["حدد الدقيقة.","اختر دقيقة أول هدف. الهدف الذهبي يحسم أي تعادل."],["اصعد في الترتيب.","النتيجة الصحيحة بخمس نقاط، والتفاخر يستمر طوال الأسبوع. لأعضاء تاون هاوس ١٠ فقط."]],
+ skip:"تخطي",next:"التالي",getStarted:"ابدأ"}};
 let LANG=(()=>{try{return localStorage.getItem("ss-lang")==="ar"?"ar":"en"}catch(_){return"en"}})();
 let t=T[LANG];
 function applyLang(){t=T[LANG];const h=document.documentElement;h.lang=t.lang;h.dir=t.dir;document.title=LANG==="ar"?"سوبر ستة":"Subar Sitta"}
@@ -220,9 +226,17 @@ function loadSample(){
 }
 
 
-/* ===================== the mark: six pips. It is also the progress of your six. ===================== */
-const PIP_XY=[[22,16],[42,16],[22,32],[42,32],[22,48],[42,48]];
-const PIPS=(n=6,cls="",label="")=>`<svg class="pips ${cls}" viewBox="0 0 64 64" ${label?`role="img" aria-label="${esc(label)}"`:'aria-hidden="true"'} focusable="false"><rect class="pips-body" x="1" y="1" width="62" height="62" rx="17"/>${PIP_XY.map(([x,y],i)=>`<circle class="pp${i<n?" on":""}" cx="${x}" cy="${y}" r="5.4" style="--i:${i}"/>`).join("")}</svg>`;
+/* ===================== the mark: a 6 whose bowl holds a match ball's patch ===================== */
+let markN=0;
+const MARK6=(cls="",size)=>{const g="m6g"+(++markN);return `<svg class="mark6 ${cls}" viewBox="0 0 64 64" ${size?`width="${size}" height="${size}"`:""} aria-hidden="true" focusable="false">
+  <defs><linearGradient id="${g}" x1="14" y1="8" x2="50" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#C8F55A"/><stop offset="1" stop-color="#25D9B4"/></linearGradient></defs>
+  <rect class="m6-tile" x="1" y="1" width="62" height="62" rx="19"/>
+  <circle cx="32" cy="40" r="13" fill="none" stroke="url(#${g})" stroke-width="7.5"/>
+  <path d="M19 40C19 24 26.5 14.5 41.5 12" fill="none" stroke="url(#${g})" stroke-width="7.5" stroke-linecap="round"/>
+  <path d="M32 34.6l5.1 3.7-1.95 6h-6.3l-1.95-6z" fill="url(#${g})"/></svg>`};
+/* six progress pips in a row: one per fixture */
+const SIX=(n,cls="")=>`<span class="six ${cls}" aria-hidden="true">${Array.from({length:6},(_,i)=>`<i class="${i<n?"on":""}" style="--i:${i}"></i>`).join("")}</span>`;
+const greet=()=>{const h=+new Date().toLocaleString("en-GB",{...KW,hour:"2-digit",hour12:false});return h<12?t.hi.m:h<17?t.hi.a:t.hi.e};
 
 /* ===================== shell ===================== */
 const PAGES=["home","round","table","player"];
@@ -230,30 +244,29 @@ function shell(){
   const inLeague=S.demo||!!(S.uid&&S.players[S.uid]);
   const cur=p=>S.page===p?'aria-current="page"':"";
   const pages=inLeague?[...PAGES,...(S.isAdmin?["admin"]:[])]:[];
-  $("#mast").innerHTML=`<div class="wrap mast-in"><button class="brand" type="button" data-go="home" aria-label="${esc(t.brand)}, ${esc(t.nav.home)}">${PIPS(6,"brand-pips")}<span class="bw"><b>${t.brand}</b><small>${t.club}</small></span></button>
+  $("#mast").innerHTML=`<div class="wrap mast-in"><button class="brand" type="button" data-go="home" aria-label="${esc(t.brand)}, ${esc(t.nav.home)}">${MARK6("brand-mark")}<span class="bw"><b>${t.brand}</b><small>${t.club}</small></span></button>
     <nav class="mnav" aria-label="Sections">${pages.map(p=>`<button type="button" data-go="${p}" ${cur(p)}>${t.nav[p]}</button>`).join("")}</nav>
     <div class="mast-r">${S.demo?`<span class="flag">${t.sample}</span>`:""}
-      <button class="lang" type="button" data-act="lang" aria-label="${t.langSwitch}" lang="${LANG==="ar"?"en":"ar"}">${t.other}</button>
-      ${inLeague&&S.isAdmin?`<button class="icon-btn adm-ico" type="button" data-go="admin" aria-label="${t.nav.admin}" ${cur("admin")}>${I.admin}</button>`:""}
+      <button class="circ lang" type="button" data-act="lang" aria-label="${t.langSwitch}" lang="${LANG==="ar"?"en":"ar"}">${t.other}</button>
+      ${inLeague&&S.isAdmin?`<button class="circ adm-ico" type="button" data-go="admin" aria-label="${t.nav.admin}" ${cur("admin")}>${I.admin}</button>`:""}
       ${inLeague?`<button class="me" type="button" data-go="player" data-self aria-label="${t.yourName}">${esc(initials(S.uid))}</button>`:""}</div></div>`;
   const tb=$("#tabbar");tb.hidden=!inLeague;
-  tb.innerHTML=PAGES.map(p=>`<button type="button" data-go="${p}" ${cur(p)}>${I[p]}<span>${t.nav[p]}</span></button>`).join("");
+  tb.innerHTML=`<div class="dock">${PAGES.map(p=>`<button type="button" data-go="${p}" ${cur(p)} aria-label="${t.nav[p]}">${I[p]}<span>${t.nav[p]}</span></button>`).join("")}</div>`;
 }
 function render(){
   applyLang();shell();
   let html;
-  if(!S.ready) html=`<div class="wrap loading" aria-busy="true">${PIPS(0,"load-pips")}<p class="meta">${t.loading}</p></div>`;
+  if(!S.ready) html=`<div class="wrap loading" aria-busy="true">${MARK6("load-mark")}<p class="meta">${t.loading}</p></div>`;
   else if(S.recovery) html=recoveryView();
   else if(!S.uid) html=authView();
   else if(S.loadFailed) html=`<div class="wrap empty"><h1 class="h2">${t.err.load}</h1><div><button class="btn quiet" type="button" data-act="retryload">${t.retry}</button></div></div>`;
   else if(!S.players[S.uid]) html=joinView();
   else html=({home,round:roundView,table:tableView,player:playerView,admin:adminView}[S.page]||home)();
+  document.body.dataset.page=!S.uid||!S.players[S.uid]&&S.ready&&!S.demo?"door":S.page;
   $("#main").innerHTML=`<div class="page page-${S.page}">${html}</div>`;
   tick();postRender();
 }
-/* realtime refreshes wait while a finger is on a drum */
 function softRender(){if(S.page==="home"&&Date.now()-(S.touchAt||0)<2500){clearTimeout(S.softT);S.softT=setTimeout(softRender,1200);return}render()}
-/* spatial navigation: sections slide in from the side they live on */
 function go(pg,after){
   const from=[...PAGES,"admin"].indexOf(S.page),to=[...PAGES,"admin"].indexOf(pg);
   const swap=()=>{S.page=pg;after?.();try{history.replaceState(null,"","#"+pg)}catch(_){}render();scrollTo({top:0});$("#main").focus({preventScroll:true})};
@@ -262,50 +275,61 @@ function go(pg,after){
   document.documentElement.dataset.nav=(to>from)===(t.dir==="ltr")?"fwd":"back";
   document.startViewTransition(swap);
 }
-const empty=(h,m,extra="")=>`<div class="empty"><h2 class="h2">${esc(h)}</h2><p class="sub">${esc(m)}</p>${extra}</div>`;
+const empty=(h,m,extra="")=>`<div class="empty card"><h2 class="h2">${esc(h)}</h2><p class="sub">${esc(m)}</p>${extra}</div>`;
 
-/* ===================== access ===================== */
-const doorHead=()=>`<div class="door-mark">${PIPS(6,"door-pips")}</div><p class="door-club">${t.club}<span>${t.members}</span></p>`;
-function recoveryView(){return `<div class="wrap door">${doorHead()}<h1 class="door-title">${t.newPw}</h1>
-  <form onsubmit="return false" class="door-form"><div class="field"><label for="npw">${t.newPw}</label><input class="inp" id="npw" type="password" autocomplete="new-password" minlength="8"></div>
-  <div><button class="btn" type="button" data-act="setpw">${t.setPw}</button></div></form></div>`}
+/* ===================== the door: onboarding and access ===================== */
+const STADIUM=`<div class="stadium" aria-hidden="true"><i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i>
+  <svg class="turf" viewBox="0 0 400 220" preserveAspectRatio="none"><g fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.2"><path d="M40 220L150 40h100l110 180"/><path d="M200 40v180"/><ellipse cx="200" cy="120" rx="46" ry="16"/><path d="M118 90h164M70 170h260"/></g></svg>
+  <div class="stadium-mark">${MARK6("hero-mark")}</div></div>`;
+function onboardSlides(){return t.onb.map(([h,p],i)=>`<div class="slide" aria-hidden="${i!==(S.onb||0)}"><h1 class="door-title">${h}</h1><p class="sub">${p}</p></div>`).join("")}
 function authView(){const up=S.authTab==="up";
+  let done=S.onbDone;if(done==null){try{done=localStorage.getItem("ss-onb")==="1"}catch(_){done=false}S.onbDone=done}
   const f=(id,l,type,ac,hint="")=>`<div class="field"><label for="${id}">${l}</label><input class="inp" id="${id}" type="${type}" autocomplete="${ac}" dir="${type==="email"||type==="password"?"ltr":"auto"}" ${hint?`aria-describedby="${id}-h"`:""}>${hint?`<span class="meta" id="${id}-h">${hint}</span>`:""}</div>`;
-  return `<div class="wrap door">${doorHead()}
-    <h1 class="door-title">${t.joinH}</h1><p class="sub">${t.joinM}</p>
+  const panel=!done?`<div class="slides" style="--s:${S.onb||0}">${onboardSlides()}</div>
+      <div class="door-foot"><button class="link quiet" type="button" data-act="skip">${t.skip}</button><span class="dots" aria-hidden="true">${t.onb.map((_,i)=>`<i class="${i===(S.onb||0)?"on":""}"></i>`).join("")}</span>
+      <button class="btn glow" type="button" data-act="${(S.onb||0)<t.onb.length-1?"next":"start"}">${(S.onb||0)<t.onb.length-1?t.next:t.getStarted}</button></div>`
+    :`<p class="door-club">${t.club}<span>${t.members}</span></p><h1 class="door-title sm">${up?t.joinT:t.signInT}</h1>
     <form onsubmit="return false" class="door-form">
       <div class="seg" role="group" aria-label="${t.signInT} / ${t.joinT}"><button type="button" data-tab="in" aria-pressed="${!up}">${t.signInT}</button><button type="button" data-tab="up" aria-pressed="${up}">${t.joinT}</button></div>
       ${up?f("code",t.code,"text","off",t.codeHint)+f("nick",t.nick,"text","nickname",t.nickPh):""}
       ${f("em",t.email,"email","email")}${f("pw",t.password,"password",up?"new-password":"current-password",up?t.pwHint:"")}
       <p class="err" id="autherr" role="alert"></p>
-      <div class="row"><button class="btn" type="button" data-act="${up?"signup":"signin"}">${up?t.signUp:t.signIn}</button>${up?"":`<button class="link" type="button" data-act="forgot">${t.forgot}</button>`}</div>
-    </form><p class="meta door-foot">${t.private}</p></div>`}
+      <button class="btn glow" type="button" data-act="${up?"signup":"signin"}">${up?t.signUp:t.signIn}</button>${up?"":`<button class="link" type="button" data-act="forgot">${t.forgot}</button>`}
+    </form>`;
+  return `<div class="door${done?" form":""}">${STADIUM}<div class="wrap door-in"><section class="glass door-panel">${panel}</section><p class="meta door-note">${t.private}</p></div></div>`}
+function recoveryView(){return `<div class="door form">${STADIUM}<div class="wrap door-in"><section class="glass door-panel"><h1 class="door-title sm">${t.newPw}</h1>
+  <form onsubmit="return false" class="door-form"><div class="field"><label for="npw">${t.newPw}</label><input class="inp" id="npw" type="password" autocomplete="new-password" minlength="8"></div>
+  <button class="btn glow" type="button" data-act="setpw">${t.setPw}</button></form></section></div></div>`}
 function joinView(){
-  return `<div class="wrap door">${doorHead()}<h1 class="door-title">${t.joinH}</h1><p class="sub">${t.joinM}</p>
+  return `<div class="door form">${STADIUM}<div class="wrap door-in"><section class="glass door-panel"><p class="door-club">${t.club}<span>${t.members}</span></p><h1 class="door-title sm">${t.join}</h1><p class="sub">${t.joinM}</p>
     <form onsubmit="return false" class="door-form"><div class="field"><label for="code">${t.code}</label><input class="inp" id="code" autocomplete="off" dir="ltr" aria-describedby="code-h"><span class="meta" id="code-h">${t.codeHint}</span></div>
       <div class="field"><label for="nick">${t.nick}</label><input class="inp" id="nick" maxlength="24" autocomplete="nickname"></div>
       <p class="err" id="autherr" role="alert"></p>
-      <div class="row"><button class="btn" type="button" data-act="join">${t.join}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></div></form></div>`}
+      <button class="btn glow" type="button" data-act="join">${t.join}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></form></section></div></div>`}
 
 /* ===================== matchday ===================== */
-const DH=40,MW=14;   /* drum row height, minute rail step */
+const DH=40,MW=14;
 function home(){
   const r=current();
-  if(!r)return `<div class="wrap">${empty(t.noRound,S.isAdmin?t.noRoundAdmin:t.noRoundUser)}${railTable()}</div>`;
+  const hello=`<header class="hello"><span class="avatar lg" aria-hidden="true">${esc(initials(S.uid))}</span><div><p class="hello-1">${greet()}</p><p class="hello-2">${bn(S.uid)}</p></div></header>`;
+  if(!r)return `<div class="wrap">${hello}${empty(t.noRound,S.isAdmin?t.noRoundAdmin:t.noRoundUser)}${railTable()}</div>`;
   ensureDraft(r);const locked=isLocked(r),settled=isSettled(r);
   const n=r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length;
-  const head=`<header class="hero">
-      <div class="hero-txt"><p class="kicker">${t.round(r.n)}<span>${esc(S.meta?.season||"2026/27")}</span></p>
-      <h1 class="mw">${locked?(settled?t.final:t.st.locked):t.mw} <span class="mw-n">${pad(r.n)}</span></h1>
-      ${locked?`<p class="when">${esc(t.lockedAt(fDay(r.deadline),fTime(r.deadline)))}</p>`
-        :`<div class="clock" data-deadline="${esc(r.deadline)}" role="timer" aria-live="off"><span class="lbl">${t.locksIn}</span><span class="dur" data-dur dir="ltr"></span></div><p class="when">${esc(t.locksAt(fLong(r.deadline),fTime(r.deadline)))}</p>`}</div>
-      <div class="hero-die" id="heroDie">${PIPS(n,"die",t.of6(n))}</div>
-      <p class="status" id="status" aria-live="polite"></p>
-    </header>`;
-  const fx=`<ol class="slate" id="fixtures" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(f=>fixture(f,locked)).join("")}</ol>${ggBlock(r,locked)}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
-  return `<div class="wrap md">${head}
-    <div class="grid"><div class="col-main">${fx}</div><aside class="rail" aria-label="${esc(t.tableH)}">${lastRound()}${room(r)}${railTable()}${rules()}</aside></div></div>`;
+  const hero=`<section class="hero-card" aria-labelledby="mwh">
+      <span class="notch">${locked?(settled?t.final:`<i class="dot"></i>${t.st.locked}`):`${t.round(r.n)}`}</span>
+      <h1 class="sr" id="mwh">${t.mw} ${r.n}</h1>
+      ${locked?`<p class="hc-big">${t.mw} <b class="num">${pad(r.n)}</b></p><p class="hc-sub">${esc(t.lockedAt(fDay(r.deadline),fTime(r.deadline)))}</p>`
+        :`<p class="hc-lbl">${t.locksIn}</p><div class="clock" data-deadline="${esc(r.deadline)}" role="timer" aria-live="off"><span class="dur" data-dur dir="ltr"></span></div><p class="hc-sub">${esc(t.locksAt(fLong(r.deadline),fTime(r.deadline)))}</p>`}
+      <div class="hc-foot" id="heroDie">${SIX(n,"hc-six")}<span class="hc-n"><b class="num" id="heroN">${n}</b>/6</span></div></section>`;
+  const fx=`<div class="sec-head"><h2 class="h2">${t.yourSix}</h2><span class="status" id="status" aria-live="polite"></span></div>
+    <ol class="slate" id="fixtures" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(f=>fixture(f,locked)).join("")}</ol>${ggBlock(r,locked)}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
+  return `<div class="wrap md">${hello}${whoRow(r)}
+    <div class="grid"><div class="col-main"><div class="sec-head"><h2 class="h2">${t.matchday}</h2><span class="meta">${esc(S.meta?.season||"2026/27")}</span></div>${hero}${fx}</div>
+    <aside class="rail" aria-label="${esc(t.tableH)}">${winCard()}${lastRound()}${room(r)}${railTable()}${rules()}</aside></div></div>`;
 }
+function whoRow(r){const st=S.status?.[r.id]||{},ids=Object.keys(S.players);const n=ids.filter(u=>st[u]).length;
+  return `<div class="chips" role="list" tabindex="0" aria-label="${t.roomH}"><span class="chip on" role="listitem"><span class="chip-ico">${I.player}</span>${t.whoIn} <b class="num">${n}/${ids.length}</b></span>
+    ${ids.sort((a,b)=>(st[b]?.filled||0)-(st[a]?.filled||0)).map(u=>{const s=st[u];const p=s?Math.round(s.filled/6*100):0;return `<span class="ring${s&&s.filled===6&&s.gg?" full":""}" role="listitem" style="--p:${p}" title="${esc(dname(u))}"><span class="avatar">${esc(initials(u))}</span><span class="sr">${esc(dname(u))}: ${s?t.of6(s.filled):t.notYet}</span></span>`}).join("")}</div>`}
 function ensureDraft(r){const p=pickOf(S.uid,r.id);const src=JSON.stringify(p?{s:p.s,gg:p.gg}:null);
   if(S.draftRound!==r.id||!S.draft||(!S.dirty&&S.saveState!=="saving"&&src!==S.draftSrc)){S.draftSrc=src;
     S.draft={s:Object.fromEntries(Object.entries(p?.s||{}).map(([k,v])=>[k,[v[0],v[1]]])),gg:p?.gg??null};S.draftRound=r.id;S.dirty=false;
@@ -322,33 +346,31 @@ function drum(f,i,val,locked,club){
     <div class="drum-in">${["–",...Array.from({length:21},(_,j)=>j)].map((v,j)=>`<span data-j="${j}"${j===k?' class="on"':""}>${v}</span>`).join("")}</div></div>`}
 function fixture(f,locked){
   const v=S.draft.s[f.id];const st=locked?"locked":cardState(f);
-  const side=(c,a)=>`<div class="tm${a?" a":""}">${crest(c,30)}<span class="tm-n">${esc(sname(c))}</span></div>`;
-  const res=f.void?`<span class="fx-res">${t.voidF}</span>`:f.res?`<span class="fx-res"><span>${t.final}</span><b class="num" dir="ltr">${f.res[0]}–${f.res[1]}</b><span class="pts p${ptsFor(v,f.res)}">+${ptsFor(v,f.res)}</span></span>`:locked?`<span class="fx-res">${t.awaiting}</span>`:"";
-  return `<li class="fx" data-card="${f.id}" data-state="${st}">
-    <div class="fx-meta"><span class="num">${fTime(f.ko)}</span><span>${esc(fWd(f.ko))}</span><span class="fx-state">${footState(f,st,locked)}</span>${res}</div>
-    <div class="fx-line">${side(f.h)}<div class="score">${drum(f.id,0,v?.[0],locked,name(f.h))}${drum(f.id,1,v?.[1],locked,name(f.a))}</div>${side(f.a,1)}</div></li>`}
-const footState=(f,st,locked)=>locked?(Array.isArray(S.draft.s[f.id])?t.st.locked:t.st.none):st==="saved"?`${I.check}${t.st.saved}`:t.st[st];
+  const side=c=>`<div class="tm">${crest(c,52)}<span class="tm-n">${esc(sname(c))}</span></div>`;
+  const res=f.void?`<span class="pill">${t.voidF}</span>`:f.res?`<span class="pill">${t.final} <b class="num" dir="ltr">${f.res[0]}–${f.res[1]}</b></span><span class="pts p${ptsFor(v,f.res)}">+${ptsFor(v,f.res)}</span>`:locked?`<span class="pill">${t.awaiting}</span>`:"";
+  return `<li class="fx card" data-card="${f.id}" data-state="${st}">
+    <div class="fx-line">${side(f.h)}<div class="fx-mid"><p class="fx-when"><span>${esc(fDay(f.ko))}</span><b class="num">${fTime(f.ko)}</b></p><div class="score">${drum(f.id,0,v?.[0],locked,name(f.h))}<span class="colon" aria-hidden="true">:</span>${drum(f.id,1,v?.[1],locked,name(f.a))}</div></div>${side(f.a)}</div>
+    <div class="fx-foot"><span class="fx-state">${footState(f,st,locked)}</span>${res}</div></li>`}
+const footState=(f,st,locked)=>locked?(Array.isArray(S.draft.s[f.id])?t.st.locked:t.st.none):st==="saved"?`${I.check}${t.st.saved}`:st==="todo"?t.swipe:t.st[st];
 function ggBlock(r,locked){const g=S.draft.gg;
   const out=`<output class="gg-val${g==null?" unset":""}" id="ggout" dir="ltr">${g==null?"–":`${g}<sup>′</sup>`}</output>`;
-  if(locked)return `<section class="gg" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${r.firstGoal!=null?t.ggWas(r.firstGoal):t.ggP}</p></div>${out}</section>`;
+  if(locked)return `<section class="gg card" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${r.firstGoal!=null?t.ggWas(r.firstGoal):t.ggP}</p></div><div class="gg-dial">${out}</div></section>`;
   const ticks=Array.from({length:90},(_,i)=>{const m=i+1;return `<i class="${m%15===0||m===1?"maj":m%5===0?"mid":""}" data-m="${m}">${m%15===0||m===1?`<b>${m===45?"HT":m}</b>`:""}</i>`}).join("");
-  return `<section class="gg" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${t.ggP}</p></div>
+  return `<section class="gg card" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${t.ggP}</p></div>
     <div class="gg-dial">${out}<p class="gg-hint" id="gghint">${g==null?t.ggSet:""}</p></div>
     <div class="mrail-wrap"><div class="mrail${g==null?" unset":""}" id="mrail" role="slider" tabindex="0" aria-label="${t.ggH}" aria-valuemin="1" aria-valuemax="90" aria-valuenow="${g??45}" aria-valuetext="${g==null?t.ggUnset:g}" dir="ltr"><div class="mrail-in">${ticks}</div></div><span class="mrail-cur" aria-hidden="true"></span></div></section>`}
 
-/* status line, the die, the save bar: updated in place, never re-rendered */
 function syncHead(){const r=current();if(!r||!S.draft)return;const locked=isLocked(r);
   const n=r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length;
-  
   const half=Object.values(S.draft.s).some(v=>(v[0]==null)!==(v[1]==null));
   const k=locked?"clean":half&&S.saveState!=="saving"?"half":S.saveState==="saving"?"saving":S.saveState==="failed"?"failed":S.dirty?"pending":S.saveState==="saved"||S.savedAt?"saved":"clean";
   const tm=S.savedAt?fTime(S.savedAt):"";
   const all=n===6&&k==="saved"&&S.draft.gg!=null;
-  const die=$("#heroDie");if(die){die.querySelectorAll(".pp").forEach((p,i)=>p.classList.toggle("on",i<n));die.querySelector("svg").setAttribute("aria-label",t.of6(n));die.classList.toggle("all",all)}
-  const el=$("#status");if(el){el.dataset.s=all?"all":k;el.innerHTML=`<span class="st-n"><b class="num">${n}</b>/6</span><span>${esc(t.gg(S.draft.gg))}</span>`}
+  const die=$("#heroDie");if(die){die.querySelectorAll(".six i").forEach((p,i)=>p.classList.toggle("on",i<n));$("#heroN").textContent=n;die.classList.toggle("all",all)}
+  const el=$("#status");if(el){el.dataset.s=all?"all":k;el.innerHTML=k==="saved"||all?`${I.check}${t.save.saved(tm)}`:k==="saving"||k==="pending"?t.save.saving:k==="failed"?t.st.failed:""}
   const sb2=$("#savebar");if(sb2){sb2.dataset.s=all?"all":n===6&&k==="saved"?"nogg":k;
-    sb2.innerHTML=`${PIPS(n,"sb-pips")}<span class="sb-msg">${all?t.allSaved(tm):n===6&&k==="saved"?t.allSavedNoGG:k==="failed"?t.save.failed:k==="half"?t.save.half:k==="saving"||k==="pending"?t.save.saving:k==="saved"?`${t.save.saved(tm)}`:t.of6(n)}</span>
-      ${k==="failed"?`<button class="sb-btn bad" type="button" data-act="retrysave">${t.retry}</button>`:k==="pending"||k==="clean"&&n>0&&S.dirty?`<button class="sb-btn" type="button" data-act="savenow">${t.saveNow}</button>`:all?`<span class="sb-ok">${I.check}</span>`:""}`;
+    sb2.innerHTML=`${SIX(n,"sb-six")}<span class="sb-msg">${all?t.allSaved(tm):n===6&&k==="saved"?t.allSavedNoGG:k==="failed"?t.save.failed:k==="half"?t.save.half:k==="saving"||k==="pending"?t.save.saving:k==="saved"?t.save.saved(tm):t.of6(n)}</span>
+      ${k==="failed"?`<button class="sb-btn bad" type="button" data-act="retrysave">${t.retry}</button>`:k==="pending"?`<button class="sb-btn" type="button" data-act="savenow">${t.saveNow}</button>`:all?`<span class="sb-ok">${I.check}</span>`:""}`;
     if(all&&S.cheered!==r.id&&S.justSaved){S.cheered=r.id;celebrate()}S.justSaved=false}}
 function syncRow(fid){const r=current();const f=r?.fixtures.find(x=>x.id===fid);const el=document.querySelector(`[data-card="${fid}"]`);if(!f||!el)return;
   const prev=el.dataset.state,st=cardState(f);el.dataset.state=st;
@@ -359,28 +381,30 @@ function syncRow(fid){const r=current();const f=r?.fixtures.find(x=>x.id===fid);
     const want=val==null?0:val+1;if(+d.dataset.k!==want&&!d.dataset.user){d.dataset.k=want;d.scrollTop=want*DH;markDrum(d,want)}});
   el.querySelector(".fx-state").innerHTML=footState(f,st,false)}
 const syncAll=()=>{const r=current();if(!r)return;r.fixtures.forEach(f=>syncRow(f.id));syncHead()};
-function celebrate(){const d=$("#heroDie");if(!d||RM.matches)return;d.classList.remove("cheer");void d.offsetWidth;d.classList.add("cheer")}
+function celebrate(){const d=$(".hero-card");if(!d||RM.matches)return;d.classList.remove("cheer");void d.offsetWidth;d.classList.add("cheer")}
 
 /* ===================== the rail ===================== */
+function winCard(){const r=roundList().filter(isSettled).at(-1);if(!r)return"";const top=roundScores(r).filter(x=>x.played)[0];if(!top||top.pts<=0)return"";
+  return `<section class="win-card" aria-label="${esc(t.winner(r.n,dname(top.uid),top.pts))}"><span class="notch">${t.round(r.n)}</span><span class="crown" aria-hidden="true">👑</span>
+    <span class="avatar xl">${esc(initials(top.uid))}</span><p class="win-name">${bn(top.uid)}</p><p class="win-sub">${t.winnerSub(top.pts)}</p></section>`}
 function room(r){const st=S.status?.[r.id]||{},ids=Object.keys(S.players),locked=isLocked(r);
   const rows=ids.map(u=>({u,s:st[u]})).sort((a,b)=>(b.s?1:0)-(a.s?1:0)||(b.s&&a.s?new Date(b.s.at)-new Date(a.s.at):dname(a.u).localeCompare(dname(b.u))));
   const n=rows.filter(x=>x.s).length;
-  return `<section class="section" aria-labelledby="roomh"><div class="section-head"><h2 class="h2" id="roomh">${t.roomH}</h2><span class="meta num">${n}/${ids.length}</span></div>
-    <ol class="room">${rows.map(({u,s})=>`<li>${PIPS(s?s.filled:0,"mini-pips")}<span class="room-who"><span class="nm">${bn(u)}${u===S.uid?`<em>${t.you}</em>`:""}</span><small>${s?`${t.of6(s.filled)}${s.gg?`, ${t.ggShort}`:""}`:t.notYet}</small></span>
-      <span class="when">${s?`${esc(fWd(s.at))} <span class="num">${fTime(s.at)}</span>`:""}</span></li>`).join("")}</ol>
+  return `<section class="section card room-card" aria-labelledby="roomh"><div class="section-head"><h2 class="h2" id="roomh">${t.roomH}</h2><span class="meta num">${n}/${ids.length}</span></div>
+    <ol class="room">${rows.map(({u,s})=>`<li><span class="avatar">${esc(initials(u))}</span><span class="room-who"><span class="nm">${bn(u)}${u===S.uid?`<em>${t.you}</em>`:""}</span><small>${s?`${t.of6(s.filled)}${s.gg?`, ${t.ggShort}`:""}`:t.notYet}</small></span>
+      <span class="room-r">${SIX(s?s.filled:0,"mini-six")}<span class="when">${s?`${esc(fWd(s.at))} <span class="num">${fTime(s.at)}</span>`:""}</span></span></li>`).join("")}</ol>
     <p class="foot-note">${locked?t.roomLocked:t.roomOpen}</p></section>`}
 function lastRound(){const r=roundList().filter(isSettled).at(-1);
   if(!r)return "";
-  const mine=pickOf(S.uid,r.id);const top=roundScores(r).filter(x=>x.played)[0];
-  return `<section class="section win" aria-labelledby="lasth">${top&&top.pts>0?`<p class="win-line"><span class="crown" aria-hidden="true">👑</span>${esc(t.winner(r.n,dname(top.uid),top.pts))}</p>`:""}
-    <div class="section-head"><h2 class="h2" id="lasth">${t.lastH}</h2><button class="link" type="button" data-go="round" data-round="${r.id}">${t.round(r.n)}</button></div>
+  const mine=pickOf(S.uid,r.id);
+  return `<section class="section card" aria-labelledby="lasth"><div class="section-head"><h2 class="h2" id="lasth">${t.lastH}</h2><button class="link" type="button" data-go="round" data-round="${r.id}">${t.viewAll}</button></div>
     <ol class="last">${r.fixtures.map(f=>{const v=mine?.s?.[f.id];const p=ptsFor(v,f.res);
-      return `<li><span class="h">${esc(sname(f.h))}</span><span class="sc num" dir="ltr">${f.void?"P":`${f.res[0]}–${f.res[1]}`}</span><span class="a">${esc(sname(f.a))}</span><span class="pts ${v?"p"+p:""}">${v?"+"+p:"–"}</span></li>`}).join("")}</ol></section>`}
-function railTable(){const tb=table();if(!roundList().some(isSettled))return `<section class="section"><div class="section-head"><h2 class="h2">${t.tableH}</h2></div><p class="foot-note">${t.noTable}</p></section>`;
+      return `<li><span class="h">${crest(f.h,22)}${esc(sname(f.h))}</span><span class="sc2 num" dir="ltr">${f.void?"P":`${f.res[0]}–${f.res[1]}`}</span><span class="a">${esc(sname(f.a))}${crest(f.a,22)}</span><span class="pts ${v?"p"+p:""}">${v?"+"+p:"–"}</span></li>`}).join("")}</ol></section>`}
+function railTable(){const tb=table();if(!roundList().some(isSettled))return `<section class="section card"><div class="section-head"><h2 class="h2">${t.tableH}</h2></div><p class="foot-note">${t.noTable}</p></section>`;
   const top=tb.slice(0,5),me=tb.find(x=>x.uid===S.uid);
-  return `<section class="section" aria-labelledby="mth"><div class="section-head"><h2 class="h2" id="mth">${t.tableH}</h2><button class="link" type="button" data-go="table">${t.fullTable}</button></div>
+  return `<section class="section card" aria-labelledby="mth"><div class="section-head"><h2 class="h2" id="mth">${t.tableH}</h2><button class="link" type="button" data-go="table">${t.viewAll}</button></div>
     <ol class="standings mini">${[...top,...(me&&me.rank>5?[me]:[])].map(s=>standRow(s,tb,true)).join("")}</ol></section>`}
-const rules=()=>`<section class="section"><div class="section-head"><h2 class="h2">${t.rulesH}</h2></div><ol class="rules">${t.rules.map((x,i)=>`<li><span class="num">${i+1}</span>${x}</li>`).join("")}</ol></section>`;
+const rules=()=>`<section class="section card"><div class="section-head"><h2 class="h2">${t.rulesH}</h2></div><ol class="rules">${t.rules.map((x,i)=>`<li><span class="num">${i+1}</span>${x}</li>`).join("")}</ol></section>`;
 
 /* ===================== results ===================== */
 function roundView(){
@@ -388,28 +412,26 @@ function roundView(){
   const r=list.find(x=>x.id===S.viewRound)||current()||list.at(-1);S.viewRound=r.id;
   const locked=isLocked(r),sc=roundScores(r).filter(x=>x.played),mine=pickOf(S.uid,r.id);
   const now=Date.now();
-  const board=f=>{const v=mine?.s?.[f.id];const p=f.res?ptsFor(v,f.res):null;const ko=new Date(f.ko).getTime();
-    const status=f.void?`<span class="mc-st">${t.voidF}</span>`:f.res?`<span class="mc-st ft">${t.ft}</span>`:now>=ko&&now<ko+115*6e4?`<span class="mc-st live">${t.live}</span>`:`<span class="mc-st">${esc(fDay(f.ko))}</span>`;
+  const board=f=>{const v=mine?.s?.[f.id];const p=f.res?ptsFor(v,f.res):null;const ko=new Date(f.ko).getTime();const live=!f.res&&!f.void&&now>=ko&&now<ko+115*6e4;
     const picks=locked?Object.keys(S.players).map(u=>pickOf(u,r.id)?.s?.[f.id]).filter(Array.isArray):[];
     const H=picks.filter(x=>x[0]>x[1]).length,D=picks.filter(x=>x[0]===x[1]).length,A=picks.filter(x=>x[0]<x[1]).length,N=picks.length;
-    const split=N?`<div class="split"><div class="split-bar" role="img" aria-label="${H} ${esc(name(f.h))}, ${D} ${t.draw}, ${A} ${esc(name(f.a))}">${H?`<i style="flex:${H};background:${KIT[f.h]||"var(--ink-3)"}"></i>`:""}${D?`<i style="flex:${D};background:var(--rule-2)"></i>`:""}${A?`<i style="flex:${A};background:${KIT[f.a]||"var(--ink-3)"}"></i>`:""}</div>
-      <div class="split-lab"><span><b class="num">${H}</b> ${esc(sname(f.h))}</span><span><b class="num">${D}</b> ${t.draw}</span><span><b class="num">${A}</b> ${esc(sname(f.a))}</span></div></div>`:"";
-    return `<li class="mc"><div class="mc-board"><div class="tm">${crest(f.h,36)}<span class="tm-n">${esc(sname(f.h))}</span></div>
-      <div class="mc-score">${f.res?`<div class="big num" dir="ltr">${f.res[0]}<span class="c">–</span>${f.res[1]}</div>`:`<div class="big num ko" dir="ltr">${fTime(f.ko)}</div>`}${status}</div>
-      <div class="tm a">${crest(f.a,36)}<span class="tm-n">${esc(sname(f.a))}</span></div></div>
+    const split=N?`<div class="odds" role="img" aria-label="${H} ${esc(name(f.h))}, ${D} ${t.draw}, ${A} ${esc(name(f.a))}"><span class="pill"><small>1</small><b class="num">${H}</b></span><span class="pill"><small>X</small><b class="num">${D}</b></span><span class="pill"><small>2</small><b class="num">${A}</b></span></div>`:"";
+    return `<li class="mc card${live?" is-live":""}">${live?`<span class="notch live"><i class="dot"></i>${t.live}</span>`:""}<div class="mc-board"><div class="tm">${crest(f.h,56)}<span class="tm-n">${esc(sname(f.h))}</span></div>
+      <div class="mc-score">${f.res?`<div class="big num" dir="ltr">${f.res[0]}<span class="c">:</span>${f.res[1]}</div><span class="mc-st">${t.ft}</span>`:f.void?`<span class="mc-st">${t.voidF}</span>`:`<span class="mc-st">${esc(fDay(f.ko))}</span><div class="big num ko" dir="ltr">${fTime(f.ko)}</div>`}</div>
+      <div class="tm">${crest(f.a,56)}<span class="tm-n">${esc(sname(f.a))}</span></div></div>
       ${v?`<p class="mc-mine">${t.yourPick} <b class="num" dir="ltr">${v[0]}–${v[1]}</b>${p!=null?`<span class="pts p${p}">+${p}</span>`:""}</p>`:""}${split}</li>`};
   let body;
   if(!locked)body=empty(t.hiddenH,t.hiddenM(S.counts?.[r.id]??Object.keys(S.status?.[r.id]||{}).length,Object.keys(S.players).length));
   else if(!sc.length)body=empty(t.everyone,t.nobody);
-  else body=`<div class="picks-wrap" tabindex="0" role="region" aria-label="${t.everyone}"><table class="picks"><thead><tr><th scope="col">${t.member}</th>${r.fixtures.map(f=>`<th scope="col">${esc(f.h)} ${esc(f.a)}<span class="num" dir="ltr">${f.res?f.res.join("–"):"–"}</span></th>`).join("")}<th scope="col">${t.ggShort}</th><th scope="col">${t.total}</th><th scope="col">${t.savedAt}</th></tr></thead><tbody>
-    ${sc.map(x=>{const p=pickOf(x.uid,r.id);return `<tr><td><span class="who">${av(x.uid)}<span>${bn(x.uid)}${x.uid===S.uid?` <span class="meta">${t.you}</span>`:""}</span></span></td>
+  else body=`<div class="card pad"><div class="picks-wrap" tabindex="0" role="region" aria-label="${t.everyone}"><table class="picks"><thead><tr><th scope="col">${t.member}</th>${r.fixtures.map(f=>`<th scope="col">${esc(f.h)} ${esc(f.a)}<span class="num" dir="ltr">${f.res?f.res.join("–"):"–"}</span></th>`).join("")}<th scope="col">${t.ggShort}</th><th scope="col">${t.total}</th><th scope="col">${t.savedAt}</th></tr></thead><tbody>
+    ${sc.map(x=>{const p=pickOf(x.uid,r.id);return `<tr><td><span class="who"><span class="avatar">${esc(initials(x.uid))}</span><span>${bn(x.uid)}${x.uid===S.uid?` <span class="meta">${t.you}</span>`:""}</span></span></td>
       ${r.fixtures.map(f=>{const v=p?.s?.[f.id];const pt=f.res&&v?ptsFor(v,f.res):null;return `<td><span class="pk ${pt==null?"":"p"+pt}" dir="ltr">${v?`${v[0]}–${v[1]}`:"–"}</span></td>`}).join("")}
       <td class="num">${x.gg??"–"}</td><td class="num tot">${x.pts}</td><td class="meta">${(()=>{const at=S.status?.[r.id]?.[x.uid]?.at||p?.at;return at?`${esc(fWd(at))} <span class="num">${fTime(at)}</span>`:"–"})()}</td></tr>`}).join("")}</tbody></table></div>
-    <div class="legend"><span><span class="pk p5">2–1</span> ${t.exact5}</span><span><span class="pk p2">2–1</span> ${t.right2}</span>${r.firstGoal!=null?`<span>${t.ggWas(r.firstGoal)}</span>`:""}</div>`;
+    <div class="legend"><span><span class="pk p5">2–1</span> ${t.exact5}</span><span><span class="pk p2">2–1</span> ${t.right2}</span>${r.firstGoal!=null?`<span>${t.ggWas(r.firstGoal)}</span>`:""}</div></div>`;
   return `<div class="wrap"><header class="page-head"><h1 class="title">${t.resultsH}</h1>
-      <div class="seg rounds" role="group" aria-label="${t.mw}">${list.slice().reverse().map(x=>`<button type="button" data-round="${x.id}" aria-pressed="${x.id===r.id}">${pad(x.n)}</button>`).join("")}</div></header>
+      <div class="tabs" role="group" aria-label="${t.mw}">${list.slice().reverse().map(x=>`<button type="button" data-round="${x.id}" aria-pressed="${x.id===r.id}">${t.round(x.n)}</button>`).join("")}</div></header>
     <div class="grid"><ol class="boards" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(board).join("")}</ol>
-      <section class="section" aria-labelledby="evh"><div class="section-head"><h2 class="h2" id="evh">${t.everyone}</h2></div>${body}</section></div></div>`;
+      <section class="section" aria-labelledby="evh"><div class="sec-head"><h2 class="h2" id="evh">${t.everyone}</h2></div>${body}</section></div></div>`;
 }
 
 /* ===================== table ===================== */
@@ -417,13 +439,15 @@ function standRow(s,tb,mini){const above=tb[s.rank-2];const below=tb[s.rank];
   const mv=s.move==null||s.move===0?"":s.move>0?`<span class="mv up" aria-label="up ${s.move}">▲${s.move}</span>`:`<span class="mv down" aria-label="down ${-s.move}">▼${-s.move}</span>`;
   const rival=s.rank===1?(below?t.leads(s.pts-below.pts):""):t.behind(above.pts-s.pts,dname(above.uid));
   return `<li><button class="st ${s.rank===1?"lead":""} ${s.uid===S.uid?"mine":""}" type="button" data-player="${esc(s.uid)}" data-move="${s.move||0}">
-    <span class="st-rank num">${s.rank}</span>
+    <span class="st-rank num">${s.rank}</span><span class="avatar">${esc(initials(s.uid))}</span>
     <span class="st-mid"><span class="st-name">${bn(s.uid)}${s.rank===1?' <span aria-hidden="true">👑</span>':""}${mv}</span>${mini?"":`<span class="st-sub">${esc(t.exactWon(s.ex,s.won))}</span>`}<span class="st-rival">${esc(rival)}</span></span>
     <span class="st-pts num">${s.pts}${s.last!=null&&!mini?`<small>${t.lastRd(s.last)}</small>`:""}</span></button></li>`}
 function tableView(){const tb=table();const n=roundList().filter(isSettled).length;
   const head=`<header class="page-head"><h1 class="title">${t.tableH}</h1><p class="sub">${n?esc(t.after(n)):""}</p></header>`;
   if(!n)return `<div class="wrap">${head}${empty(t.tableH,t.noTable)}</div>`;
-  return `<div class="wrap narrow">${head}<ol class="standings" id="standings">${tb.map(s=>standRow(s,tb,false)).join("")}</ol>
+  const pod=tb.slice(0,3);
+  const podium=`<div class="podium">${[pod[1],pod[0],pod[2]].filter(Boolean).map(s=>`<button class="pod pod-${s.rank}" type="button" data-player="${esc(s.uid)}"><span class="avatar xl">${esc(initials(s.uid))}</span><span class="pod-name">${bn(s.uid)}</span><span class="pod-pts num">${s.pts}</span><span class="pod-step num">${s.rank}</span></button>`).join("")}</div>`;
+  return `<div class="wrap narrow">${head}${podium}<div class="card pad"><ol class="standings" id="standings">${tb.map(s=>standRow(s,tb,false)).join("")}</ol></div>
     <p class="foot-note">${t.rules[1]} ${t.rules[2]}</p></div>`}
 
 /* ===================== member ===================== */
@@ -435,19 +459,18 @@ function playerView(){const ids=Object.keys(S.players);const uid=ids.includes(S.
   const opts=(l,v)=>l.map(x=>`<option value="${esc(x)}" ${x===v?"selected":""}>${esc(dname(x))}</option>`).join("");
   const joined=S.players[uid]?.joinedAt;
   const pass=`<section class="pass" aria-label="${t.yourName}">
-      <div class="pass-top">${PIPS(6,"pass-pips")}<span class="pass-club">${t.club}</span><span class="num pass-no">${t.no(memberNo(uid)||1)}</span></div>
+      <div class="pass-top">${MARK6("pass-mark")}<span class="pass-club">${t.club}</span><span class="num pass-no">${t.no(memberNo(uid)||1)}</span></div>
       <h1 class="pass-name">${bn(uid)}</h1>
       <div class="pass-row"><span>${t.since}<b>${joined?esc(new Date(joined).toLocaleDateString(LOC(),{...KW,month:"short",year:"numeric"})):"2026"}</b></span><span>${t.position}<b class="num">${me.rank||"–"}</b></span><span>${t.points}<b class="num">${me.pts}</b></span></div></section>`;
-  const stats=`<dl class="ledger2"><div><dt>${t.avg}</dt><dd class="num">${me.played?(Math.round(me.pts/me.played*10)/10):"–"}</dd></div><div><dt>${t.wonN}</dt><dd class="num">${me.won}</dd></div><div><dt>${t.exactN}</dt><dd class="num">${me.ex}</dd></div><div><dt>${t.rightN}</dt><dd class="num">${me.rs}</dd></div></dl>`;
-  const h2h=`<section class="section" aria-labelledby="h2hh"><div class="section-head"><h2 class="h2" id="h2hh">${t.h2h}</h2></div>
-    ${!vs?`<p class="foot-note">${t.h2hNeed}</p>`:`<div class="field" style="margin-top:14px;max-width:320px"><label for="selv">${t.vs}</label><select id="selv">${opts(others,vs)}</select></div>
-    ${!per.length?`<p class="foot-note">${t.h2hAfter}</p>`:`<div class="vs-sum"><span><b class="num">${h.a}</b>${bn(uid)}</span><span><b class="num">${h.d}</b>${t.draws}</span><span><b class="num">${h.b}</b>${bn(vs)}</span></div>
+  const stats=`<dl class="stats">${[[t.avg,me.played?(Math.round(me.pts/me.played*10)/10):"–"],[t.wonN,me.won],[t.exactN,me.ex],[t.rightN,me.rs]].map(([k,v])=>`<div class="card stat"><dt>${k}</dt><dd class="num">${v}</dd></div>`).join("")}</dl>`;
+  const h2h=`<section class="section card" aria-labelledby="h2hh"><div class="section-head"><h2 class="h2" id="h2hh">${t.h2h}</h2></div>
+    ${!vs?`<p class="foot-note">${t.h2hNeed}</p>`:`<div class="field" style="margin-top:14px"><label for="selv">${t.vs}</label><select id="selv">${opts(others,vs)}</select></div>
+    ${!per.length?`<p class="foot-note">${t.h2hAfter}</p>`:`<div class="odds vs"><span class="pill"><small>${bn(uid)}</small><b class="num">${h.a}</b></span><span class="pill"><small>${t.draws}</small><b class="num">${h.d}</b></span><span class="pill"><small>${bn(vs)}</small><b class="num">${h.b}</b></span></div>
       <div class="vs-strip" role="list">${per.map(p=>`<div role="listitem" class="${p.a>p.b?"w":p.b>p.a?"l":""}"><b class="num" dir="ltr">${p.a}–${p.b}</b><span>${t.round(p.n)}</span></div>`).join("")}</div>`}`}</section>`;
   return `<div class="wrap member"><div class="member-page"><div>${pass}
-      <div class="row member-ctl"><div class="field"><label for="selp">${t.choose}</label><select id="selp">${opts(ids,uid)}</select></div>
+      <div class="card pad member-ctl"><div class="field"><label for="selp">${t.choose}</label><select id="selp">${opts(ids,uid)}</select></div>
       ${uid===S.uid&&!S.demo?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div></div>
     <div>${stats}${h2h}</div></div></div>`}
-
 
 /* ===================== edits + autosave ===================== */
 function setScore(fid,i,val){const r=current();if(!r||isLocked(r))return;const cur=S.draft.s[fid]?[...S.draft.s[fid]]:[null,null];
@@ -548,6 +571,8 @@ document.addEventListener("click",async e=>{
   const tk=e.target.closest("#mrail [data-m]");if(tk){stepRail($("#mrail"),+tk.dataset.m);return}
   const act=e.target.closest("[data-act]");if(!act)return;const a=act.dataset.act;
   const authErr=m=>{const el=$("#autherr");if(el)el.textContent=m};
+  if(a==="next"){S.onb=(S.onb||0)+1;const sl=$(".slides");if(sl&&!RM.matches){sl.style.setProperty("--s",S.onb);sl.querySelectorAll(".slide").forEach((x,i)=>x.setAttribute("aria-hidden",i!==S.onb));$$(".dots i").forEach((x,i)=>x.classList.toggle("on",i===S.onb));if(S.onb>=t.onb.length-1){act.dataset.act="start";act.textContent=t.getStarted}}else render();return}
+  if(a==="start"||a==="skip"){S.onbDone=true;try{localStorage.setItem("ss-onb","1")}catch(_){}if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(render)}else render();return}
   if(a==="lang"){LANG=LANG==="ar"?"en":"ar";try{localStorage.setItem("ss-lang",LANG)}catch(_){}
     if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(render)}else render();return}
   if(a==="retrysave"){S.saveState="dirty";S.dirty=true;save();return}

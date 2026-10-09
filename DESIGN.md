@@ -1,33 +1,31 @@
-# Subar Sitta design system (v4, Porcelain)
+# Subar Sitta design system (v5, Night Pitch)
 
-Concept: **a beautifully engineered object.** It is light, quiet and exact, made for six friends. The interface uses no cards, gradients or glass. Hairlines, type and one physical gesture carry it.
+The approved art direction is the dark football app reference the owner supplied: deep forest greens, glass cards and lime-to-turquoise light.
 
-## The mark: six pips
-A die face of six (`mark.svg`, `PIPS(n)` in app.js). Six pips are six fixtures. The mark is also the progress of your round. In the header, the save bar and the "Who's in" list, a pip lights when a fixture is predicted. When all six scores and the Golden Goal are saved, the die turns green. It works as an app icon, an embossed card, a chest print and a motion sequence (pips lighting 0 to 6).
+## Mark
+A modern 6 drawn as one stroke. Its bowl holds a match ball's pentagon patch. It is lime to turquoise on a near-black tile (`MARK6()`, `mark.svg`). It works as the app icon, in the masthead, on the membership card and at hero scale on the entry screen. The name is set as Subar Sitta / سوبر ستة, always with Town House 10.
 
-## Inks
-| Token | Light | Dark | Use |
-|---|---|---|---|
-| `--paper` | #F4F5F3 | #0B0C0E | Canvas |
-| `--surface` | #FFFFFF | #17191C | Drum window, inputs, panels |
-| `--ink` | #0B0C0E | #F2F3F1 | Text, die, save bar |
-| `--ink-2` / `--ink-3` | #464B52 / #5F656C | #B6BBC1 / #8D939A | Secondary and meta (AA) |
-| `--green` | #00703C | #3BC47E | Saved, exact score, focus, active |
-| `--red` | #C8102E | #FF5D6C | Live, errors, under three hours to lock |
-
-These are the four inks of Kuwait's flag, used with restraint. Club colours appear only in the prediction split.
+## Colour
+- Canvas: #060B08 under a forest glow (#2C6338 to #163A22) at the top of the screen.
+- Cards: translucent white at 4.5 to 6% with a 1px light edge, a backdrop blur and a soft drop shadow, 28px radius.
+- Light: `--grad` (#C8F55A to #79EA8F to #25D9B4). Used for the hero card, the active navigation pill, primary buttons, exact scores, the member card and the round winner. Text on light uses #07140D.
+- Text: #F2F6F1, #B5C1B8 and #8A988E (meta, AA on the canvas).
+- Live and errors: #E5383B.
 
 ## Type
-Alexandria (OFL), one family drawn for Arabic and Latin together, served from the site.
-- Words: 700, tight tracking in Latin, natural spacing in Arabic.
-- Numbers: 200 to 300, tabular. Scores, countdown, ranks and minutes read like instruments.
-- Text: 400 to 500 at 15px.
-- Western digits are used for scores and times in both languages.
+Manrope for Latin and Alexandria for Arabic, joined into one family ("SS") by unicode range. Weights 500 to 800. Numbers are tabular and bold, like the reference's scores.
 
-## Interaction
-- **Score drums.** Each score is a picker wheel built on native scroll snapping. You flick it, or tap a number above or below the centre. On a keyboard, digits, the arrow keys and Backspace work, and it is exposed as `role=spinbutton`. A value saves automatically about a second after it settles.
-- **Minute rail.** The Golden Goal is a 90-minute ruler you slide under a fixed cursor (`role=slider`; arrow keys, Shift for 5, Home and End).
-- **Save bar.** An ink object that shows the pips and the state, turns green when all six are saved and offers a retry if a save fails.
-- **Spatial navigation.** Sections slide in from the side they sit on, using the View Transitions API. The masthead and tab bar stay still, and the slide reverses in Arabic.
-- **Realtime.** Refreshes wait while a finger is on a drum.
-- **Languages.** English (LTR) and Arabic (RTL) switch from the masthead; the choice is remembered on the device. Light and dark follow the system setting. Reduced motion turns every animation off.
+## Components
+- **Notch tab:** sits at the top centre of a card ("Round 3", "Live").
+- **Floating dock:** round buttons. The active one stretches into a gradient pill with its label (spring).
+- **Fixture card:** crests at 52px, the date and kick-off time, and two score drums (picker wheels on native scroll snapping, with tap and keyboard input).
+- **Golden Goal:** a 90-minute rail under a glowing cursor.
+- **Pick split:** after the lock, the group's split appears as 1 / X / 2 pills, in the place of the reference's odds.
+- **Who's in:** a row of avatars with progress rings that fill as each member predicts.
+- **Round winner:** a gradient card with a crown. The table opens with a podium.
+- **Save bar:** a glass pill that floats only when it has something to say, and turns gradient when all six are saved.
+
+## Motion
+- Spring easing through CSS `linear()`.
+- Sections slide in from the side they sit on (View Transitions; mirrored in Arabic). Onboarding slides spring between steps.
+- Reduced motion switches every animation off.
