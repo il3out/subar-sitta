@@ -19,41 +19,42 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  mw:"Matchweek",round:n=>`Round ${n}`,
  locksIn:"Locks in",lockedAt:(d,tm)=>`Locked ${d}, ${tm}`,locksAt:(d,tm)=>`${d}, ${tm} Kuwait time`,
  of6:n=>`${n} of 6`,gg:m=>m==null?"Golden Goal not set":`Golden Goal ${m}′`,
- save:{clean:"",pending:"Saving",saving:"Saving",saved:tm=>`Saved ${tm}`,failed:"Not saved. Tap to retry",half:"Add the other score"},
- st:{todo:"",half:"Add the other score",edited:"Saving",saving:"Saving",saved:"Saved",failed:"Not saved",locked:"Locked in",none:"No prediction"},
- final:"Full time",awaiting:"Awaiting result",voidF:"Postponed, not scored",
- goalsOf:c=>`${c} goals`,swipe:"Swipe a number, or tap it",
- ggH:"Golden Goal",ggP:"The minute of the first goal across all six. It settles ties.",ggSet:"Slide to the minute",ggWas:m=>`First goal: minute ${m}`,ggUnset:"Not set",
- roomH:"Who's in",roomOpen:"Scores stay hidden until kick-off.",roomLocked:"Everyone's picks are on Results.",notYet:"Not in yet",ggShort:"GG",
- lastH:"Last round",lastNone:"Results appear here once a round is complete.",yourPick:"You",winner:(n,who,p)=>`Round ${n} went to ${who} with ${p}`,
- tableH:"The table",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
+ save:{clean:"",pending:"⏳ Saving",saving:"⏳ Saving",saved:tm=>`💙 Saved ${tm}`,failed:"⚠️ Not saved. Tap to retry",half:"✏️ Add the other score"},
+ st:{todo:"",half:"✏️ Add the other score",edited:"⏳ Saving",saving:"⏳ Saving",saved:"💙 Saved",failed:"⚠️ Not saved",locked:"🔒 Locked in",none:"😶 No prediction"},
+ final:"🏁 Full time",awaiting:"⏳ Awaiting result",voidF:"🚫 Postponed, not scored",
+ goalsOf:c=>`${c} goals`,swipe:"👆 Swipe a number, or tap it",
+ ggH:"⏱️ Golden Goal",ggP:"The minute of the first goal across all six. It settles ties.",ggSet:"Slide to the minute",ggWas:m=>`First goal: minute ${m}`,ggUnset:"Not set",
+ roomH:"👀 Who's in",roomOpen:"🙈 Scores stay hidden until kick-off.",roomLocked:"👉 Everyone's picks are on Results.",notYet:"😴 Not in yet",ggShort:"GG",
+ lastH:"🏁 Last round",lastNone:"Results appear here once a round is complete.",yourPick:"You",winner:(n,who,p)=>`Round ${n} went to ${who} with ${p}`,
+ tableH:"📈 The table",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
  after:n=>n===1?"After 1 round":`After ${n} rounds`,exactWon:(e,w)=>`${e} exact, ${w} ${w===1?"round":"rounds"} won`,
- behind:(p,n)=>p===0?`Level with ${n}`:`${p} behind ${n}`,leads:p=>p===0?"Level at the top":`Leads by ${p}`,you:"you",lastRd:p=>`${p} last round`,
- rulesH:"How it works",rules:["Six fixtures every round. Predict the full-time score of each.","An exact score is worth 5 points. The right result is worth 2.","The Golden Goal is the minute of the first goal across all six. It settles ties.","Picks lock at the first kick-off. Then everyone's picks are revealed."],
+ behind:(p,n)=>p===0?`🤝 Level with ${n}`:`🎯 ${p} behind ${n}`,leads:p=>p===0?"🤝 Level at the top":`📈 Leads by ${p}`,you:"you",lastRd:p=>`${p} last round`,
+ rulesH:"📖 How it works",rules:["⚽ Six fixtures every round. Predict the full-time score of each.","🎯 An exact score is worth 5 points. The right result is worth 2.","⏱️ The Golden Goal is the minute of the first goal across all six. It settles ties.","🔒 Picks lock at the first kick-off. Then everyone's picks are revealed."],
  joinH:"A private season.",joinM:"Six fixtures every round. Call the scores, pick the minute of the first goal, and climb the table.",
- nick:"Your name in the league",nickPh:"For example Bu Salem",nickErr:"Use at least two characters.",join:"Join the league",joined:"Welcome to SUBAR 6",
+ nick:"Your name in the league",nickPh:"For example Bu Salem",nickErr:"Use at least two characters.",join:"Join the league",joined:"🎉 Welcome to SUBAR 6",
  signInT:"Sign in",joinT:"Join",email:"Email",password:"Password",pwHint:"At least 8 characters",code:"Invite code",codeHint:"From the member who invited you",
- signIn:"Sign in",signUp:"Create account and join",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"Password saved",
+ signIn:"Sign in",signUp:"Create account and join",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"💙 Password saved",
  confirmEmail:"Check your email to confirm your account, then sign in.",signOut:"Sign out",authErr:"Email or password is not right.",
- badCode:"That invite code is not right.",weakPw:"Use at least 8 characters.",badEmail:"Enter a valid email.",locked:"Picks are locked for this round.",
- noRound:"No round is open",noRoundUser:"The next round opens on its own when the fixtures are published.",noRoundAdmin:"The autopilot opens rounds on its own. You can also open one from Admin.",
- resultsH:"Results",everyone:"Everyone's picks",hiddenH:"Hidden until kick-off",hiddenM:(a,b)=>`${a} of ${b} members have saved picks so far.`,nobody:"Nobody predicted this round.",
+ badCode:"That invite code is not right.",weakPw:"Use at least 8 characters.",badEmail:"Enter a valid email.",locked:"🔒 Picks are locked for this round.",
+ noRound:"😴 No round is open",noRoundUser:"The next round opens on its own when the fixtures are published.",noRoundAdmin:"The autopilot opens rounds on its own. You can also open one from Admin.",
+ resultsH:"Results",everyone:"Everyone's picks",hiddenH:"🙈 Hidden until kick-off",hiddenM:(a,b)=>`${a} of ${b} members have saved picks so far.`,nobody:"🦗 Nobody predicted this round.",
  member:"Member",total:"Pts",savedAt:"Saved",exact5:"Exact score, 5",right2:"Right result, 2",live:"Live",ft:"Full time",draw:"Draw",
  no:n=>`No. ${String(n).padStart(3,"0")}`,since:"Member since",position:"Position",points:"Points",avg:"Per round",exactN:"Exact scores",rightN:"Right results",wonN:"Rounds won",
- choose:"Member",h2h:"Head to head",vs:"Against",h2hNeed:"Head to head starts when another member joins.",h2hAfter:"Head to head starts after the first completed round.",wins:"wins",draws:"level",
+ choose:"Member",h2h:"⚔️ Head to head",vs:"Against",h2hNeed:"Head to head starts when another member joins.",h2hAfter:"Head to head starts after the first completed round.",wins:"wins",draws:"level",
  adminH:"Admin",adminOnly:"This page is for admins only.",adminSub:n=>`${n} ${n===1?"member":"members"} in the league.`,current:"Current round",
  autoH:"Autopilot",autoM:"Opens each round from the real Premier League fixtures, locks it at the first kick-off, and settles results and the Golden Goal.",autoOn:"On",autoOff:"Off",runNow:"Run now",lastRun:"Last action",callsToday:n=>`${n} of 80 data requests used today`,never:"Nothing yet",
- inviteH:"Invite code",inviteM:"Share it with friends so they can join. A new code stops the old one working.",newCode:"New code",copy:"Copy",copied:"Copied",
- resultsT:n=>`Round ${n} results`,fg:"Minute of the first goal (90 if goalless)",saveResults:"Save results",resultsSaved:"Results saved",lockNow:"Lock picks now",reopen:"Reopen picks",lockedMsg:"Picks locked",reopenedMsg:"Picks reopened",resNote:"A round counts toward the table once all six results are in.",
- newT:n=>`Open round ${n} by hand`,homeN:i=>`Home ${i}`,awayL:"Away",ko:"Kick-off (Kuwait time)",deadline:"Pick deadline (blank means the first kick-off)",openN:n=>`Open round ${n}`,opened:n=>`Round ${n} is open`,
+ inviteH:"Invite code",inviteM:"Share it with friends so they can join. A new code stops the old one working.",newCode:"New code",copy:"Copy",copied:"📋 Copied",
+ resultsT:n=>`Round ${n} results`,fg:"Minute of the first goal (90 if goalless)",saveResults:"Save results",resultsSaved:"💙 Results saved",lockNow:"Lock picks now",reopen:"Reopen picks",lockedMsg:"Picks locked",reopenedMsg:"Picks reopened",resNote:"A round counts toward the table once all six results are in.",
+ newT:n=>`Open round ${n} by hand`,homeN:i=>`Home ${i}`,awayL:"Away",ko:"Kick-off (Kuwait time)",deadline:"Pick deadline (blank means the first kick-off)",openN:n=>`Open round ${n}`,opened:n=>`🔵 Round ${n} is open`,
  needSix:"Fill all six fixtures: two different teams and a kick-off for each.",dup:"A team appears in more than one fixture.",curChanged:"Current round updated",choosePh:"Choose",lockedS:"Locked",openS:"Open",
  err:{perm:"You don't have permission for that change.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
- private:"Private league. Invitation only.",
- allSaved:tm=>`All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"Six scores saved. Now the Golden Goal.",saveNow:"Save now",cheer:"All six saved. Good luck.",
+ private:"🔐 Private league. Invitation only.",
+ allSaved:tm=>`💙 All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"💙 Six scores saved. Now the Golden Goal ⏱️",saveNow:"💾 Save now",cheer:"💙 All six saved. Good luck ⚽",
  units:{d:"d",h:"h",m:"m",s:"s"},toDark:"Switch to dark mode",toLight:"Switch to light mode",yourName:"Your membership",langSwitch:"Switch to Arabic",
- hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"Who's in",yourSix:"Your six",matchday:"Matchday",viewAll:"View all",winnerSub:p=>`Round winner with ${p} points`,
+ hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"👀 Who's in",yourSix:"⚽ Your six",matchday:"🗓️ Matchday",viewAll:"View all",winnerSub:p=>`🎉 Round winner with ${p} points`,
  onb:[["Six matches. One perfect six.","Predict the full-time score of six Premier League fixtures every round."],["Name the minute.","Pick the minute of the first goal. The Golden Goal settles every tie."],["Climb the table.","Exact scores are worth five. Bragging rights last all week. Town House 10 only."]],
- skip:"Skip",next:"Next",getStarted:"Get started"}};
+ skip:"Skip",next:"Next",getStarted:"Get started",
+ banner:["🔥 Six matches. Six exact scores. One perfect six.","🎯 Exact score 5 points. Right result 2.","⏱️ The Golden Goal settles every tie.","💙 Bragging rights last a whole week."]}};
 const LANG="en";
 /* theme: follows the device until the member picks one in the header */
 const DARKQ=matchMedia("(prefers-color-scheme: dark)");
@@ -289,10 +290,11 @@ function home(){
       <div class="hc-foot" id="heroDie">${SIX(n,"hc-six")}<span class="hc-n"><b class="num" id="heroN">${n}</b>/6</span></div></section>`;
   const fx=`<div class="sec-head"><h2 class="h2">${t.yourSix}</h2><span class="status" id="status" aria-live="polite"></span></div>
     <ol class="slate" id="fixtures" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(f=>fixture(f,locked)).join("")}</ol>${ggBlock(r,locked)}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
-  return `<div class="wrap md">${hello}${whoRow(r)}
+  return `<div class="wrap md">${banner()}${hello}${whoRow(r)}
     <div class="grid"><div class="col-main"><div class="sec-head"><h2 class="h2">${t.matchday}</h2><span class="meta">${esc(S.meta?.season||"2026/27")}</span></div>${hero}${fx}</div>
     <aside class="rail" aria-label="${esc(t.tableH)}">${winCard()}${lastRound()}${room(r)}${railTable()}${rules()}</aside></div></div>`;
 }
+const banner=()=>`<div class="banner" role="note"><span class="banner-tag">SUBAR 6</span><span id="bannerTxt" aria-live="off">${t.banner[S.bannerI||0]}</span></div>`;
 function whoRow(r){const st=S.status?.[r.id]||{},ids=Object.keys(S.players);const n=ids.filter(u=>st[u]).length;
   return `<div class="chips" role="list" tabindex="0" aria-label="${t.roomH}"><span class="chip on" role="listitem"><span class="chip-ico">${I.player}</span>${t.whoIn} <b class="num">${n}/${ids.length}</b></span>
     ${ids.sort((a,b)=>(st[b]?.filled||0)-(st[a]?.filled||0)).map(u=>{const s=st[u];const p=s?Math.round(s.filled/6*100):0;return `<span class="ring${s&&s.filled===6&&s.gg?" full":""}" role="listitem" style="--p:${p}" title="${esc(dname(u))}"><span class="avatar">${esc(initials(u))}</span><span class="sr">${esc(dname(u))}: ${s?t.of6(s.filled):t.notYet}</span></span>`}).join("")}</div>`}
@@ -317,7 +319,7 @@ function fixture(f,locked){
   return `<li class="fx card" data-card="${f.id}" data-state="${st}">
     <div class="fx-line">${side(f.h)}<div class="fx-mid"><p class="fx-when"><span>${esc(fDay(f.ko))}</span><b class="num">${fTime(f.ko)}</b></p><div class="score">${drum(f.id,0,v?.[0],locked,name(f.h))}<span class="colon" aria-hidden="true">:</span>${drum(f.id,1,v?.[1],locked,name(f.a))}</div></div>${side(f.a)}</div>
     <div class="fx-foot"><span class="fx-state">${footState(f,st,locked)}</span>${res}</div></li>`}
-const footState=(f,st,locked)=>locked?(Array.isArray(S.draft.s[f.id])?t.st.locked:t.st.none):st==="saved"?`${I.check}${t.st.saved}`:st==="todo"?t.swipe:t.st[st];
+const footState=(f,st,locked)=>locked?(Array.isArray(S.draft.s[f.id])?t.st.locked:t.st.none):st==="saved"?t.st.saved:st==="todo"?t.swipe:t.st[st];
 function ggBlock(r,locked){const g=S.draft.gg;
   const out=`<output class="gg-val${g==null?" unset":""}" id="ggout" dir="ltr">${g==null?"–":`${g}<sup>′</sup>`}</output>`;
   if(locked)return `<section class="gg card" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${r.firstGoal!=null?t.ggWas(r.firstGoal):t.ggP}</p></div><div class="gg-dial">${out}</div></section>`;
@@ -333,7 +335,7 @@ function syncHead(){const r=current();if(!r||!S.draft)return;const locked=isLock
   const tm=S.savedAt?fTime(S.savedAt):"";
   const all=n===6&&k==="saved"&&S.draft.gg!=null;
   const die=$("#heroDie");if(die){die.querySelectorAll(".six i").forEach((p,i)=>p.classList.toggle("on",i<n));$("#heroN").textContent=n;die.classList.toggle("all",all)}
-  const el=$("#status");if(el){el.dataset.s=all?"all":k;el.innerHTML=k==="saved"||all?`${I.check}${t.save.saved(tm)}`:k==="saving"||k==="pending"?t.save.saving:k==="failed"?t.st.failed:""}
+  const el=$("#status");if(el){el.dataset.s=all?"all":k;el.innerHTML=k==="saved"||all?t.save.saved(tm):k==="saving"||k==="pending"?t.save.saving:k==="failed"?t.st.failed:""}
   const sb2=$("#savebar");if(sb2){sb2.dataset.s=all?"all":n===6&&k==="saved"?"nogg":k;
     sb2.innerHTML=`${SIX(n,"sb-six")}<span class="sb-msg">${all?t.allSaved(tm):n===6&&k==="saved"?t.allSavedNoGG:k==="failed"?t.save.failed:k==="half"?t.save.half:k==="saving"||k==="pending"?t.save.saving:k==="saved"?t.save.saved(tm):t.of6(n)}</span>
       ${k==="failed"?`<button class="sb-btn bad" type="button" data-act="retrysave">${t.retry}</button>`:k==="pending"?`<button class="sb-btn" type="button" data-act="savenow">${t.saveNow}</button>`:all?`<span class="sb-ok">${I.check}</span>`:""}`;
@@ -591,6 +593,10 @@ document.addEventListener("change",async e=>{const el=e.target;
   if(el.id==="setcur"){if(await write("meta/league",{season:S.meta?.season||"2026/27",currentRound:el.value}))toast(t.curChanged)}});
 addEventListener("beforeunload",e=>{if(S.dirty){flushSave();e.preventDefault()}});
 addEventListener("visibilitychange",()=>{if(document.hidden)flushSave()});
+
+/* ===================== banner rotation ===================== */
+setInterval(()=>{const b=$("#bannerTxt");if(!b||RM.matches||document.hidden)return;S.bannerI=((S.bannerI||0)+1)%t.banner.length;
+  b.classList.remove("in");void b.offsetWidth;b.textContent=t.banner[S.bannerI];b.classList.add("in")},4500);
 
 /* ===================== boot ===================== */
 (()=>{const h=location.hash.slice(1);if(h==="predict")S.page="home";else if([...PAGES,"admin"].includes(h))S.page=h})();
