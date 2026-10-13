@@ -1,6 +1,6 @@
 # Subar Sitta
 
-The private game. Six Premier League fixtures a round, one inner circle.
+Six Premier League fixtures a round. One table. Open to everyone at subarsitta.com.
 
 A static web app (no build step) on Vercel, with Supabase for sign-in, data and the autopilot.
 
@@ -23,17 +23,16 @@ It makes a handful of API requests a day and stops itself at 80, under the free 
 ## One-time setup
 
 ### 1. Supabase
-1. **Authentication → Sign In / Providers → Email**: turn **off** "Confirm email". Friends join with an invite code, so email confirmation isn't needed, and the free email service only sends a few emails an hour.
+1. **Authentication → Sign In / Providers → Email**: "Confirm email" stays **off** unless a custom email sender (SMTP) is set up; the built-in sender only manages a couple of emails an hour.
 2. **Authentication → URL Configuration**: set **Site URL** to `https://subarsitta.com`. Password-reset links use it.
-3. **SQL Editor → New query**: paste all of `supabase/setup.sql` and click **Run**.
+3. **SQL Editor → New query**: paste all of `supabase/setup.sql` and click **Run**, then do the same with `supabase/update-02-public.sql`.
 4. **SQL Editor → New query**: run this with your API-Football key. The key goes into Supabase's encrypted Vault and is never in the code:
    ```sql
    select vault.create_secret('YOUR_API_FOOTBALL_KEY', 'api_football_key');
    ```
-5. Still in the SQL Editor, run the autopilot once by hand and read your invite code:
+5. Still in the SQL Editor, run the autopilot once by hand:
    ```sql
    select public.autopilot();
-   select invite_code from public.league_secret;
    ```
 
 ### 2. Vercel
@@ -41,13 +40,23 @@ It makes a handful of API requests a day and stops itself at 80, under the free 
 2. Set Framework Preset to **Other**. Leave the build command empty and keep the output directory as the root. Click **Deploy**.
 3. **Settings → Domains**: add `subarsitta.com`, then copy the DNS records Vercel shows into your domain registrar.
 
-### 3. Join first
-Open the site, choose **Join**, and use the invite code. **The first person to join becomes the admin**, so join before you share the code.
+### 3. Make yourself admin
+Sign up on the site, then in the SQL Editor:
+```sql
+update public.players set is_admin = true where nick = 'YOUR USERNAME';
+```
+
+### 4. Bot protection (recommended once public)
+1. Cloudflare → Turnstile → add the site `subarsitta.com`; copy the site key and secret key.
+2. Put the site key in `config.js` as `turnstile: "…"` and deploy.
+3. Supabase → Authentication → Attack Protection → enable CAPTCHA, provider Turnstile, paste the secret key.
+Do 2 before 3, or sign-ins fail until the new `config.js` is live.
 
 ## Files
 - `index.html`: the whole app (design, logic, copy)
-- `config.js`: the Supabase project URL and publishable key. Both are public by design; the database rules protect the data.
-- `supabase/setup.sql`: tables, access rules, invite join, autopilot and schedule
+- `config.js`: the Supabase project URL, publishable key and (optional) Turnstile site key. All public by design; the database rules protect the data.
+- `supabase/setup.sql`: tables, access rules, autopilot and schedule
+- `supabase/update-02-public.sql`: open sign-up with unique usernames, the table and round scores computed in the database, public fixtures
 - `crests/`, `mark.svg`, icons: brand and club artwork
 - `fonts/`: Anton, Barlow and Barlow Condensed, SIL Open Font License 1.1 (licences alongside)
 - `brand/`: SUBAR 6 logo SVGs (hero, badge, wordmark, monogram, app icon)
@@ -59,4 +68,3 @@ Open the site, choose **Join**, and use the invite code. **The first person to j
   update public.league set season = '2027/28', api_season = 2027;
   ```
 - **Pause automation:** use the Admin → Autopilot switch. You can still enter results and open rounds by hand on the same page.
-- **New invite code:** Admin → Invite code → New code. The old code stops working.

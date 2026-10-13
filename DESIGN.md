@@ -1,6 +1,6 @@
 # SUBAR 6 — design system (v6)
 
-Private football predictions for Town House 10. English only. No stars, no green, no red, no trophies.
+Football predictions, open to everyone. English only. Signed-out visitors get the landing page: rich navy, the gradient 6, a live match ticket (real crests, club codes, countdown) and stitched seams. No stars, no green, no red, no trophies.
 
 ## Colour (blues, whites, neutrals only)
 | Token | Hex | Use |
