@@ -13,8 +13,8 @@ const BUNDLED=new Set(Object.keys(CLUBS));
 /* ===================== copy (English only) ===================== */
 const T={
 en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
- brand:"SUBAR 6",club:"Town House 10",members:"Members only",
- nav:{home:"Matchday",round:"Results",table:"Table",player:"Member",admin:"Admin"},
+ brand:"SUBAR 6",club:"Football predictions",
+ nav:{home:"Matchday",round:"Results",table:"Table",player:"Me",admin:"Admin"},
  sample:"Sample",loading:"Loading the league",
  mw:"Matchweek",round:n=>`Round ${n}`,
  locksIn:"Locks in",lockedAt:(d,tm)=>`Locked ${d}, ${tm}`,locksAt:(d,tm)=>`${d}, ${tm} Kuwait time`,
@@ -24,36 +24,38 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  final:"🏁 Full time",awaiting:"⏳ Awaiting result",voidF:"🚫 Postponed, not scored",
  goalsOf:c=>`${c} goals`,swipe:"👆 Swipe a number, or tap it",
  ggH:"⏱️ Golden Goal",ggP:"The minute of the first goal across all six. It settles ties.",ggSet:"Slide to the minute",ggWas:m=>`First goal: minute ${m}`,ggUnset:"Not set",
- roomH:"👀 Who's in",roomOpen:"🙈 Scores stay hidden until kick-off.",roomLocked:"👉 Everyone's picks are on Results.",notYet:"😴 Not in yet",ggShort:"GG",
+ roomH:"👀 Who's in",roomOpen:"🙈 Scores stay hidden until kick-off.",roomMore:n=>`and ${n} more`,roomLocked:"👉 Everyone's picks are on Results.",notYet:"😴 Not in yet",ggShort:"GG",
  lastH:"🏁 Last round",lastNone:"Results appear here once a round is complete.",yourPick:"You",winner:(n,who,p)=>`Round ${n} went to ${who} with ${p}`,
  tableH:"📈 The table",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
  after:n=>n===1?"After 1 round":`After ${n} rounds`,exactWon:(e,w)=>`${e} exact, ${w} ${w===1?"round":"rounds"} won`,
  behind:(p,n)=>p===0?`🤝 Level with ${n}`:`🎯 ${p} behind ${n}`,leads:p=>p===0?"🤝 Level at the top":`📈 Leads by ${p}`,you:"you",lastRd:p=>`${p} last round`,
  rulesH:"📖 How it works",rules:["⚽ Six fixtures every round. Predict the full-time score of each.","🎯 An exact score is worth 5 points. The right result is worth 2.","⏱️ The Golden Goal is the minute of the first goal across all six. It settles ties.","🔒 Picks lock at the first kick-off. Then everyone's picks are revealed."],
- joinH:"A private season.",joinM:"Six fixtures every round. Call the scores, pick the minute of the first goal, and climb the table.",
- nick:"Your name in the league",nickPh:"For example Bu Salem",nickErr:"Use at least two characters.",join:"Join the league",joined:"🎉 Welcome to SUBAR 6",
- signInT:"Sign in",joinT:"Join",email:"Email",password:"Password",pwHint:"At least 8 characters",code:"Invite code",codeHint:"From the member who invited you",
- signIn:"Sign in",signUp:"Create account and join",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"💙 Password saved",
+ joinM:"Pick the name everyone will see on the table.",
+ nick:"Username",nickHint:"3 to 20 characters. Everyone sees this on the table.",nickErr:"Usernames are 3 to 20 characters.",nickTaken:"That username is taken. Try another.",nickFree:"Available",
+ join:"Choose your username",joinBtn:"Start playing",joined:"🎉 You're in. Make your six.",
+ signInT:"Sign in",joinT:"Join the game",email:"Email",emailHint:"For password resets only. Never shown to other players.",password:"Password",pwHint:"At least 8 characters",
+ signIn:"Sign in",signUp:"Create account",haveAcc:"Already playing?",newHere:"New here?",back:"Back",
+ emailTaken:"That email already has an account. Sign in instead.",tooMany:"Too many attempts. Wait a minute and try again.",botCheck:"Complete the check above, then try again.",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"💙 Password saved",
  confirmEmail:"Check your email to confirm your account, then sign in.",signOut:"Sign out",authErr:"Email or password is not right.",
- badCode:"That invite code is not right.",weakPw:"Use at least 8 characters.",badEmail:"Enter a valid email.",locked:"🔒 Picks are locked for this round.",
+ weakPw:"Use at least 8 characters.",badEmail:"Enter a valid email.",locked:"🔒 Picks are locked for this round.",
  noRound:"😴 No round is open",noRoundUser:"The next round opens on its own when the fixtures are published.",noRoundAdmin:"The autopilot opens rounds on its own. You can also open one from Admin.",
- resultsH:"Results",everyone:"Everyone's picks",hiddenH:"🙈 Hidden until kick-off",hiddenM:(a,b)=>`${a} of ${b} members have saved picks so far.`,nobody:"🦗 Nobody predicted this round.",
- member:"Member",total:"Pts",savedAt:"Saved",exact5:"Exact score, 5",right2:"Right result, 2",live:"Live",ft:"Full time",draw:"Draw",
- no:n=>`No. ${String(n).padStart(3,"0")}`,since:"Member since",position:"Position",points:"Points",avg:"Per round",exactN:"Exact scores",rightN:"Right results",wonN:"Rounds won",
- choose:"Member",h2h:"⚔️ Head to head",vs:"Against",h2hNeed:"Head to head starts when another member joins.",h2hAfter:"Head to head starts after the first completed round.",wins:"wins",draws:"level",
- adminH:"Admin",adminOnly:"This page is for admins only.",adminSub:n=>`${n} ${n===1?"member":"members"} in the league.`,current:"Current round",
+ resultsH:"Results",everyone:"Everyone's picks",hiddenH:"🙈 Hidden until kick-off",hiddenM:(a,b)=>`${a} of ${b} players have saved picks so far.`,nobody:"🦗 Nobody predicted this round.",
+ member:"Player",total:"Pts",savedAt:"Saved",exact5:"Exact score, 5",right2:"Right result, 2",live:"Live",ft:"Full time",draw:"Draw",
+ no:n=>`No. ${String(n).padStart(3,"0")}`,since:"Playing since",position:"Position",points:"Points",avg:"Per round",exactN:"Exact scores",rightN:"Right results",wonN:"Rounds won",
+ choose:"Player",h2h:"⚔️ Head to head",vs:"Against",h2hNeed:"Head to head starts when another player joins.",h2hAfter:"Head to head starts after the first completed round.",wins:"wins",draws:"level",
+ adminH:"Admin",adminOnly:"This page is for admins only.",adminSub:n=>`${n} ${n===1?"player":"players"} in the game.`,current:"Current round",
  autoH:"Autopilot",autoM:"Opens each round from the real Premier League fixtures, locks it at the first kick-off, and settles results and the Golden Goal.",autoOn:"On",autoOff:"Off",runNow:"Run now",lastRun:"Last action",callsToday:n=>`${n} of 80 data requests used today`,never:"Nothing yet",
- inviteH:"Invite code",inviteM:"Share it with friends so they can join. A new code stops the old one working.",newCode:"New code",copy:"Copy",copied:"📋 Copied",
  resultsT:n=>`Round ${n} results`,fg:"Minute of the first goal (90 if goalless)",saveResults:"Save results",resultsSaved:"💙 Results saved",lockNow:"Lock picks now",reopen:"Reopen picks",lockedMsg:"Picks locked",reopenedMsg:"Picks reopened",resNote:"A round counts toward the table once all six results are in.",
  newT:n=>`Open round ${n} by hand`,homeN:i=>`Home ${i}`,awayL:"Away",ko:"Kick-off (Kuwait time)",deadline:"Pick deadline (blank means the first kick-off)",openN:n=>`Open round ${n}`,opened:n=>`🔵 Round ${n} is open`,
  needSix:"Fill all six fixtures: two different teams and a kick-off for each.",dup:"A team appears in more than one fixture.",curChanged:"Current round updated",choosePh:"Choose",lockedS:"Locked",openS:"Open",
  err:{perm:"You don't have permission for that change.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
- private:"🔐 Private league. Invitation only.",
+ land:{h:["Six matches.","Six predictions.","One leaderboard."],p:"Call the score of six Premier League games every round. Exact score 5, right result 2. Free to play.",
+   cta:"JOIN THE GAME ⚽",how:"HOW IT WORKS",round:n=>`Round ${n}`,locks:"Picks lock in",lastRes:"Last round",
+   howH:"How it works",steps:[["Predict six scores","Every round we pick six Premier League fixtures. Call the full-time score of each and the minute of the first goal."],["Picks lock at kick-off","Change your mind as often as you like until the first game starts. Then everyone's picks are revealed."],["Climb the table","Exact score 5 points, right result 2. The Golden Goal minute settles ties. Bragging rights last all week."]],
+   story:"We started with friends. Now everyone's invited.",join2:"Join the game",free:"Free. No invite code. Takes 20 seconds."},
  allSaved:tm=>`💙 All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"💙 Six scores saved. Now the Golden Goal ⏱️",saveNow:"💾 Save now",cheer:"💙 All six saved. Good luck ⚽",
- units:{d:"d",h:"h",m:"m",s:"s"},toDark:"Switch to dark mode",toLight:"Switch to light mode",yourName:"Your membership",langSwitch:"Switch to Arabic",
+ units:{d:"d",h:"h",m:"m",s:"s"},toDark:"Switch to dark mode",toLight:"Switch to light mode",yourName:"Your player card",langSwitch:"Switch to Arabic",
  hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"👀 Who's in",yourSix:"⚽ Your six",matchday:"🗓️ Matchday",viewAll:"View all",winnerSub:p=>`🎉 Round winner with ${p} points`,
- onb:[["Six matches. One perfect six.","Predict the full-time score of six Premier League fixtures every round."],["Name the minute.","Pick the minute of the first goal. The Golden Goal settles every tie."],["Climb the table.","Exact scores are worth five. Bragging rights last all week. Town House 10 only."]],
- skip:"Skip",next:"Next",getStarted:"Get started",
  banner:["🔥 Six matches. Six exact scores. One perfect six.","🎯 Exact score 5 points. Right result 2.","⏱️ The Golden Goal settles every tie.","💙 Bragging rights last a whole week."]}};
 const LANG="en";
 /* theme: follows the device until the member picks one in the header */
@@ -86,9 +88,9 @@ const I={
  err:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.2v.3"/>')};
 
 /* ===================== state ===================== */
-const S={uid:null,isAdmin:false,demo:false,ready:false,loadFailed:false,
- meta:null,rounds:{},players:{},picks:{},status:{},counts:{},got:{},
- page:"home",viewRound:null,viewPlayer:null,vsPlayer:null,authTab:"in",invite:null,
+const S={uid:null,member:false,isAdmin:false,ready:false,loadFailed:false,
+ meta:null,rounds:{},players:{},mine:{},lb:[],total:0,who:null,boards:{},
+ page:"home",viewRound:null,viewPlayer:null,vsPlayer:null,auth:null,
  draft:null,draftRound:null,draftSrc:null,dirty:false,saveState:"clean",ver:0,savedAt:null,kp:null};
 
 
@@ -114,88 +116,75 @@ function roundList(){return Object.entries(S.rounds).map(([id,r])=>({id,...r})).
 function current(){const id=S.meta?.currentRound;return id&&S.rounds[id]?{id,...S.rounds[id]}:roundList().at(-1)||null}
 const isLocked=r=>!!r&&(!!r.locked||Date.now()>=new Date(r.deadline).getTime());
 const isSettled=r=>!!r&&r.fixtures?.length===6&&r.fixtures.every(f=>Array.isArray(f.res)||f.void);
-const pickOf=(uid,rid)=>S.picks[uid]?.rounds?.[rid]||null;
+const pickOf=(uid,rid)=>uid===S.uid?S.mine[rid]||null:null;   /* only your own picks live on the phone */
 const dname=uid=>S.players[uid]?.nick||t.member;
 const initials=uid=>dname(uid).split(/\s+/).filter(Boolean).slice(0,2).map(w=>[...w][0]).join("").toUpperCase();
 const bn=uid=>`<bdi>${esc(dname(uid))}</bdi>`;
 const av=uid=>`<span class="avatar" aria-hidden="true">${esc(initials(uid))}</span>`;
-const memberNo=uid=>Object.entries(S.players).sort((a,b)=>String(a[1].joinedAt||"").localeCompare(String(b[1].joinedAt||""))).findIndex(([u])=>u===uid)+1;
+const memberNo=uid=>S.players[uid]?.no||0;
 const fullPick=v=>Array.isArray(v)&&v[0]!=null&&v[1]!=null;
 
 
-function roundScores(r){
-  const fg=r.firstGoal??null;
-  return Object.keys(S.players).map(uid=>{const p=pickOf(uid,r.id);let pts=0,ex=0,rs=0;
-    (r.fixtures||[]).forEach(f=>{const v=ptsFor(p?.s?.[f.id],f.res);pts+=v;if(v===5)ex++;else if(v===2)rs++});
-    return {uid,pts,ex,rs,gg:p?.gg??null,ggd:p&&p.gg!=null&&fg!=null?Math.abs(p.gg-fg):Infinity,played:!!p}})
-   .sort((a,b)=>b.pts-a.pts||a.ggd-b.ggd);
-}
-function standings(upto){
-  const T0={};Object.keys(S.players).forEach(u=>T0[u]={uid:u,pts:0,ex:0,rs:0,won:0,played:0,hist:[]});
-  roundList().filter(isSettled).slice(0,upto??undefined).forEach(r=>{const sc=roundScores(r),top=sc[0];
-    sc.forEach(x=>{const s=T0[x.uid];if(!s)return;s.pts+=x.pts;s.ex+=x.ex;s.rs+=x.rs;if(x.played)s.played++;
-      if(top&&x.played&&top.pts>0&&x.pts===top.pts&&x.ggd===top.ggd)s.won++;s.hist.push({n:r.n,pts:x.pts})})});
-  return Object.values(T0).sort((a,b)=>b.pts-a.pts||b.ex-a.ex||b.won-a.won);
-}
-function table(){const n=roundList().filter(isSettled).length;const now=standings();
-  const prev=n>1?standings(n-1):null;const pr={};prev?.forEach((s,i)=>pr[s.uid]=i);
-  return now.map((s,i)=>({...s,rank:i+1,last:s.hist.at(-1)?.pts??null,move:prev&&pr[s.uid]!=null?pr[s.uid]-i:null}))}
+/* scoring lives in the database (leaderboard, round_board); same rules as ptsFor */
+const board=rid=>S.boards[rid]||[];
+const lastSettled=()=>roundList().filter(r=>isSettled(r)&&isLocked(r)).at(-1)||null;
+function table(){return S.lb.map(r=>({uid:r.user_id,rank:r.rank,pts:r.pts,ex:r.ex,rs:r.rs,won:r.won,played:r.played,hist:r.hist||[],last:r.last_pts,move:r.move}))}
+const addPlayer=(uid,nick,x={})=>{S.players[uid]={...S.players[uid],nick,...x}};
 
 
 /* ===================== data (Supabase; RLS decides what comes back) ===================== */
-let sb=null,reloadT=null;
+let sb=null,reloadT=null,whoT=null;
 const cfg=window.SUBAR||{};
-const errMsg=e=>{const m=String(e?.message||e||"");return /row-level security|violates/i.test(m)?t.locked:/invite code/i.test(m)?t.badCode:/Invalid login/i.test(m)?t.authErr:m||t.err.gen};
+const errMsg=e=>{const m=String(e?.message||e||""),c=e?.code||e?.error_code||"";
+  return /row-level security|violates row/i.test(m)?t.locked:/username is taken|players_nick_unique/i.test(m)?t.nickTaken:/^Usernames/.test(m)?m+".":
+    /already registered|user_already_exists/i.test(m+c)?t.emailTaken:/rate limit|429|too many/i.test(m+c+(e?.status||""))?t.tooMany:/captcha/i.test(m)?t.botCheck:
+    /Invalid login/i.test(m)?t.authErr:/invalid format|validate email/i.test(m)?t.badEmail:/at least 8|weak/i.test(m+c)?t.weakPw:m||t.err.gen};
 async function q(p){try{const {data,error}=await p;if(error){toast(errMsg(error),true);return null}return data??true}catch(e){toast(t.err.gen,true);return null}}
 async function loadAll(){
-  const [lg,rd,pl,pk,st]=await Promise.all([sb.from("league").select("*").maybeSingle(),sb.from("rounds").select("*").order("n"),sb.from("players").select("*"),sb.from("picks").select("*"),sb.from("pick_status").select("*")]);
-  if(lg.error||rd.error||pl.error||pk.error){S.loadFailed=true;S.ready=true;render();return}
-  const L=lg.data;S.meta=L?{season:L.season,currentRound:L.current_round,auto:L.auto,status:L.status,statusAt:L.status_at,calls:L.calls_day===new Date().toISOString().slice(0,10)?L.calls_today:0}:null;
+  const [lg,rd,me]=await Promise.all([sb.from("league").select("*").maybeSingle(),sb.from("rounds").select("*").order("n"),
+    S.uid?sb.from("players").select("*").eq("id",S.uid).maybeSingle():Promise.resolve({data:null})]);
+  if(rd.error||me.error){S.loadFailed=true;S.ready=true;render();return}
   S.rounds={};(rd.data||[]).forEach(r=>{(r.fixtures||[]).forEach(f=>{if(f.h&&!CLUBS[f.h])CLUBS[f.h]=f.hn||f.h;if(f.a&&!CLUBS[f.a])CLUBS[f.a]=f.an||f.a});
     S.rounds[r.id]={n:r.n,deadline:r.deadline,locked:r.locked,firstGoal:r.first_goal,fixtures:r.fixtures||[],settledAt:r.settled_at}});
-  S.players={};(pl.data||[]).forEach(p=>S.players[p.id]={nick:p.nick,isAdmin:p.is_admin,joinedAt:p.joined_at});
-  S.picks={};(pk.data||[]).forEach(p=>{(S.picks[p.user_id]??={rounds:{}}).rounds[p.round_id]={s:p.s||{},gg:p.gg,at:p.at}});
-  S.status={};if(!st.error)(st.data||[]).forEach(x=>{(S.status[x.round_id]??={})[x.user_id]={filled:x.filled,gg:x.has_gg,at:x.last_at,saves:x.saves}});   /* tolerated if the update hasn't been run */
-  S.isAdmin=!!S.players[S.uid]?.isAdmin;
-  const cr=current();S.counts={};if(cr&&!isLocked(cr)&&S.players[S.uid]){const {data}=await sb.rpc("pick_count",{r:cr.id});S.counts[cr.id]=data??0}
-  if(S.isAdmin&&S.page==="admin"&&S.invite==null){const {data}=await sb.rpc("invite_code");S.invite=data}
+  const L=lg.data;S.meta=L?{season:L.season,currentRound:L.current_round,auto:L.auto,status:L.status,statusAt:L.status_at,calls:L.calls_day===new Date().toISOString().slice(0,10)?L.calls_today:0}:null;
+  S.member=!!me.data;
+  if(!S.member){S.loadFailed=false;S.ready=true;softRender();return}
+  addPlayer(S.uid,me.data.nick,{isAdmin:me.data.is_admin,joinedAt:me.data.joined_at});
+  const [lb,mine,tot]=await Promise.all([sb.rpc("leaderboard",{lim:100}),sb.from("picks").select("*").eq("user_id",S.uid),
+    sb.from("players").select("id",{count:"exact",head:true})]);
+  if(lb.error||mine.error){S.loadFailed=true;S.ready=true;render();return}
+  S.lb=lb.data||[];S.lb.forEach(r=>addPlayer(r.user_id,r.nick,{isAdmin:r.is_admin,joinedAt:r.joined_at,no:r.member_no}));
+  S.mine={};(mine.data||[]).forEach(p=>S.mine[p.round_id]={s:p.s||{},gg:p.gg,at:p.at});
+  S.total=tot.count??S.lb.length;S.isAdmin=!!me.data.is_admin;S.boards={};
+  const ls=lastSettled();
+  await Promise.all([loadWho(),ls&&loadBoard(ls.id),S.viewRound&&S.viewRound!==ls?.id&&loadBoard(S.viewRound)]);
   S.loadFailed=false;S.ready=true;
   softRender()}
+/* one locked round, best first (the database only returns everyone once the round has locked) */
+async function loadBoard(rid){const r=S.rounds[rid];if(!r||!isLocked(r))return;
+  // ponytail: first 500 players per round; page with .range() if a round ever has more
+  const {data,error}=await sb.rpc("round_board",{rid}).range(0,499);if(error)return;
+  S.boards[rid]=(data||[]).map(x=>{if(!S.players[x.user_id])addPlayer(x.user_id,x.nick);return{uid:x.user_id,pts:x.pts,ex:x.ex,rs:x.rs,gg:x.gg,ggd:x.ggd,s:x.s||{},at:x.at,played:true}})}
+const ensureBoard=rid=>{if(rid&&!S.boards[rid]&&S.rounds[rid]&&isLocked(S.rounds[rid]))loadBoard(rid).then(()=>{if(S.page==="round")render()})};
+/* Who's in: how many have saved this round and the latest savers. Never the scores. */
+async function loadWho(){const cr=current();if(!cr){S.who=null;return}
+  const [rows,cnt]=await Promise.all([sb.from("pick_status").select("user_id,filled,has_gg,last_at,players(nick)").eq("round_id",cr.id).order("last_at",{ascending:false}).limit(24),
+    sb.from("pick_status").select("user_id",{count:"exact",head:true}).eq("round_id",cr.id)]);
+  if(rows.error)return;
+  S.who={rid:cr.id,count:cnt.count??rows.data.length,rows:rows.data.map(x=>{if(x.players?.nick)addPlayer(x.user_id,x.players.nick);return{uid:x.user_id,filled:x.filled,gg:x.has_gg,at:x.last_at}})}}
 const reload=()=>{clearTimeout(reloadT);reloadT=setTimeout(loadAll,250)};
-function live(){sb.channel("subar").on("postgres_changes",{event:"*",schema:"public"},reload).subscribe()}
+/* live: rounds and league reload; a pick saved anywhere only refreshes Who's in, spread out so a busy round doesn't stampede */
+const whoSoon=()=>{if(!S.member)return;clearTimeout(whoT);whoT=setTimeout(async()=>{await loadWho();softRender()},1500+Math.random()*3500)};
+function live(){const ch=sb.channel("subar"),on=(table,fn)=>ch.on("postgres_changes",{event:"*",schema:"public",table},fn);
+  on("rounds",reload);on("league",reload);on("pick_status",whoSoon);ch.subscribe()}
 async function write(path,data,merge){
-  if(S.demo){await new Promise(r=>setTimeout(r,450));demoWrite(path,data,merge);return true}
   const [c,id]=path.split("/");let ok;
   if(c==="picks"){const r=data.rounds[S.draftRound];ok=await q(sb.from("picks").upsert({user_id:S.uid,round_id:S.draftRound,s:r.s,gg:r.gg}))}
   else if(c==="rounds"){const m={};for(const [k,v] of Object.entries(data))m[{firstGoal:"first_goal"}[k]||k]=v;
     if(m.fixtures&&m.fixtures.every(f=>Array.isArray(f.res)||f.void))m.settled_at=new Date().toISOString();
     ok=await q(merge?sb.from("rounds").update(m).eq("id",id):sb.from("rounds").insert({id,...m}))}
   else if(c==="meta"&&id==="league"){ok=await q(sb.from("league").update({current_round:data.currentRound}).eq("id",1))}
-  if(ok)reload();return !!ok}
-function demoWrite(path,data,merge){const [c,id]=path.split("/");const tgt={meta:null,rounds:S.rounds,players:S.players,picks:S.picks}[c];
-  if(c==="meta"){S.meta={...(merge?S.meta:{}),...data};return}
-  tgt[id]=merge?{...tgt[id],...data}:data;
-  if(c==="picks"){const r=data.rounds[S.draftRound];(S.status[S.draftRound]??={})[S.uid]={filled:Object.keys(r.s).length,gg:r.gg!=null,at:new Date().toISOString()}}}
-
-/* ===================== sample data (no backend configured) ===================== */
-function loadSample(){
-  S.demo=true;S.uid="s1";S.isAdmin=true;
-  const mk=(rows,res)=>rows.map(([h,a,ko,r],i)=>({id:"f"+(i+1),h,a,ko,res:res?r:null}));
-  const prev=mk([["MCI","SUN","2026-09-20T13:00:00Z",[5,3]],["EVE","IPS","2026-09-19T14:00:00Z",[1,0]],["NFO","COV","2026-09-19T16:30:00Z",[0,1]],["BRE","CFC","2026-09-18T19:00:00Z",[3,0]],["LFC","ARS","2026-09-13T15:30:00Z",[1,1]],["AVL","NEW","2026-09-13T14:00:00Z",[2,0]]],1);
-  const past=mk([["TOT","AVL","2026-09-19T11:30:00Z",[2,3]],["BRI","ARS","2026-09-19T14:00:00Z",[3,0]],["NEW","HUL","2026-09-19T14:00:00Z",[2,1]],["BOU","LFC","2026-09-20T13:00:00Z",[0,1]],["LEE","CRY","2026-09-20T13:00:00Z",[0,0]],["FUL","MUN","2026-09-20T15:30:00Z",[1,1]]],1);
-  const next=mk([["ARS","LEE","2026-10-10T11:30:00Z"],["SUN","BRI","2026-10-10T14:00:00Z"],["AVL","BRE","2026-10-10T14:00:00Z"],["CFC","BOU","2026-10-10T16:30:00Z"],["HUL","EVE","2026-10-11T13:00:00Z"],["LFC","MCI","2026-10-11T15:30:00Z"]],0);
-  S.rounds={s1:{n:1,deadline:"2026-09-13T11:00:00Z",fixtures:prev,firstGoal:14},s2:{n:2,deadline:"2026-09-18T19:00:00Z",fixtures:past,firstGoal:9},s3:{n:3,deadline:"2026-10-10T11:30:00Z",fixtures:next,firstGoal:null}};
-  S.meta={season:"2026/27",currentRound:"s3",auto:true,status:"Opened round 3 (Regular Season - 7)",statusAt:"2026-10-08T15:02:00Z",calls:4};
-  const nm=["Bu Salem","Mishari","Nawaf","Yousef A.","Fahad"];
-  const g1=[[[3,1],[1,0],[1,1],[2,0],[1,1],[1,0]],[[2,0],[2,1],[0,1],[1,1],[2,2],[2,1]],[[4,2],[1,1],[0,0],[3,1],[0,1],[2,0]],[[2,1],[0,0],[1,2],[2,0],[1,1],[1,1]],[[3,0],[1,0],[0,1],[1,0],[1,0],[2,0]]];
-  const g2=[[[1,2],[1,1],[2,1],[0,2],[0,0],[1,1]],[[2,1],[0,1],[3,0],[1,1],[1,0],[2,1]],[[2,3],[2,0],[2,0],[0,1],[1,1],[0,2]],[[1,1],[1,2],[2,1],[1,3],[0,0],[1,0]],[[0,2],[3,0],[1,0],[0,1],[2,1],[1,1]]];
-  const m=g=>Object.fromEntries(g.map((x,j)=>["f"+(j+1),x]));
-  nm.forEach((n,i)=>{const u="s"+(i+1);S.players[u]={nick:n,joinedAt:`2026-09-0${i+1}T10:00:00Z`};
-    S.picks[u]={rounds:{s1:{s:m(g1[i]),gg:[12,20,8,15,30][i]},s2:{s:m(g2[i]),gg:[6,12,4,30,9][i]}}}});
-  S.picks.s1.rounds.s3={s:{f1:[2,0],f2:[1,1],f3:[0,0]},gg:null,at:"2026-10-08T15:40:00Z"};
-  S.status={s3:{s1:{filled:3,gg:false,at:"2026-10-08T15:40:00Z"},s3:{filled:6,gg:true,at:"2026-10-08T16:12:00Z"},s4:{filled:6,gg:true,at:"2026-10-08T14:02:00Z"}}};
-  S.ready=true;
-}
+  if(ok&&c!=="picks")reload();return !!ok}
 
 
 /* ===================== the mark: the SUBAR 6 monogram ===================== */
@@ -208,15 +197,15 @@ const greet=()=>{const h=+new Date().toLocaleString("en-GB",{...KW,hour:"2-digit
 /* ===================== shell ===================== */
 const PAGES=["home","round","table","player"];
 function shell(){
-  const inLeague=S.demo||!!(S.uid&&S.players[S.uid]);
+  const inLeague=S.member;
   const cur=p=>S.page===p?'aria-current="page"':"";
   const pages=inLeague?[...PAGES,...(S.isAdmin?["admin"]:[])]:[];
-  $("#mast").innerHTML=`<div class="wrap mast-in"><button class="brand" type="button" data-go="home" aria-label="${esc(t.brand)}, ${esc(t.nav.home)}">${WM}<small class="bw-club">${t.club}</small></button>
+  $("#mast").innerHTML=`<div class="wrap mast-in"><button class="brand" type="button" data-go="home" aria-label="${esc(t.brand)} ${esc(t.club)}">${WM}<small class="bw-club">${t.club}</small></button>
     <nav class="mnav" aria-label="Sections">${pages.map(p=>`<button type="button" data-go="${p}" ${cur(p)}>${t.nav[p]}</button>`).join("")}</nav>
-    <div class="mast-r">${S.demo?`<span class="flag">${t.sample}</span>`:""}
+    <div class="mast-r">${!S.uid&&S.ready&&!S.auth?`<button class="btn quiet mast-in-btn" type="button" data-act="auth" data-v="in">${t.signInT}</button>`:""}
       <button class="circ" type="button" data-act="theme" aria-label="${isDark()?t.toLight:t.toDark}">${I.theme}</button>
       ${inLeague&&S.isAdmin?`<button class="circ adm-ico" type="button" data-go="admin" aria-label="${t.nav.admin}" ${cur("admin")}>${I.admin}</button>`:""}
-      ${inLeague?`<button class="me" type="button" data-go="player" data-self aria-label="${t.yourName}">${esc(initials(S.uid))}</button>`:""}</div></div>`;
+      ${inLeague?`<button class="me" type="button" data-go="player" data-self aria-label="${esc(initials(S.uid))}, ${t.yourName}">${esc(initials(S.uid))}</button>`:""}</div></div>`;
   const tb=$("#tabbar");tb.hidden=!inLeague;
   tb.innerHTML=`<div class="dock">${PAGES.map(p=>`<button type="button" data-go="${p}" ${cur(p)} aria-label="${t.nav[p]}">${I[p]}<span>${t.nav[p]}</span></button>`).join("")}</div>`;
 }
@@ -225,13 +214,13 @@ function render(){
   let html;
   if(!S.ready) html=`<div class="wrap loading" aria-busy="true">${MARK6("load-mark")}<p class="meta">${t.loading}</p></div>`;
   else if(S.recovery) html=recoveryView();
-  else if(!S.uid) html=authView();
   else if(S.loadFailed) html=`<div class="wrap empty"><h1 class="h2">${t.err.load}</h1><div><button class="btn quiet" type="button" data-act="retryload">${t.retry}</button></div></div>`;
-  else if(!S.players[S.uid]) html=joinView();
+  else if(!S.uid) html=S.auth?authView():landing();
+  else if(!S.member) html=joinView();
   else html=({home,round:roundView,table:tableView,player:playerView,admin:adminView}[S.page]||home)();
-  document.body.dataset.page=!S.uid||!S.players[S.uid]&&S.ready&&!S.demo?"door":S.page;
+  document.body.dataset.page=!S.uid&&!S.auth?"land":!S.member?"door":S.page;
   $("#main").innerHTML=`<div class="page page-${S.page}">${html}</div>`;
-  tick();postRender();
+  tick();postRender();if(S.focusId){const el=document.getElementById(S.focusId);S.focusId=null;el?.focus()}
 }
 function softRender(){if(S.page==="home"&&Date.now()-(S.touchAt||0)<2500){clearTimeout(S.softT);S.softT=setTimeout(softRender,1200);return}render()}
 function go(pg,after){
@@ -244,35 +233,61 @@ function go(pg,after){
 }
 const empty=(h,m,extra="")=>`<div class="empty card"><h2 class="h2">${esc(h)}</h2><p class="sub">${esc(m)}</p>${extra}</div>`;
 
-/* ===================== the door: onboarding and access ===================== */
-/* the door: the primary logo over pitch markings */
+/* ===================== the door: landing, sign-up, sign-in ===================== */
+/* the stitched seam: a football's panel stitching, drawn as a dashed line with cross-stitches */
+const SEAM=`<div class="seam" aria-hidden="true"></div>`;
 const STADIUM=`<div class="stadium" aria-hidden="true"><svg class="pitch" viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="20" y="20" width="360" height="200"/><path d="M200 20v200"/><circle cx="200" cy="120" r="34"/><rect x="20" y="70" width="44" height="100"/><rect x="336" y="70" width="44" height="100"/><path d="M64 98a24 24 0 0 1 0 44M336 98a24 24 0 0 0 0 44"/></g></svg>
   <img class="door-logo" src="brand/logo-primary-royal.svg" alt="" width="2116" height="960"></div>`;
-function onboardSlides(){return t.onb.map(([h,p],i)=>`<div class="slide" aria-hidden="${i!==(S.onb||0)}"><h1 class="door-title">${h}</h1><p class="sub">${p}</p></div>`).join("")}
-function authView(){const up=S.authTab==="up";
-  let done=S.onbDone;if(done==null){try{done=localStorage.getItem("ss-onb")==="1"}catch(_){done=false}S.onbDone=done}
-  const f=(id,l,type,ac,hint="")=>`<div class="field"><label for="${id}">${l}</label><input class="inp" id="${id}" type="${type}" autocomplete="${ac}" dir="${type==="email"||type==="password"?"ltr":"auto"}" ${hint?`aria-describedby="${id}-h"`:""}>${hint?`<span class="meta" id="${id}-h">${hint}</span>`:""}</div>`;
-  const panel=!done?`<div class="slides" style="--s:${S.onb||0}">${onboardSlides()}</div>
-      <div class="door-foot"><button class="link quiet" type="button" data-act="skip">${t.skip}</button><span class="dots" aria-hidden="true">${t.onb.map((_,i)=>`<i class="${i===(S.onb||0)?"on":""}"></i>`).join("")}</span>
-      <button class="btn glow" type="button" data-act="${(S.onb||0)<t.onb.length-1?"next":"start"}">${(S.onb||0)<t.onb.length-1?t.next:t.getStarted}</button></div>`
-    :`<p class="door-club">${t.club}<span>${t.members}</span></p><h1 class="door-title sm">${up?t.joinT:t.signInT}</h1>
-    <form onsubmit="return false" class="door-form">
-      <div class="seg" role="group" aria-label="${t.signInT} / ${t.joinT}"><button type="button" data-tab="in" aria-pressed="${!up}">${t.signInT}</button><button type="button" data-tab="up" aria-pressed="${up}">${t.joinT}</button></div>
-      ${up?f("code",t.code,"text","off",t.codeHint)+f("nick",t.nick,"text","nickname",t.nickPh):""}
-      ${f("em",t.email,"email","email")}${f("pw",t.password,"password",up?"new-password":"current-password",up?t.pwHint:"")}
+/* the round on show: the open one if there is one, otherwise the latest */
+const showRound=()=>{const l=roundList();return l.find(r=>!isLocked(r))||l.at(-1)||null};
+function landing(){const L=t.land,r=showRound(),open=r&&!isLocked(r);
+  const row=f=>`<li class="lt-row"><span class="lt-t">${crest(f.h,34)}<abbr title="${esc(name(f.h))}">${esc(f.h)}</abbr></span>
+      <span class="lt-mid num" dir="ltr">${f.res?`${f.res[0]}–${f.res[1]}`:f.void?"P":`<span class="lt-q">?</span><i>:</i><span class="lt-q">?</span>`}</span>
+      <span class="lt-t a"><abbr title="${esc(name(f.a))}">${esc(f.a)}</abbr>${crest(f.a,34)}</span></li>`;
+  const ticket=r?`<section class="lt" aria-labelledby="lth"><div class="lt-head"><h2 class="lt-h" id="lth">${open?L.round(r.n):L.lastRes}</h2>
+      ${open?`<div class="lt-clock"><span>${L.locks}</span><div class="clock" data-deadline="${esc(r.deadline)}" role="timer" aria-live="off"><span class="dur" data-dur dir="ltr"></span></div></div>`:""}</div>
+      <ol class="lt-list">${r.fixtures.map(row).join("")}</ol>
+      ${open?`<button class="lt-cta" type="button" data-act="auth" data-v="up">${t.land.join2}</button>`:""}</section>`:"";
+  return `<div class="land">
+    <section class="land-hero"><div class="wrap land-in">
+      <h1 class="land-h">${L.h.map((x,i)=>`<span style="--i:${i}">${x}</span>`).join("")}</h1>
+      <p class="land-p">${L.p}</p>
+      <div class="land-cta"><button class="btn land-go" type="button" data-act="auth" data-v="up">${L.cta}</button><a class="btn land-how" href="#how">${L.how}</a></div>
+      <p class="land-free">${L.free}</p>
+    </div><div class="land-six" aria-hidden="true"></div></section>
+    <div class="wrap land-body">${ticket}${SEAM}
+      <section class="how" id="how" aria-labelledby="howh" tabindex="-1"><h2 class="land-h2" id="howh">${L.howH}</h2>
+        <ol class="how-list">${L.steps.map(([h,p],i)=>`<li><span class="how-n num">${i+1}</span><div><h3>${h}</h3><p>${p}</p></div></li>`).join("")}</ol></section>
+      ${SEAM}
+      <section class="land-end"><p class="land-story">${L.story}</p><button class="btn land-go" type="button" data-act="auth" data-v="up">${L.cta}</button></section>
+    </div></div>`}
+const fieldH=(id,l,type,ac,hint="",extra="")=>`<div class="field"><label for="${id}">${l}</label><input class="inp" id="${id}" name="${id}" type="${type}" autocomplete="${ac}" ${hint?`aria-describedby="${id}-h"`:""} ${extra}>${hint?`<span class="meta" id="${id}-h">${hint}</span>`:""}</div>`;
+const nickField=()=>fieldH("nick",t.nick,"text","username",t.nickHint,`maxlength="20" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="next"`);
+const captcha=()=>cfg.turnstile?`<div class="captcha" id="captcha"></div>`:"";
+function authView(){const up=S.auth==="up";
+  return `<div class="door form">${STADIUM}<div class="wrap door-in"><section class="glass door-panel">
+    <button class="link quiet door-back" type="button" data-act="auth" data-v="">${t.back}</button>
+    <h1 class="door-title sm">${up?t.joinT:t.signInT}</h1>
+    <form class="door-form" id="authform" novalidate data-act-submit="${up?"signup":"signin"}">
+      ${up?nickField():""}
+      ${fieldH("em",t.email,"email","email",up?t.emailHint:"",`inputmode="email" autocapitalize="none" spellcheck="false" enterkeyhint="next"`)}
+      ${fieldH("pw",t.password,"password",up?"new-password":"current-password",up?t.pwHint:"",`minlength="8" enterkeyhint="go"`)}
+      ${captcha()}
       <p class="err" id="autherr" role="alert"></p>
-      <button class="btn glow" type="button" data-act="${up?"signup":"signin"}">${up?t.signUp:t.signIn}</button>${up?"":`<button class="link" type="button" data-act="forgot">${t.forgot}</button>`}
-    </form>`;
-  return `<div class="door${done?" form":""}">${STADIUM}<div class="wrap door-in"><section class="glass door-panel">${panel}</section><p class="meta door-note">${t.private}</p></div></div>`}
+      <button class="btn glow" type="submit">${up?t.signUp:t.signIn}</button>
+      ${up?"":`<button class="link" type="button" data-act="forgot">${t.forgot}</button>`}
+    </form>
+    <p class="door-switch">${up?t.haveAcc:t.newHere} <button class="link" type="button" data-act="auth" data-v="${up?"in":"up"}">${up?t.signInT:t.joinT}</button></p>
+    </section></div></div>`}
 function recoveryView(){return `<div class="door form">${STADIUM}<div class="wrap door-in"><section class="glass door-panel"><h1 class="door-title sm">${t.newPw}</h1>
   <form onsubmit="return false" class="door-form"><div class="field"><label for="npw">${t.newPw}</label><input class="inp" id="npw" type="password" autocomplete="new-password" minlength="8"></div>
   <button class="btn glow" type="button" data-act="setpw">${t.setPw}</button></form></section></div></div>`}
+/* signed in but no username yet (sign-up interrupted, or the name was taken a moment earlier) */
 function joinView(){
-  return `<div class="door form">${STADIUM}<div class="wrap door-in"><section class="glass door-panel"><p class="door-club">${t.club}<span>${t.members}</span></p><h1 class="door-title sm">${t.join}</h1><p class="sub">${t.joinM}</p>
-    <form onsubmit="return false" class="door-form"><div class="field"><label for="code">${t.code}</label><input class="inp" id="code" autocomplete="off" dir="ltr" aria-describedby="code-h"><span class="meta" id="code-h">${t.codeHint}</span></div>
-      <div class="field"><label for="nick">${t.nick}</label><input class="inp" id="nick" maxlength="24" autocomplete="nickname"></div>
+  return `<div class="door form">${STADIUM}<div class="wrap door-in"><section class="glass door-panel"><h1 class="door-title sm">${t.join}</h1><p class="sub">${t.joinM}</p>
+    <form class="door-form" id="authform" novalidate data-act-submit="join">${nickField()}
       <p class="err" id="autherr" role="alert"></p>
-      <button class="btn glow" type="button" data-act="join">${t.join}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></form></section></div></div>`}
+      <button class="btn glow" type="submit">${t.joinBtn}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></form></section></div></div>`}
 
 /* ===================== matchday ===================== */
 const DH=40,MW=14;
@@ -295,9 +310,11 @@ function home(){
     <aside class="rail" aria-label="${esc(t.tableH)}">${winCard()}${lastRound()}${room(r)}${railTable()}${rules()}</aside></div></div>`;
 }
 const banner=()=>`<div class="banner" role="note"><span class="banner-tag">SUBAR 6</span><span id="bannerTxt" aria-live="off">${t.banner[S.bannerI||0]}</span></div>`;
-function whoRow(r){const st=S.status?.[r.id]||{},ids=Object.keys(S.players);const n=ids.filter(u=>st[u]).length;
-  return `<div class="chips" role="list" tabindex="0" aria-label="${t.roomH}"><span class="chip on" role="listitem"><span class="chip-ico">${I.player}</span>${t.whoIn} <b class="num">${n}/${ids.length}</b></span>
-    ${ids.sort((a,b)=>(st[b]?.filled||0)-(st[a]?.filled||0)).map(u=>{const s=st[u];const p=s?Math.round(s.filled/6*100):0;return `<span class="ring${s&&s.filled===6&&s.gg?" full":""}" role="listitem" style="--p:${p}" title="${esc(dname(u))}"><span class="avatar">${esc(initials(u))}</span><span class="sr">${esc(dname(u))}: ${s?t.of6(s.filled):t.notYet}</span></span>`}).join("")}</div>`}
+function whoRow(r){const W=S.who?.rid===r.id?S.who:{count:0,rows:[]};const mineN=S.draft?r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length:0;
+  const others=W.rows.filter(x=>x.uid!==S.uid).slice(0,11);
+  const ring=(u,filled,gg)=>{const p=Math.round(filled/6*100);return `<span class="ring${filled===6&&gg?" full":""}" role="listitem" style="--p:${p}" title="${esc(dname(u))}"><span class="avatar">${esc(initials(u))}</span><span class="sr">${esc(dname(u))}: ${filled?t.of6(filled):t.notYet}</span></span>`};
+  return `<div class="chips" role="list" tabindex="0" aria-label="${t.roomH}"><span class="chip on" role="listitem"><span class="chip-ico">${I.player}</span>${t.whoIn} <b class="num">${W.count}/${S.total}</b></span>
+    ${ring(S.uid,mineN,S.draft?.gg!=null)}${others.map(x=>ring(x.uid,x.filled,x.gg)).join("")}</div>`}
 function ensureDraft(r){const p=pickOf(S.uid,r.id);const src=JSON.stringify(p?{s:p.s,gg:p.gg}:null);
   if(S.draftRound!==r.id||!S.draft||(!S.dirty&&S.saveState!=="saving"&&src!==S.draftSrc)){S.draftSrc=src;
     S.draft={s:Object.fromEntries(Object.entries(p?.s||{}).map(([k,v])=>[k,[v[0],v[1]]])),gg:p?.gg??null};S.draftRound=r.id;S.dirty=false;
@@ -352,24 +369,23 @@ const syncAll=()=>{const r=current();if(!r)return;r.fixtures.forEach(f=>syncRow(
 function celebrate(){const d=$(".hero-card");if(!d||RM.matches)return;d.classList.remove("cheer");void d.offsetWidth;d.classList.add("cheer")}
 
 /* ===================== the rail ===================== */
-function winCard(){const r=roundList().filter(isSettled).at(-1);if(!r)return"";const top=roundScores(r).filter(x=>x.played)[0];if(!top||top.pts<=0)return"";
+function winCard(){const r=lastSettled();if(!r)return"";const top=board(r.id)[0];if(!top||top.pts<=0)return"";
   return `<section class="win-card" aria-label="${esc(t.winner(r.n,dname(top.uid),top.pts))}"><span class="notch">${t.round(r.n)}</span><span class="crown" aria-hidden="true">${I.pennant}</span>
     <span class="avatar xl">${esc(initials(top.uid))}</span><p class="win-name">${bn(top.uid)}</p><p class="win-sub">${t.winnerSub(top.pts)}</p></section>`}
-function room(r){const st=S.status?.[r.id]||{},ids=Object.keys(S.players),locked=isLocked(r);
-  const rows=ids.map(u=>({u,s:st[u]})).sort((a,b)=>(b.s?1:0)-(a.s?1:0)||(b.s&&a.s?new Date(b.s.at)-new Date(a.s.at):dname(a.u).localeCompare(dname(b.u))));
-  const n=rows.filter(x=>x.s).length;
-  return `<section class="section card room-card" aria-labelledby="roomh"><div class="section-head"><h2 class="h2" id="roomh">${t.roomH}</h2><span class="meta num">${n}/${ids.length}</span></div>
-    <ol class="room">${rows.map(({u,s})=>`<li><span class="avatar">${esc(initials(u))}</span><span class="room-who"><span class="nm">${bn(u)}${u===S.uid?`<em>${t.you}</em>`:""}</span><small>${s?`${t.of6(s.filled)}${s.gg?`, ${t.ggShort}`:""}`:t.notYet}</small></span>
-      <span class="room-r">${SIX(s?s.filled:0,"mini-six")}<span class="when">${s?`${esc(fWd(s.at))} <span class="num">${fTime(s.at)}</span>`:""}</span></span></li>`).join("")}</ol>
-    <p class="foot-note">${locked?t.roomLocked:t.roomOpen}</p></section>`}
-function lastRound(){const r=roundList().filter(isSettled).at(-1);
+/* the latest savers this round (never their scores) */
+function room(r){const W=S.who?.rid===r.id?S.who:{count:0,rows:[]},locked=isLocked(r);const rows=W.rows.slice(0,12),more=W.count-rows.length;
+  return `<section class="section card room-card" aria-labelledby="roomh"><div class="section-head"><h2 class="h2" id="roomh">${t.roomH}</h2><span class="meta num">${W.count}/${S.total}</span></div>
+    <ol class="room">${rows.map(s=>`<li><span class="avatar">${esc(initials(s.uid))}</span><span class="room-who"><span class="nm">${bn(s.uid)}${s.uid===S.uid?`<em>${t.you}</em>`:""}</span><small>${t.of6(s.filled)}${s.gg?`, ${t.ggShort}`:""}</small></span>
+      <span class="room-r">${SIX(s.filled,"mini-six")}<span class="when">${esc(fWd(s.at))} <span class="num">${fTime(s.at)}</span></span></span></li>`).join("")}</ol>
+    ${more>0?`<p class="foot-note">${t.roomMore(more)}</p>`:""}<p class="foot-note">${locked?t.roomLocked:t.roomOpen}</p></section>`}
+function lastRound(){const r=lastSettled();
   if(!r)return "";
   const mine=pickOf(S.uid,r.id);
   return `<section class="section card" aria-labelledby="lasth"><div class="section-head"><h2 class="h2" id="lasth">${t.lastH}</h2><button class="link" type="button" data-go="round" data-round="${r.id}">${t.viewAll}</button></div>
     <ol class="last">${r.fixtures.map(f=>{const v=mine?.s?.[f.id];const p=ptsFor(v,f.res);
       return `<li><span class="h">${crest(f.h,22)}${esc(sname(f.h))}</span><span class="sc2 num" dir="ltr">${f.void?"P":`${f.res[0]}–${f.res[1]}`}</span><span class="a">${esc(sname(f.a))}${crest(f.a,22)}</span><span class="pts ${v?"p"+p:""}">${v?"+"+p:"–"}</span></li>`}).join("")}</ol></section>`}
 function railTable(){const tb=table();if(!roundList().some(isSettled))return `<section class="section card"><div class="section-head"><h2 class="h2">${t.tableH}</h2></div><p class="foot-note">${t.noTable}</p></section>`;
-  const top=tb.slice(0,5),me=tb.find(x=>x.uid===S.uid);
+  const top=tb.slice(0,5),me=tb.find(x=>x.uid===S.uid);   /* the server sends the top 100 plus your own row */
   return `<section class="section card" aria-labelledby="mth"><div class="section-head"><h2 class="h2" id="mth">${t.tableH}</h2><button class="link" type="button" data-go="table">${t.viewAll}</button></div>
     <ol class="standings mini">${[...top,...(me&&me.rank>5?[me]:[])].map(s=>standRow(s,tb,true)).join("")}</ol></section>`}
 const rules=()=>`<section class="section card"><div class="section-head"><h2 class="h2">${t.rulesH}</h2></div><ol class="rules">${t.rules.map((x,i)=>`<li><span class="num">${i+1}</span>${x}</li>`).join("")}</ol></section>`;
@@ -378,10 +394,10 @@ const rules=()=>`<section class="section card"><div class="section-head"><h2 cla
 function roundView(){
   const list=roundList();if(!list.length)return `<div class="wrap">${empty(t.noRound,t.noRoundUser)}</div>`;
   const r=list.find(x=>x.id===S.viewRound)||current()||list.at(-1);S.viewRound=r.id;
-  const locked=isLocked(r),sc=roundScores(r).filter(x=>x.played),mine=pickOf(S.uid,r.id);
+  const locked=isLocked(r),sc=board(r.id),mine=pickOf(S.uid,r.id);if(locked&&!S.boards[r.id])ensureBoard(r.id);
   const now=Date.now();
-  const board=f=>{const v=mine?.s?.[f.id];const p=f.res?ptsFor(v,f.res):null;const ko=new Date(f.ko).getTime();const live=!f.res&&!f.void&&now>=ko&&now<ko+115*6e4;
-    const picks=locked?Object.keys(S.players).map(u=>pickOf(u,r.id)?.s?.[f.id]).filter(Array.isArray):[];
+  const mcard=f=>{const v=mine?.s?.[f.id];const p=f.res?ptsFor(v,f.res):null;const ko=new Date(f.ko).getTime();const live=!f.res&&!f.void&&now>=ko&&now<ko+115*6e4;
+    const picks=locked?sc.map(x=>x.s[f.id]).filter(Array.isArray):[];
     const H=picks.filter(x=>x[0]>x[1]).length,D=picks.filter(x=>x[0]===x[1]).length,A=picks.filter(x=>x[0]<x[1]).length,N=picks.length;
     const split=N?`<div class="odds" role="img" aria-label="${H} ${esc(name(f.h))}, ${D} ${t.draw}, ${A} ${esc(name(f.a))}"><span class="pill"><small>1</small><b class="num">${H}</b></span><span class="pill"><small>X</small><b class="num">${D}</b></span><span class="pill"><small>2</small><b class="num">${A}</b></span></div>`:"";
     return `<li class="mc card${live?" is-live":""}">${live?`<span class="notch live"><i class="dot"></i>${t.live}</span>`:""}<div class="mc-board"><div class="tm">${crest(f.h,56)}<span class="tm-n">${esc(sname(f.h))}</span></div>
@@ -389,23 +405,23 @@ function roundView(){
       <div class="tm">${crest(f.a,56)}<span class="tm-n">${esc(sname(f.a))}</span></div></div>
       ${v?`<p class="mc-mine">${t.yourPick} <b class="num" dir="ltr">${v[0]}–${v[1]}</b>${p!=null?`<span class="pts p${p}">+${p}</span>`:""}</p>`:""}${split}</li>`};
   let body;
-  if(!locked)body=empty(t.hiddenH,t.hiddenM(S.counts?.[r.id]??Object.keys(S.status?.[r.id]||{}).length,Object.keys(S.players).length));
+  if(!locked)body=empty(t.hiddenH,t.hiddenM(S.who?.rid===r.id?S.who.count:0,S.total));
   else if(!sc.length)body=empty(t.everyone,t.nobody);
   else body=`<div class="card pad"><div class="picks-wrap" tabindex="0" role="region" aria-label="${t.everyone}"><table class="picks"><thead><tr><th scope="col">${t.member}</th>${r.fixtures.map(f=>`<th scope="col">${esc(f.h)} ${esc(f.a)}<span class="num" dir="ltr">${f.res?f.res.join("–"):"–"}</span></th>`).join("")}<th scope="col">${t.ggShort}</th><th scope="col">${t.total}</th><th scope="col">${t.savedAt}</th></tr></thead><tbody>
-    ${sc.map(x=>{const p=pickOf(x.uid,r.id);return `<tr><td><span class="who"><span class="avatar">${esc(initials(x.uid))}</span><span>${bn(x.uid)}${x.uid===S.uid?` <span class="meta">${t.you}</span>`:""}</span></span></td>
+    ${sc.map(x=>{const p=x;return `<tr><td><span class="who"><span class="avatar">${esc(initials(x.uid))}</span><span>${bn(x.uid)}${x.uid===S.uid?` <span class="meta">${t.you}</span>`:""}</span></span></td>
       ${r.fixtures.map(f=>{const v=p?.s?.[f.id];const pt=f.res&&v?ptsFor(v,f.res):null;return `<td><span class="pk ${pt==null?"":"p"+pt}" dir="ltr">${v?`${v[0]}–${v[1]}`:"–"}</span></td>`}).join("")}
-      <td class="num">${x.gg??"–"}</td><td class="num tot">${x.pts}</td><td class="meta">${(()=>{const at=S.status?.[r.id]?.[x.uid]?.at||p?.at;return at?`${esc(fWd(at))} <span class="num">${fTime(at)}</span>`:"–"})()}</td></tr>`}).join("")}</tbody></table></div>
+      <td class="num">${x.gg??"–"}</td><td class="num tot">${x.pts}</td><td class="meta">${(()=>{const at=x.at;return at?`${esc(fWd(at))} <span class="num">${fTime(at)}</span>`:"–"})()}</td></tr>`}).join("")}</tbody></table></div>
     <div class="legend"><span><span class="pk p5">2–1</span> ${t.exact5}</span><span><span class="pk p2">2–1</span> ${t.right2}</span>${r.firstGoal!=null?`<span>${t.ggWas(r.firstGoal)}</span>`:""}</div></div>`;
   return `<div class="wrap"><header class="page-head"><h1 class="title">${t.resultsH}</h1>
       <div class="tabs" role="group" aria-label="${t.mw}">${list.slice().reverse().map(x=>`<button type="button" data-round="${x.id}" aria-pressed="${x.id===r.id}">${t.round(x.n)}</button>`).join("")}</div></header>
-    <div class="grid"><ol class="boards" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(board).join("")}</ol>
+    <div class="grid"><ol class="boards" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(mcard).join("")}</ol>
       <section class="section" aria-labelledby="evh"><div class="sec-head"><h2 class="h2" id="evh">${t.everyone}</h2></div>${body}</section></div></div>`;
 }
 
 /* ===================== table ===================== */
-function standRow(s,tb,mini){const above=tb[s.rank-2];const below=tb[s.rank];
+function standRow(s,tb,mini){const above=tb.find(x=>x.rank===s.rank-1),below=tb.find(x=>x.rank===s.rank+1);
   const mv=s.move==null||s.move===0?"":s.move>0?`<span class="mv up" aria-label="up ${s.move}">▲${s.move}</span>`:`<span class="mv down" aria-label="down ${-s.move}">▼${-s.move}</span>`;
-  const rival=s.rank===1?(below?t.leads(s.pts-below.pts):""):t.behind(above.pts-s.pts,dname(above.uid));
+  const rival=s.rank===1?(below?t.leads(s.pts-below.pts):""):above?t.behind(above.pts-s.pts,dname(above.uid)):"";
   return `<li><button class="st ${s.rank===1?"lead":""} ${s.uid===S.uid?"mine":""}" type="button" data-player="${esc(s.uid)}" data-move="${s.move||0}">
     <span class="st-rank num">${s.rank}</span><span class="avatar">${esc(initials(s.uid))}</span>
     <span class="st-mid"><span class="st-name">${bn(s.uid)}${s.rank===1?`<span class="lead-ico" aria-hidden="true">${I.pennant}</span>`:""}${mv}</span>${mini?"":`<span class="st-sub">${esc(t.exactWon(s.ex,s.won))}</span>`}<span class="st-rival">${esc(rival)}</span></span>
@@ -419,15 +435,16 @@ function tableView(){const tb=table();const n=roundList().filter(isSettled).leng
     <p class="foot-note">${t.rules[1]} ${t.rules[2]}</p></div>`}
 
 /* ===================== member ===================== */
-function playerView(){const ids=Object.keys(S.players);const uid=ids.includes(S.viewPlayer)?S.viewPlayer:S.uid;S.viewPlayer=uid;
+function playerView(){const ids=[...new Set([S.uid,...S.lb.map(x=>x.user_id)])];const uid=ids.includes(S.viewPlayer)?S.viewPlayer:S.uid;S.viewPlayer=uid;
   const others=ids.filter(x=>x!==uid),vs=others.includes(S.vsPlayer)?S.vsPlayer:others[0]||null;S.vsPlayer=vs;
   const tb=table(),me=tb.find(x=>x.uid===uid)||{pts:0,ex:0,rs:0,won:0,played:0,hist:[]};
-  const set=roundList().filter(isSettled);const per=set.map(r=>{const sc=roundScores(r);return{n:r.n,a:sc.find(x=>x.uid===uid)?.pts||0,b:vs?sc.find(x=>x.uid===vs)?.pts||0:0}});
+  const hist=u=>Object.fromEntries((tb.find(x=>x.uid===u)?.hist||[]).map(h=>[h.n,h.pts]));const ha=hist(uid),hb=hist(vs);
+  const per=Object.keys(ha).map(Number).sort((a,b)=>a-b).map(n=>({n,a:ha[n]||0,b:vs?hb[n]||0:0}));
   const h=per.reduce((o,p)=>(p.a>p.b?o.a++:p.b>p.a?o.b++:o.d++,o),{a:0,b:0,d:0});
   const opts=(l,v)=>l.map(x=>`<option value="${esc(x)}" ${x===v?"selected":""}>${esc(dname(x))}</option>`).join("");
   const joined=S.players[uid]?.joinedAt;
   const pass=`<section class="pass" aria-label="${t.yourName}">
-      <div class="pass-top">${MARK6("pass-mark")}<span class="pass-club">${t.club}</span><span class="num pass-no">${t.no(memberNo(uid)||1)}</span></div>
+      <div class="pass-top">${MARK6("pass-mark")}<span class="pass-club">subarsitta.com</span><span class="num pass-no">${t.no(memberNo(uid)||1)}</span></div>
       <h1 class="pass-name">${bn(uid)}</h1>
       <div class="pass-row"><span>${t.since}<b>${joined?esc(new Date(joined).toLocaleDateString(LOC(),{...KW,month:"short",year:"numeric"})):"2026"}</b></span><span>${t.position}<b class="num">${me.rank||"–"}</b></span><span>${t.points}<b class="num">${me.pts}</b></span></div></section>`;
   const stats=`<dl class="stats">${[[t.avg,me.played?(Math.round(me.pts/me.played*10)/10):"–"],[t.wonN,me.won],[t.exactN,me.ex],[t.rightN,me.rs]].map(([k,v])=>`<div class="card stat"><dt>${k}</dt><dd class="num">${v}</dd></div>`).join("")}</dl>`;
@@ -437,7 +454,7 @@ function playerView(){const ids=Object.keys(S.players);const uid=ids.includes(S.
       <div class="vs-strip" role="list">${per.map(p=>`<div role="listitem" class="${p.a>p.b?"w":p.b>p.a?"l":""}"><b class="num" dir="ltr">${p.a}–${p.b}</b><span>${t.round(p.n)}</span></div>`).join("")}</div>`}`}</section>`;
   return `<div class="wrap member"><div class="member-page"><div>${pass}
       <div class="card pad member-ctl"><div class="field"><label for="selp">${t.choose}</label><select id="selp">${opts(ids,uid)}</select></div>
-      ${uid===S.uid&&!S.demo?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div></div>
+      ${uid===S.uid?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div></div>
     <div>${stats}${h2h}</div></div></div>`}
 
 /* ===================== edits + autosave ===================== */
@@ -452,15 +469,15 @@ function queueSave(ms=900){clearTimeout(saveT);saveT=setTimeout(save,ms)}
 function flushSave(){if(S.dirty){clearTimeout(saveT);save()}}
 async function save(){const r=current();if(!r||!S.draft||!S.dirty)return;if(isLocked(r)){toast(t.locked,true);render();return}
   if(saving){queueSave(400);return}
-  if(!S.demo&&!S.ready)return;
+  if(!S.ready)return;
   const clean=Object.fromEntries(Object.entries(S.draft.s).filter(([,v])=>v[0]!=null&&v[1]!=null).map(([k,v])=>[k,[v[0],v[1]]]));
   const prev=pickOf(S.uid,r.id);
   if(prev&&JSON.stringify(prev.s)===JSON.stringify(clean)&&prev.gg===S.draft.gg){S.dirty=Object.values(S.draft.s).some(v=>(v[0]==null)!==(v[1]==null));S.saveState="saved";syncAll();return}
   if(!prev&&!Object.keys(clean).length&&S.draft.gg==null){syncAll();return}
   const v=S.ver;saving=true;S.saveState="saving";syncAll();
-  const rounds={...(S.picks[S.uid]?.rounds||{}),[r.id]:{s:clean,gg:S.draft.gg,at:new Date().toISOString()}};
+  const rounds={[r.id]:{s:clean,gg:S.draft.gg,at:new Date().toISOString()}};
   const ok=await write("picks/"+S.uid,{rounds});saving=false;
-  if(ok){S.picks[S.uid]={rounds};S.draftSrc=JSON.stringify({s:clean,gg:S.draft.gg});S.savedAt=new Date().toISOString();S.saveState="saved";S.justSaved=true;
+  if(ok){S.mine[r.id]=rounds[r.id];S.draftSrc=JSON.stringify({s:clean,gg:S.draft.gg});S.savedAt=new Date().toISOString();S.saveState="saved";S.justSaved=true;
     S.dirty=S.ver!==v||Object.values(S.draft.s).some(x=>(x[0]==null)!==(x[1]==null));if(S.ver!==v)queueSave(300)}
   else S.saveState="failed";
   syncAll()}
@@ -474,8 +491,6 @@ function adminView(){if(!S.isAdmin)return `<div class="wrap">${empty(t.adminH,t.
       <div class="seg2" role="group" aria-label="${t.autoH}"><button type="button" data-act="auto" data-v="1" aria-pressed="${!!M.auto}">${t.autoOn}</button><button type="button" data-act="auto" data-v="0" aria-pressed="${!M.auto}">${t.autoOff}</button></div></div>
     <p class="sub" style="font-size:14px">${t.autoM}</p><p style="margin-top:14px"><span class="meta">${t.lastRun}</span><br>${esc(M.status||t.never)}${M.statusAt?` <span class="meta">${esc(fDay(M.statusAt))} ${fTime(M.statusAt)}</span>`:""}</p>
     <p class="meta" style="margin-top:6px">${t.callsToday(M.calls||0)}</p><div style="margin-top:14px"><button class="btn quiet" type="button" data-act="runauto">${t.runNow}</button></div></section>`;
-  const invite=`<section class="panel"><h2 class="h2">${t.inviteH}</h2><p class="sub" style="font-size:14px">${t.inviteM}</p>
-    <div class="row" style="margin-top:14px;gap:16px"><span class="code">${esc(S.invite||"------")}</span><button class="btn quiet" type="button" data-act="copycode">${t.copy}</button><button class="link" type="button" data-act="newcode">${t.newCode}</button></div></section>`;
   const res=r?`<section class="panel"><div class="section-head" style="border:0;padding:0"><h2 class="h2">${t.resultsT(r.n)}</h2><span class="meta">${isLocked(r)?t.lockedS:t.openS}</span></div>
     <ol class="adm-res">${r.fixtures.map(f=>`<li><span>${esc(name(f.h))}</span><span class="in">${f.void?`<span class="meta">${t.voidF}</span>`:""}<input id="rh-${f.id}" inputmode="numeric" maxlength="2" aria-label="${esc(t.goalsOf(name(f.h)))}" value="${f.res?f.res[0]:""}"><span class="meta">:</span><input id="ra-${f.id}" inputmode="numeric" maxlength="2" aria-label="${esc(t.goalsOf(name(f.a)))}" value="${f.res?f.res[1]:""}"></span><span class="a">${esc(name(f.a))}</span></li>`).join("")}</ol>
     <div class="field" style="max-width:360px;margin-top:14px"><label for="fg">${t.fg}</label><input class="inp" id="fg" inputmode="numeric" maxlength="2" value="${r.firstGoal??""}"></div>
@@ -488,9 +503,9 @@ function adminView(){if(!S.isAdmin)return `<div class="wrap">${empty(t.adminH,t.
       <div class="field full"><label for="nk${i}">${t.ko}</label><input class="inp" id="nk${i}" type="datetime-local"></div></div>`).join("")}
     <div class="field" style="margin-top:12px"><label for="ndl">${t.deadline}</label><input class="inp" id="ndl" type="datetime-local"></div>
     <div style="margin-top:14px"><button class="btn" type="button" data-act="newround" data-n="${next}">${t.openN(next)}</button></div></section>`;
-  return `<div class="wrap"><header style="padding:24px 0 18px"><h1 class="title">${t.adminH}</h1><p class="sub">${t.adminSub(Object.keys(S.players).length)}</p>
+  return `<div class="wrap"><header style="padding:24px 0 18px"><h1 class="title">${t.adminH}</h1><p class="sub">${t.adminSub(S.total)}</p>
     ${list.length?`<div class="field" style="max-width:280px;margin-top:16px"><label for="setcur">${t.current}</label><select id="setcur">${list.map(x=>`<option value="${esc(x.id)}" ${x.id===r?.id?"selected":""}>${t.round(x.n)}</option>`).join("")}</select></div>`:""}</header>
-    <div class="grid adm"><div class="adm">${auto}${res}${invite}</div><div class="adm">${nr}</div></div></div>`}
+    <div class="grid adm"><div class="adm">${auto}${res}</div><div class="adm">${nr}</div></div></div>`}
 
 
 /* ===================== countdown + post-render ===================== */
@@ -531,37 +546,25 @@ function stepRail(mr,m){m=Math.max(1,Math.min(90,m));mr.scrollTo({left:(m-1)*MW,
 /* ===================== interactions ===================== */
 document.addEventListener("click",async e=>{
   const g=e.target.closest("[data-go]");if(g){const pg=g.dataset.go;go(pg,()=>{if(g.hasAttribute("data-self"))S.viewPlayer=S.uid;if(g.dataset.round)S.viewRound=g.dataset.round});
-    if(pg==="admin"&&sb&&S.isAdmin&&S.invite==null)sb.rpc("invite_code").then(({data})=>{S.invite=data;if(S.page==="admin")render()});return}
+    if(pg==="round")ensureBoard(S.viewRound||current()?.id);return}
   const pl=e.target.closest("[data-player]");if(pl){go("player",()=>{S.viewPlayer=pl.dataset.player});return}
-  const tb=e.target.closest("[data-tab]");if(tb){S.authTab=tb.dataset.tab;render();return}
-  const rb=e.target.closest("[data-round]");if(rb){S.viewRound=rb.dataset.round;render();return}
+  const rb=e.target.closest("[data-round]");if(rb){S.viewRound=rb.dataset.round;render();ensureBoard(S.viewRound);return}
   const ds=e.target.closest(".drum [data-j]");if(ds){const d=ds.closest(".drum");stepDrum(d,+ds.dataset.j);return}
   const tk=e.target.closest("#mrail [data-m]");if(tk){stepRail($("#mrail"),+tk.dataset.m);return}
   const act=e.target.closest("[data-act]");if(!act)return;const a=act.dataset.act;
   const authErr=m=>{const el=$("#autherr");if(el)el.textContent=m};
-  if(a==="next"){S.onb=(S.onb||0)+1;const sl=$(".slides");if(sl&&!RM.matches){sl.style.setProperty("--s",S.onb);sl.querySelectorAll(".slide").forEach((x,i)=>x.setAttribute("aria-hidden",i!==S.onb));$$(".dots i").forEach((x,i)=>x.classList.toggle("on",i===S.onb));if(S.onb>=t.onb.length-1){act.dataset.act="start";act.textContent=t.getStarted}}else render();return}
-  if(a==="start"||a==="skip"){S.onbDone=true;try{localStorage.setItem("ss-onb","1")}catch(_){}if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(render)}else render();return}
+  if(a==="auth"){openAuth(act.dataset.v||null);return}
   if(a==="theme"){const v=isDark()?"light":"dark";try{localStorage.setItem("ss-theme",v)}catch(_){}
     const run=()=>{applyTheme(v);shell()};if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(run)}else run();return}
   if(a==="retrysave"){S.saveState="dirty";S.dirty=true;save();return}
   if(a==="savenow"){if(S.dirty)flushSave();else toast(t.save.saved(S.savedAt?fTime(S.savedAt):""));return}
-  if(a==="join"||a==="signup"){const code=($("#code").value||"").trim(),nick=($("#nick").value||"").trim().slice(0,24);
-    if(code.length<4)return authErr(t.badCode);if(nick.length<2)return authErr(t.nickErr);act.disabled=true;
-    if(a==="signup"){const email=($("#em").value||"").trim(),pw=$("#pw").value||"";
-      if(!/^\S+@\S+\.\S+$/.test(email)){act.disabled=false;return authErr(t.badEmail)}if(pw.length<8){act.disabled=false;return authErr(t.weakPw)}
-      S.pendingJoin={code,nick};const {data,error}=await sb.auth.signUp({email,password:pw});
-      if(error){act.disabled=false;return authErr(errMsg(error))}if(!data.session){act.disabled=false;return authErr(t.confirmEmail)}S.uid=data.session.user.id}
-    const {error}=await sb.rpc("join_league",{code,nick});S.pendingJoin=null;
-    if(error){act.disabled=false;return authErr(errMsg(error))}toast(t.joined);await loadAll();return}
-  if(a==="signin"){const email=($("#em").value||"").trim(),pw=$("#pw").value||"";act.disabled=true;const {error}=await sb.auth.signInWithPassword({email,password:pw});if(error){act.disabled=false;authErr(errMsg(error))}return}
-  if(a==="forgot"){const email=($("#em").value||"").trim();if(!/^\S+@\S+\.\S+$/.test(email))return authErr(t.badEmail);const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin});authErr(error?errMsg(error):t.resetSent);return}
+  if(a==="forgot"){const email=($("#em").value||"").trim();if(!/^\S+@\S+\.\S+$/.test(email))return authErr(t.badEmail);
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin,...captchaOpt()});resetCaptcha();authErr(error?errMsg(error):t.resetSent);return}
   if(a==="setpw"){const pw=$("#npw").value||"";if(pw.length<8)return toast(t.weakPw,true);if(await q(sb.auth.updateUser({password:pw}))){S.recovery=false;toast(t.pwSaved);loadAll()}return}
-  if(a==="signout"){S.authTab="in";S.page="home";await sb.auth.signOut();return}
+  if(a==="signout"){S.auth=null;S.page="home";await sb.auth.signOut();return}
   if(a==="retryload"){S.ready=false;render();loadAll();return}
-  if(a==="auto"){if(S.demo){S.meta.auto=act.dataset.v==="1";render();return}if(await q(sb.from("league").update({auto:act.dataset.v==="1"}).eq("id",1)))reload();return}
-  if(a==="runauto"){if(S.demo)return toast(t.sample);act.disabled=true;const r=await q(sb.rpc("run_autopilot"));act.disabled=false;if(r)toast(String(r));reload();return}
-  if(a==="newcode"){if(S.demo)return;const c=await q(sb.rpc("new_invite_code"));if(c){S.invite=c;render()}return}
-  if(a==="copycode"){try{await navigator.clipboard.writeText(S.invite||"");toast(t.copied)}catch(_){}return}
+  if(a==="auto"){if(await q(sb.from("league").update({auto:act.dataset.v==="1"}).eq("id",1)))reload();return}
+  if(a==="runauto"){act.disabled=true;const r=await q(sb.rpc("run_autopilot"));act.disabled=false;if(r)toast(String(r));reload();return}
   if(a==="lock"){const r=S.rounds[act.dataset.r];if(await write("rounds/"+act.dataset.r,{locked:!r.locked},true)){toast(r.locked?t.reopenedMsg:t.lockedMsg);render()}return}
   if(a==="results"){const id=act.dataset.r,r=S.rounds[id];const num=v=>{v=v.trim();return v!==""&&/^\d{1,2}$/.test(v)?+v:null};
     const fixtures=r.fixtures.map(f=>{const h=num($("#rh-"+f.id).value),aw=num($("#ra-"+f.id).value);return{...f,res:h!=null&&aw!=null?[h,aw]:null}});
@@ -572,6 +575,42 @@ document.addEventListener("click",async e=>{
     const deadline=kwIso($("#ndl").value)||fixtures.map(f=>f.ko).sort()[0],id="r"+n;act.disabled=true;
     if(await write("rounds/"+id,{n,deadline,fixtures,firstGoal:null,locked:false})&&await write("meta/league",{season:S.meta?.season||"2026/27",currentRound:id})){toast(t.opened(n));S.page="home";render()}else act.disabled=false;return}
 });
+/* ===================== sign-up, sign-in, username ===================== */
+function openAuth(v){S.auth=v;try{history.replaceState(null,"",v==="up"?"#join":v==="in"?"#signin":location.pathname)}catch(_){}
+  S.focusId=v==="up"?"nick":v==="in"?"em":null;render();scrollTo({top:0});if(v)mountCaptcha()}
+/* optional bot check: Cloudflare Turnstile, on once config.js has a site key (then switch it on in Supabase → Auth → Bot protection) */
+let tsId=null;
+function mountCaptcha(){if(!cfg.turnstile)return;const go=()=>{const el=$("#captcha");if(el&&window.turnstile){tsId=turnstile.render(el,{sitekey:cfg.turnstile,theme:isDark()?"dark":"light",size:"flexible"})}};
+  if(window.turnstile)return go();if(!$("#ts-js")){const sc=document.createElement("script");sc.id="ts-js";sc.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";sc.async=true;sc.onload=go;document.head.append(sc)}}
+const captchaOpt=()=>{const tok=cfg.turnstile&&window.turnstile&&tsId!=null?turnstile.getResponse(tsId):null;return tok?{captchaToken:tok}:{}};
+const resetCaptcha=()=>{try{if(tsId!=null)turnstile.reset(tsId)}catch(_){}};
+const tidyNick=v=>(v||"").replace(/\s+/g," ").trim();
+const nickOk=v=>v.length>=3&&v.length<=20&&/^[\p{L}\p{N}][\p{L}\p{N} ._-]*$/u.test(v);
+let nickT;
+document.addEventListener("input",e=>{if(e.target.id!=="nick")return;const h=$("#nick-h");if(!h)return;clearTimeout(nickT);const v=tidyNick(e.target.value);
+  h.textContent=t.nickHint;h.dataset.s="";if(!nickOk(v))return;
+  nickT=setTimeout(async()=>{const {data}=await sb.rpc("username_free",{username:v});if(tidyNick($("#nick")?.value)!==v)return;h.textContent=data===false?t.nickTaken:t.nickFree;h.dataset.s=data===false?"bad":"ok"},450)});
+document.addEventListener("submit",async e=>{const f=e.target.closest("#authform");if(!f)return;e.preventDefault();
+  const a=f.dataset.actSubmit,btn=f.querySelector("[type=submit]"),authErr=m=>{const el=$("#autherr");if(el)el.textContent=m};
+  if(btn.disabled)return;
+  const nick=tidyNick($("#nick")?.value),email=($("#em")?.value||"").trim(),pw=$("#pw")?.value||"";
+  if(a!=="signin"&&!nickOk(nick)){authErr(nick.length<3||nick.length>20?t.nickErr:"Usernames use letters, numbers, spaces, dots, dashes and underscores.");$("#nick").focus();return}
+  if(a!=="join"&&!/^\S+@\S+\.\S+$/.test(email)){authErr(t.badEmail);$("#em").focus();return}
+  if(a==="signup"&&pw.length<8){authErr(t.weakPw);$("#pw").focus();return}
+  if(a==="signin"&&!pw){authErr(t.authErr);$("#pw").focus();return}
+  btn.disabled=true;authErr("");
+  try{
+    if(a==="signup"){const {data:free}=await sb.rpc("username_free",{username:nick});if(free===false){authErr(t.nickTaken);$("#nick").focus();return}
+      S.pendingJoin=true;const {data,error}=await sb.auth.signUp({email,password:pw,options:captchaOpt()});resetCaptcha();
+      if(error){S.pendingJoin=false;return authErr(errMsg(error))}
+      if(!data.session){S.pendingJoin=false;return authErr(t.confirmEmail)}
+      S.uid=data.session.user.id}
+    if(a==="signup"||a==="join"){const {error}=await sb.rpc("join_game",{username:nick});S.pendingJoin=false;
+      if(error){S.auth=null;await loadAll();S.focusId="nick";render();return $("#autherr")&&($("#autherr").textContent=errMsg(error))}
+      S.auth=null;try{history.replaceState(null,"",location.pathname)}catch(_){}S.page="home";toast(t.joined);await loadAll();return}
+    if(a==="signin"){const {error}=await sb.auth.signInWithPassword({email,password:pw,options:captchaOpt()});resetCaptcha();
+      if(error)return authErr(errMsg(error));S.auth=null;try{history.replaceState(null,"",location.pathname)}catch(_){}}
+  }catch(_){authErr(t.err.gen)}finally{if(btn.isConnected)btn.disabled=false}});
 /* keyboard: drums are spinbuttons, the rail is a slider */
 document.addEventListener("keydown",e=>{
   const d=e.target.closest?.(".drum");
@@ -599,18 +638,17 @@ setInterval(()=>{const b=$("#bannerTxt");if(!b||RM.matches||document.hidden)retu
   b.classList.remove("in");void b.offsetWidth;b.textContent=t.banner[S.bannerI];b.classList.add("in")},4500);
 
 /* ===================== boot ===================== */
-(()=>{const h=location.hash.slice(1);if(h==="predict")S.page="home";else if([...PAGES,"admin"].includes(h))S.page=h})();
+(()=>{const h=location.hash.slice(1);if(h==="predict")S.page="home";else if([...PAGES,"admin"].includes(h))S.page=h;else if(h==="join")S.auth="up";else if(h==="signin")S.auth="in"})();
 render();
 (async()=>{
-  if(!window.supabase||!cfg.url||/YOUR/.test(cfg.url)){loadSample();render();return}   /* no backend configured: sample data */
   sb=supabase.createClient(cfg.url,cfg.key);
   sb.auth.onAuthStateChange((ev,session)=>{
     if(ev==="PASSWORD_RECOVERY"){S.recovery=true;S.uid=session?.user?.id||null;S.ready=true;render();return}
     const uid=session?.user?.id||null;if(uid===S.uid&&ev!=="SIGNED_IN"&&S.ready)return;
-    S.uid=uid;S.invite=null;S.draft=null;S.draftRound=null;S.dirty=false;S.savedAt=null;
-    if(!uid){S.ready=true;S.players={};S.picks={};S.rounds={};S.meta=null;render();return}
+    S.uid=uid;S.member=false;S.draft=null;S.draftRound=null;S.dirty=false;S.savedAt=null;S.mine={};S.lb=[];S.boards={};S.who=null;
     if(S.pendingJoin)return;
     setTimeout(loadAll,0)});
   live();
-  addEventListener("focus",()=>{if(S.uid)reload()});
+  if(S.auth)mountCaptcha();
+  addEventListener("focus",()=>reload());
 })();

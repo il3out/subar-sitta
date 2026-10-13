@@ -468,7 +468,7 @@ select{-webkit-appearance:none;appearance:none;background-image:linear-gradient(
 @media (max-width:1023px){:root{--tab-h:calc(80px + env(safe-area-inset-bottom))}.rail .room-card{display:none}}
 @media (max-width:599px){.mast-in{gap:10px}.mast-r{gap:6px}.flag{display:none}.brand .wm{height:30px}.bw-club{font-size:11px;padding-inline-start:10px}
   .savebar{min-height:50px;padding:6px 6px 6px 16px}.sb-btn,.sb-ok{min-height:38px;height:38px}
-  .door.form .door-logo{top:72px;width:min(240px,62vw)}.door.form .door-in{padding-top:210px}}
+  .door.form .door-logo{top:70px;width:min(170px,46vw)}.door.form .door-in{padding-top:140px}.door-panel{padding:18px 20px}}
 @media (min-width:600px){:root{--gut:32px}}
 @media (min-width:600px) and (max-width:1023px){.door.form .door-logo{top:78px;width:300px}.door.form .door-in{padding-top:250px}}
 @media (min-width:1024px){
@@ -497,3 +497,85 @@ select{-webkit-appearance:none;appearance:none;background-image:linear-gradient(
   @keyframes logoInD{from{opacity:0;transform:translateY(-46%) scale(.96)}}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+
+/* ---------- landing (signed out): rich navy, the inflatable 6, a live match ticket, stitched seams ---------- */
+body[data-page="land"]{--land:#061A40;--land-2:#0A2456;background:var(--land);color:var(--ivory)}
+:root[data-theme="dark"] body[data-page="land"]{--land:#050E24;--land-2:#0A1A3D}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body[data-page="land"]{--land:#050E24;--land-2:#0A1A3D}}
+body[data-page="land"] .mast{background:color-mix(in srgb,var(--land) 82%,transparent);box-shadow:none}
+body[data-page="land"] .brand{color:var(--ivory)}
+body[data-page="land"] .bw-club{color:var(--powder);box-shadow:inset 1px 0 0 rgba(147,197,253,.35)}
+body[data-page="land"] .circ{background:transparent;color:var(--ivory);box-shadow:inset 0 0 0 1.5px rgba(251,246,238,.28)}
+.mast-in-btn{min-height:44px;padding:0 18px;font-size:15px}
+body[data-page="land"] .mast-in-btn{color:var(--ivory);box-shadow:inset 0 0 0 1.5px rgba(251,246,238,.5)}
+.land{overflow:hidden}
+.land-hero{position:relative;padding:34px 0 46px;isolation:isolate}
+/* the 6, pumped up: a royal-to-cobalt gradient poured into the logo's 6 with a soft highlight, bleeding off the right edge */
+.land-six{position:absolute;z-index:-1;right:-14vw;top:4px;width:min(78vw,440px);height:auto;aspect-ratio:559/726;opacity:1;
+  -webkit-mask:url("brand/six-mask.svg") center/contain no-repeat;mask:url("brand/six-mask.svg") center/contain no-repeat;
+  background:radial-gradient(60% 46% at 38% 30%,rgba(147,197,253,.28),transparent 70%),radial-gradient(90% 70% at 70% 80%,#061A40,transparent 70%),linear-gradient(160deg,#1D4FCC,#0B3D91 55%,#0A2456);
+  content:"";filter:drop-shadow(0 40px 60px rgba(0,0,0,.4));animation:sixIn 1.1s var(--spring) both .1s}
+@keyframes sixIn{from{opacity:0;transform:translateY(24px) scale(.9)}}
+.land-in{position:relative}
+.land-h{font:400 clamp(44px,12.4vw,112px)/.92 var(--display);text-transform:uppercase;margin:0;display:grid;white-space:nowrap}
+.land-h span{display:block;animation:lineIn .7s var(--spring) both;animation-delay:calc(var(--i)*110ms + 150ms)}
+@keyframes lineIn{from{opacity:0;transform:translateY(.35em)}}
+.land-p{margin:22px 0 0;max-width:34ch;font-size:clamp(17px,4.4vw,20px);line-height:1.45;color:rgba(251,246,238,.86)}
+.land-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.land-go{background:var(--ivory);color:var(--royal);font:400 20px/1 var(--display);letter-spacing:.02em;min-height:56px;padding:0 22px;box-shadow:0 14px 34px -12px rgba(147,197,253,.55)}
+.land-go:hover{background:var(--white)}
+.land-how{background:transparent;color:var(--ivory);font:700 14px/1 var(--label);letter-spacing:.08em;min-height:56px;padding:0 18px;text-decoration:none;box-shadow:inset 0 0 0 1.5px rgba(251,246,238,.38)}
+.land-free{margin:14px 0 0;font-size:14px;color:var(--powder)}
+.land-body{display:grid;gap:0;padding-bottom:calc(48px + env(safe-area-inset-bottom))}
+/* football stitching: a seam of dashes crossed by short stitches */
+.seam{height:16px;margin:34px 0;background:
+  linear-gradient(rgba(147,197,253,.32),rgba(147,197,253,.32)) center/100% 1.5px no-repeat,
+  repeating-linear-gradient(90deg,transparent 0 5px,rgba(147,197,253,.6) 5px 7px,transparent 7px 12px) center/100% 10px no-repeat}
+/* the live ticket: this round's six fixtures, real crests, the countdown */
+.lt{position:relative;background:var(--ivory);color:var(--navy);border-radius:var(--r3);box-shadow:0 30px 60px -28px rgba(0,0,0,.6);overflow:hidden}
+.lt-head{background:var(--pitch) center/cover no-repeat,var(--royal);color:var(--ivory);padding:18px 20px 16px;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 16px}
+.lt-h{font:400 34px/1 var(--display);text-transform:uppercase;margin:0}
+.lt-clock{display:grid;justify-items:end;gap:4px}
+.lt-clock>span{font:700 12.5px/1 var(--label);text-transform:uppercase;letter-spacing:.08em;color:var(--powder)}
+.lt-clock .clock{margin:0}
+.lt-clock .dur b{font-size:34px}
+.lt-clock .dur i{font-size:12px;margin-inline:2px 6px}
+.lt-list{list-style:none;margin:0;padding:6px 16px}
+.lt-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;padding:11px 0;border-bottom:1.5px dashed #D5E2F0}
+.lt-row:last-child{border-bottom:0}
+.lt-t{display:flex;align-items:center;gap:10px;min-width:0;font:400 22px/1 var(--display);letter-spacing:.02em}
+.lt-t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lt-t.a{justify-content:flex-end;text-align:end}
+.lt-t .crest{width:34px;height:34px;flex:none}
+.lt-mid{display:flex;align-items:center;gap:4px;font:400 24px/1 var(--display);color:var(--royal)}
+.lt-mid i{font-style:normal;color:#93A8CB}
+.lt-q{display:inline-grid;place-items:center;width:34px;height:38px;border-radius:var(--r1);background:#EEF5FB;box-shadow:inset 0 0 0 1.5px #BCD0E6;color:#536583}
+.lt-cta{display:block;width:100%;padding:16px;background:#DEEFF7;border-top:1.5px dashed #BCD0E6;font:400 19px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--royal)}
+.lt-cta:hover{background:#cfe6f3}
+.land-h2{font:400 clamp(36px,10vw,56px)/1 var(--display);text-transform:uppercase;margin:0 0 20px}
+.how{outline:none;scroll-margin-top:84px}
+.how-list{list-style:none;margin:0;padding:0;display:grid;gap:22px}
+.how-list li{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:start}
+.how-n{font:400 52px/.9 var(--display);color:var(--powder)}
+.how-list h3{margin:2px 0 6px;font:700 19px/1.2 var(--font)}
+.how-list p{margin:0;color:rgba(251,246,238,.8);max-width:46ch}
+.land-end{display:grid;justify-items:start;gap:20px}
+.land-story{margin:0;font:400 clamp(32px,9vw,52px)/1 var(--display);text-transform:uppercase;max-width:14ch}
+body[data-page="land"] :focus-visible{outline:3px solid var(--powder);outline-offset:3px}
+/* sign-up form extras */
+.door-back{justify-self:start;margin:-6px 0 10px -4px;min-height:44px}
+.door-panel{display:grid}
+.door-switch{margin:14px 0 0;text-align:center;font-size:15px;color:var(--ink-2)}
+.door-switch .link{display:inline;min-height:44px}
+#nick-h[data-s="ok"]{color:var(--brand);font-weight:700}
+#nick-h[data-s="bad"]{color:var(--accent);font-weight:700}
+.captcha{min-height:65px}
+@media (min-width:768px){
+  .land-hero{padding:70px 0 80px}
+  .land-six{right:4vw;top:30px;width:min(40vw,520px)}
+  .land-body{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:56px;align-items:start}
+  .land-body>.seam{display:none}
+  .land-body>.lt{grid-row:1/span 2}
+  .land-end{grid-column:2}
+}
+.lt-t abbr{text-decoration:none}
