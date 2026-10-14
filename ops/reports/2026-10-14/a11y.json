@@ -1,0 +1,28 @@
+{
+ "landing-light": [],
+ "landing-dark": [],
+ "matchday-light": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "n": 1,
+   "ex": [
+    "span[aria-label=\"up 1\"] :: Element has insufficient color contrast of 4.37 (foreground color: #2563eb, background color: #deeff7, font si"
+   ]
+  }
+ ],
+ "matchday-dark": [],
+ "results-light": [],
+ "results-dark": [],
+ "table-light": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "n": 1,
+   "ex": [
+    "span[aria-label=\"up 1\"] :: Element has insufficient color contrast of 4.37 (foreground color: #2563eb, background color: #deeff7, font si"
+   ]
+  }
+ ],
+ "table-dark": []
+}

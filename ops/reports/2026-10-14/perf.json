@@ -1,0 +1,39 @@
+{
+ "landing": {
+  "fcp_ms": 2243,
+  "fmp_ms": 2424,
+  "dcl_ms": 2245,
+  "load_ms": 3030,
+  "usable_ms": 3325,
+  "transfer_kb": 590,
+  "requests": 28,
+  "kb_by_type": {
+   "/": 2,
+   "css": 48,
+   "js": 282,
+   "woff2": 84,
+   "svg": 29,
+   "webp": 138
+  },
+  "runs": 3
+ },
+ "matchday": {
+  "fcp_ms": 2240,
+  "fmp_ms": 2916,
+  "dcl_ms": 2241,
+  "load_ms": 3581,
+  "usable_ms": 3859,
+  "transfer_kb": 659,
+  "requests": 63,
+  "kb_by_type": {
+   "/": 2,
+   "css": 48,
+   "js": 282,
+   "woff2": 128,
+   "svg": 41,
+   "webp": 138
+  },
+  "runs": 3
+ },
+ "profile": "iPhone 13 viewport, 4x CPU slowdown, 150ms RTT, 1.6 Mbps down, cache off, uncompressed local server, Supabase mocked"
+}
