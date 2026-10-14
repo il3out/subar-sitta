@@ -41,6 +41,10 @@ Routines read all of this before proposing anything.
 7. Measured findings and design hypotheses are labelled as such. No performance claim without a before/after measurement on the same profile.
 8. Keep it recognisably Subar Sitta: `DESIGN.md` is the approved system. No new colours, fonts or motifs without approval.
 
+## Reports
+
+- 14 Oct 2026 (baseline): https://claude.ai/artifact/KsBKM9zjvgfaMF7QjzY31m (private to the owner), evidence in `ops/reports/2026-10-14/`
+
 ## Running things yourself
 
 ```
