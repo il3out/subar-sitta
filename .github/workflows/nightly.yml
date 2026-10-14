@@ -1,0 +1,43 @@
+# Nightly (03:17 Kuwait): full regression, live smoke on the real site (signed out), Lighthouse mobile on the
+# live landing page. Results go to the job log as one METRICS line (read by the daily report) and as artifacts.
+name: Nightly
+on:
+  schedule: [{ cron: "17 0 * * *" }]
+  workflow_dispatch:
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.56.1-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm test
+        env: { CI: "1" }
+      - name: Live smoke (read-only, signed out)
+        run: npx playwright test --project=live
+        env: { CI: "1", LIVE: "1" }
+      - name: Front-end performance (throttled phone, mocked data)
+        if: always()
+        run: |
+          node tests/serve.js & sleep 1
+          node tests/perf.js perf.json
+          echo "METRICS {\"perf\":$(node -e 'console.log(JSON.stringify(require("./perf.json")))')}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: nightly-regression, path: "playwright-report\ntest-results\nperf.json", retention-days: 30 }
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Lighthouse, mobile, live landing page (3 runs, median reported)
+        run: |
+          for i in 1 2 3; do npx --yes lighthouse@12.8.2 https://subarsitta.com --quiet --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=lh-$i.json || true; done
+          node -e '
+            const fs=require("fs");const r=[1,2,3].map(i=>{try{return JSON.parse(fs.readFileSync(`lh-${i}.json`))}catch{return null}}).filter(Boolean);
+            const med=a=>a.sort((x,y)=>x-y)[a.length>>1];const a=k=>med(r.map(x=>x.audits[k]?.numericValue??NaN));
+            console.log("METRICS "+JSON.stringify({lighthouse:{runs:r.length,perf:med(r.map(x=>Math.round(x.categories.performance.score*100))),a11y:med(r.map(x=>Math.round(x.categories.accessibility.score*100))),
+              fcp_ms:Math.round(a("first-contentful-paint")),lcp_ms:Math.round(a("largest-contentful-paint")),tbt_ms:Math.round(a("total-blocking-time")),cls:+a("cumulative-layout-shift").toFixed(3),bytes_kb:Math.round(a("total-byte-weight")/1024)}}))'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: lighthouse, path: "lh-*.json", retention-days: 30 }
