@@ -1,0 +1,8 @@
+# test and ops tooling: never served on subarsitta.com
+tests/
+ops/
+.github/
+package.json
+package-lock.json
+playwright.config.js
+supabase/

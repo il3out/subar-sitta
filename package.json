@@ -1,0 +1,15 @@
+{
+  "name": "subar-sitta",
+  "private": true,
+  "description": "Tests and monitoring only. The site itself has no build step.",
+  "scripts": {
+    "test": "playwright test --project=desktop --project=mobile",
+    "test:visual": "playwright test --project=desktop --project=mobile tests/visual.spec.js",
+    "test:live": "playwright test --project=live",
+    "test:sql": "tests/sql/run.sh",
+    "perf": "node tests/perf.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}
