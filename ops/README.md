@@ -10,13 +10,9 @@ Nothing here deploys. `main` deploys to subarsitta.com through Vercel, and only 
 | Every push / PR | `CI`: SQL scoring + access-rule tests on the real migrations; 20 journey tests and 28 visual-baseline screens (desktop 1440 + iPhone 13, light + dark), Supabase mocked | GitHub Actions | PR check |
 | Every 15 min | `Monitor`: site, assets, database and autopilot health (read-only, signed out) | GitHub Actions | Opens one `outage` issue on failure, closes it on recovery |
 | Nightly 03:17 Kuwait | `Nightly`: full regression, live smoke on subarsitta.com, phone performance, Lighthouse mobile ×3 on the live landing page | GitHub Actions | `METRICS {…}` lines in the job logs, artifacts for 30 days |
-| Every 6 h | Claude routine **triage**: reads Monitor/Nightly/CI results and open issues, root-causes failures, prepares fixes on a branch + draft PR | Claude cloud | Draft PRs; phone notification for anything critical |
-| Daily 07:46 Kuwait | Claude routine **daily report**: runs the suites, compares metrics with history, audits screens, writes the report | Claude cloud | Private report page + a `daily-report` issue holding its metrics and link |
-| Weekly, Sunday 09:33 Kuwait | Claude routine **innovation**: one high-value feature or experience proposal with a working prototype and screenshots | Claude cloud | `proposal` issue + private preview page |
+| Every 2 days, 07:47 Kuwait | Claude routine **48-hour review**: functionality, speed, mobile, visual design, accessibility; a short plain-language report with screenshots and at most 3 ranked recommendations | Claude cloud | Private report page + phone and email notification |
 
-**Routine status (14 Oct 2026): the three Claude routines exist but are paused.** A verification run showed that routine sessions start without GitHub access (no repository attached, no GitHub tools), so they cannot read Actions results, open issues or push branches. To turn them on: claude.ai → Code → Routines → open each "Subar Sitta · …" routine → add the `il3out/subar-sitta` repository (and the GitHub connector if offered) → enable. The GitHub Actions monitoring above does not depend on them and runs as soon as this PR is merged.
-
-Hourly "inspect failures" is covered by the Monitor itself: it escalates within 15 minutes by opening an issue (GitHub emails the owner), and the 6-hourly triage picks it up. An hourly Claude session would add cost without catching anything sooner.
+The owner is a product owner, not a developer: reports use plain words, no code or logs, at most 3 recommendations, and numbered one-action steps.
 
 ## Memory: where history lives
 
@@ -61,7 +57,6 @@ Visual baselines are made in GitHub's Playwright container, so local screenshot 
 
 | Need | Why | How |
 |---|---|---|
-| Attach `il3out/subar-sitta` to the three paused routines and enable them | Routine sessions currently start with no GitHub access | claude.ai → Code → Routines |
 | Merge the infrastructure PR | Scheduled GitHub workflows only run from `main` | Review and merge |
 | Allow `subarsitta.com` and `jjavqcpxyljxprefbtta.supabase.co` in the Claude cloud environment's network settings | Routines can then check the live site directly instead of only through GitHub Actions | Environment settings → Network access → Allowed domains |
 | A staging Supabase project (free tier) + one test account | Logged-in journeys (sign-up, save, edit) against real Postgres rules without touching players' data | Create the project, run the two SQL files, share the URL and publishable key |
