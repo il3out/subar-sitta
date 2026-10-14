@@ -1,0 +1,39 @@
+# Every push and pull request: scoring/access-rule SQL tests, critical journeys and the visual baseline.
+# Everything runs against a local copy with Supabase mocked; nothing touches production.
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: write   # only used by the [update-baselines] escape hatch below
+jobs:
+  sql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Scoring, Golden Goal and access rules against the real migrations
+        run: |
+          sudo systemctl start postgresql.service
+          sudo -u postgres createuser -s "$USER"
+          PGHOST=/var/run/postgresql PGDATABASE=postgres tests/sql/run.sh
+  browser:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.56.1-noble
+    steps:
+      - uses: actions/checkout@v5
+      - run: node --check app.js && node --check config.js
+      - run: npm ci
+      - name: Refresh visual baselines (only when the commit message asks)
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[update-baselines]')
+        run: |
+          npx playwright test tests/visual.spec.js --project=desktop --project=mobile --update-snapshots
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/baseline && git commit -m "Refresh visual baselines in the CI container" && git push || echo "baselines unchanged"
+      - name: Journeys + visual baseline (desktop 1440 and iPhone 13, light and dark)
+        run: npm test
+        env: { CI: "1" }
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with: { name: playwright-report, path: "playwright-report\ntest-results", retention-days: 14 }
