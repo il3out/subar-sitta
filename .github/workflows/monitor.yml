@@ -4,6 +4,8 @@ name: Monitor
 on:
   schedule: [{ cron: "*/15 * * * *" }]
   workflow_dispatch:
+  push:   # also run when this check itself changes, so edits are proven before they merge
+    paths: [".github/workflows/monitor.yml", "tests/monitor.js"]
 permissions:
   issues: write
 concurrency: { group: monitor, cancel-in-progress: false }
