@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.56.1-noble
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: npm ci
       - run: npm test
         env: { CI: "1" }
       - name: Live smoke (read-only, signed out)
+        if: always()
         run: npx playwright test --project=live
         env: { CI: "1", LIVE: "1" }
       - name: Front-end performance (throttled phone, mocked data)
@@ -24,13 +25,13 @@ jobs:
           node tests/serve.js & sleep 1
           node tests/perf.js perf.json
           echo "METRICS {\"perf\":$(node -e 'console.log(JSON.stringify(require("./perf.json")))')}"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with: { name: nightly-regression, path: "playwright-report\ntest-results\nperf.json", retention-days: 30 }
   lighthouse:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with: { node-version: 22 }
       - name: Lighthouse, mobile, live landing page (3 runs, median reported)
         run: |
@@ -40,6 +41,6 @@ jobs:
             const med=a=>a.sort((x,y)=>x-y)[a.length>>1];const a=k=>med(r.map(x=>x.audits[k]?.numericValue??NaN));
             console.log("METRICS "+JSON.stringify({lighthouse:{runs:r.length,perf:med(r.map(x=>Math.round(x.categories.performance.score*100))),a11y:med(r.map(x=>Math.round(x.categories.accessibility.score*100))),
               fcp_ms:Math.round(a("first-contentful-paint")),lcp_ms:Math.round(a("largest-contentful-paint")),tbt_ms:Math.round(a("total-blocking-time")),cls:+a("cumulative-layout-shift").toFixed(3),bytes_kb:Math.round(a("total-byte-weight")/1024)}}))'
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with: { name: lighthouse, path: "lh-*.json", retention-days: 30 }

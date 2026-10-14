@@ -14,6 +14,8 @@ Nothing here deploys. `main` deploys to subarsitta.com through Vercel, and only 
 | Daily 07:46 Kuwait | Claude routine **daily report**: runs the suites, compares metrics with history, audits screens, writes the report | Claude cloud | Private report page + a `daily-report` issue holding its metrics and link |
 | Weekly, Sunday 09:33 Kuwait | Claude routine **innovation**: one high-value feature or experience proposal with a working prototype and screenshots | Claude cloud | `proposal` issue + private preview page |
 
+**Routine status (14 Oct 2026): the three Claude routines exist but are paused.** A verification run showed that routine sessions start without GitHub access (no repository attached, no GitHub tools), so they cannot read Actions results, open issues or push branches. To turn them on: claude.ai → Code → Routines → open each "Subar Sitta · …" routine → add the `il3out/subar-sitta` repository (and the GitHub connector if offered) → enable. The GitHub Actions monitoring above does not depend on them and runs as soon as this PR is merged.
+
 Hourly "inspect failures" is covered by the Monitor itself: it escalates within 15 minutes by opening an issue (GitHub emails the owner), and the 6-hourly triage picks it up. An hourly Claude session would add cost without catching anything sooner.
 
 ## Memory: where history lives
@@ -49,12 +51,13 @@ node tests/serve.js &    # then:
 npm run perf             # phone performance baseline
 node tests/monitor.js    # live health (needs internet)
 ```
-After an approved visual change: `npx playwright test tests/visual.spec.js --update-snapshots`, or push a commit whose message contains `[update-baselines]` and CI regenerates them in its container.
+Visual baselines are made in GitHub's Playwright container, so local screenshot comparisons can differ by a few pixels (system emoji); trust CI. After an approved visual change: `npx playwright test tests/visual.spec.js --update-snapshots`, or push a commit whose message contains `[update-baselines]` and CI regenerates them in its container.
 
 ## Access the system still needs (owner action)
 
 | Need | Why | How |
 |---|---|---|
+| Attach `il3out/subar-sitta` to the three paused routines and enable them | Routine sessions currently start with no GitHub access | claude.ai → Code → Routines |
 | Merge the infrastructure PR | Scheduled GitHub workflows only run from `main` | Review and merge |
 | Allow `subarsitta.com` and `jjavqcpxyljxprefbtta.supabase.co` in the Claude cloud environment's network settings | Routines can then check the live site directly instead of only through GitHub Actions | Environment settings → Network access → Allowed domains |
 | A staging Supabase project (free tier) + one test account | Logged-in journeys (sign-up, save, edit) against real Postgres rules without touching players' data | Create the project, run the two SQL files, share the URL and publishable key |
