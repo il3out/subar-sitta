@@ -113,7 +113,8 @@ const RM=matchMedia("(prefers-reduced-motion: reduce)");
 let toastT;function toast(m,bad){const el=$("#toast");el.textContent=m;el.classList.toggle("bad",!!bad);el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),2600)}
 function crest(c,size){return BUNDLED.has(c)?`<img class="crest" src="crests/${c}.webp" alt="" width="${size||32}" height="${size||32}" loading="lazy">`:`<span class="crest-ph" aria-hidden="true">${esc(c)}</span>`}
 function roundList(){return Object.entries(S.rounds).map(([id,r])=>({id,...r})).sort((a,b)=>a.n-b.n)}
-function current(){const id=S.meta?.currentRound;return id&&S.rounds[id]?{id,...S.rounds[id]}:roundList().at(-1)||null}
+/* the open round, else the latest: derived from the rounds themselves, never a stored pointer that can go stale */
+function current(){const l=roundList();return l.find(r=>!isLocked(r))||l.at(-1)||null}
 const isLocked=r=>!!r&&(!!r.locked||Date.now()>=new Date(r.deadline).getTime());
 const isSettled=r=>!!r&&r.fixtures?.length===6&&r.fixtures.every(f=>Array.isArray(f.res)||f.void);
 const pickOf=(uid,rid)=>uid===S.uid?S.mine[rid]||null:null;   /* only your own picks live on the phone */
@@ -239,8 +240,7 @@ const SEAM=`<div class="seam" aria-hidden="true"></div>`;
 const STADIUM=`<div class="stadium" aria-hidden="true"><svg class="pitch" viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="20" y="20" width="360" height="200"/><path d="M200 20v200"/><circle cx="200" cy="120" r="34"/><rect x="20" y="70" width="44" height="100"/><rect x="336" y="70" width="44" height="100"/><path d="M64 98a24 24 0 0 1 0 44M336 98a24 24 0 0 0 0 44"/></g></svg>
   <img class="door-logo" src="brand/logo-primary-royal.svg" alt="" width="2116" height="960"></div>`;
 /* the round on show: the open one if there is one, otherwise the latest */
-const showRound=()=>{const l=roundList();return l.find(r=>!isLocked(r))||l.at(-1)||null};
-function landing(){const L=t.land,r=showRound(),open=r&&!isLocked(r);
+function landing(){const L=t.land,r=current(),open=r&&!isLocked(r);
   const row=f=>`<li class="lt-row"><span class="lt-t">${crest(f.h,34)}<abbr title="${esc(name(f.h))}">${esc(f.h)}</abbr></span>
       <span class="lt-mid num" dir="ltr">${f.res?`${f.res[0]}–${f.res[1]}`:f.void?"P":`<span class="lt-q">?</span><i>:</i><span class="lt-q">?</span>`}</span>
       <span class="lt-t a"><abbr title="${esc(name(f.a))}">${esc(f.a)}</abbr>${crest(f.a,34)}</span></li>`;
@@ -503,8 +503,7 @@ function adminView(){if(!S.isAdmin)return `<div class="wrap">${empty(t.adminH,t.
       <div class="field full"><label for="nk${i}">${t.ko}</label><input class="inp" id="nk${i}" type="datetime-local"></div></div>`).join("")}
     <div class="field" style="margin-top:12px"><label for="ndl">${t.deadline}</label><input class="inp" id="ndl" type="datetime-local"></div>
     <div style="margin-top:14px"><button class="btn" type="button" data-act="newround" data-n="${next}">${t.openN(next)}</button></div></section>`;
-  return `<div class="wrap"><header style="padding:24px 0 18px"><h1 class="title">${t.adminH}</h1><p class="sub">${t.adminSub(S.total)}</p>
-    ${list.length?`<div class="field" style="max-width:280px;margin-top:16px"><label for="setcur">${t.current}</label><select id="setcur">${list.map(x=>`<option value="${esc(x.id)}" ${x.id===r?.id?"selected":""}>${t.round(x.n)}</option>`).join("")}</select></div>`:""}</header>
+  return `<div class="wrap"><header style="padding:24px 0 18px"><h1 class="title">${t.adminH}</h1><p class="sub">${t.adminSub(S.total)}</p></header>
     <div class="grid adm"><div class="adm">${auto}${res}</div><div class="adm">${nr}</div></div></div>`}
 
 
@@ -629,7 +628,7 @@ document.addEventListener("keydown",e=>{
 document.addEventListener("change",async e=>{const el=e.target;
   if(el.id==="selp"){S.viewPlayer=el.value;render()}
   if(el.id==="selv"){S.vsPlayer=el.value;render()}
-  if(el.id==="setcur"){if(await write("meta/league",{season:S.meta?.season||"2026/27",currentRound:el.value}))toast(t.curChanged)}});
+});
 addEventListener("beforeunload",e=>{if(S.dirty){flushSave();e.preventDefault()}});
 addEventListener("visibilitychange",()=>{if(document.hidden)flushSave()});
 
