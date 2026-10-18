@@ -395,12 +395,12 @@ function roundView(){
   const r=list.find(x=>x.id===S.viewRound)||current()||list.at(-1);S.viewRound=r.id;
   const locked=isLocked(r),sc=board(r.id),mine=pickOf(S.uid,r.id);if(locked&&!S.boards[r.id])ensureBoard(r.id);
   const now=Date.now();
-  const mcard=f=>{const v=mine?.s?.[f.id];const sc=f.res||f.live,p=sc?ptsFor(v,sc):null;const ko=new Date(f.ko).getTime();const live=!f.res&&!f.void&&(!!f.live||now>=ko&&now<ko+115*6e4);
+  const mcard=f=>{const v=mine?.s?.[f.id];const fs=f.res||f.live,p=fs?ptsFor(v,fs):null;const ko=new Date(f.ko).getTime();const live=!f.res&&!f.void&&(!!f.live||now>=ko&&now<ko+115*6e4);
     const picks=locked?sc.map(x=>x.s[f.id]).filter(Array.isArray):[];
     const H=picks.filter(x=>x[0]>x[1]).length,D=picks.filter(x=>x[0]===x[1]).length,A=picks.filter(x=>x[0]<x[1]).length,N=picks.length;
     const split=N?`<div class="odds" role="img" aria-label="${H} ${esc(name(f.h))}, ${D} ${t.draw}, ${A} ${esc(name(f.a))}"><span class="pill"><small>1</small><b class="num">${H}</b></span><span class="pill"><small>X</small><b class="num">${D}</b></span><span class="pill"><small>2</small><b class="num">${A}</b></span></div>`:"";
     return `<li class="mc card${live?" is-live":""}">${live?`<span class="notch live"><i class="dot"></i>${t.live}</span>`:""}<div class="mc-board"><div class="tm">${crest(f.h,56)}<span class="tm-n">${esc(sname(f.h))}</span></div>
-      <div class="mc-score">${sc?`<div class="big num" dir="ltr">${sc[0]}<span class="c">:</span>${sc[1]}</div><span class="mc-st">${f.res?t.ft:f.st==="HT"?t.ht:f.min?f.min+"′":t.live}</span>`:f.void?`<span class="mc-st">${t.voidF}</span>`:`<span class="mc-st">${esc(fDay(f.ko))}</span><div class="big num ko" dir="ltr">${fTime(f.ko)}</div>`}</div>
+      <div class="mc-score">${fs?`<div class="big num" dir="ltr">${fs[0]}<span class="c">:</span>${fs[1]}</div><span class="mc-st">${f.res?t.ft:f.st==="HT"?t.ht:f.min?f.min+"′":t.live}</span>`:f.void?`<span class="mc-st">${t.voidF}</span>`:`<span class="mc-st">${esc(fDay(f.ko))}</span><div class="big num ko" dir="ltr">${fTime(f.ko)}</div>`}</div>
       <div class="tm">${crest(f.a,56)}<span class="tm-n">${esc(sname(f.a))}</span></div></div>
       ${v?`<p class="mc-mine">${t.yourPick} <b class="num" dir="ltr">${v[0]}–${v[1]}</b>${p!=null?`<span class="pts p${p}">+${p}</span>`:""}</p>`:""}${split}</li>`};
   let body;
