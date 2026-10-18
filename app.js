@@ -17,7 +17,7 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  nav:{home:"Matchday",round:"Results",table:"Table",player:"Me",admin:"Admin"},
  sample:"Sample",loading:"Loading the league",
  mw:"Matchweek",round:n=>`Round ${n}`,
- locksIn:"Locks in",lockedAt:(d,tm)=>`Locked ${d}, ${tm}`,locksAt:(d,tm)=>`${d}, ${tm} Kuwait time`,
+ locksIn:"Locks in",lockedAt:(d,tm)=>`Locked ${d}, ${tm}`,locksAt:(d,tm)=>`${d}, ${tm}`,
  of6:n=>`${n} of 6`,gg:m=>m==null?"Golden Goal not set":`Golden Goal ${m}′`,
  save:{clean:"",pending:"⏳ Saving",saving:"⏳ Saving",saved:tm=>`💙 Saved ${tm}`,failed:"⚠️ Not saved. Tap to retry",half:"✏️ Add the other score"},
  st:{todo:"",half:"✏️ Add the other score",edited:"⏳ Saving",saving:"⏳ Saving",saved:"💙 Saved",failed:"⚠️ Not saved",locked:"🔒 Locked in",none:"😶 No prediction"},
@@ -40,13 +40,13 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  weakPw:"Use at least 8 characters.",badEmail:"Enter a valid email.",locked:"🔒 Picks are locked for this round.",
  noRound:"😴 No round is open",noRoundUser:"The next round opens on its own when the fixtures are published.",noRoundAdmin:"The autopilot opens rounds on its own. You can also open one from Admin.",
  resultsH:"Results",everyone:"Everyone's picks",hiddenH:"🙈 Hidden until kick-off",hiddenM:(a,b)=>`${a} of ${b} players have saved picks so far.`,nobody:"🦗 Nobody predicted this round.",
- member:"Player",total:"Pts",savedAt:"Saved",exact5:"Exact score, 5",right2:"Right result, 2",live:"Live",ft:"Full time",draw:"Draw",
+ member:"Player",total:"Pts",savedAt:"Saved",exact5:"Exact score, 5",right2:"Right result, 2",live:"Live",ft:"Full time",ht:"Half time",draw:"Draw",
  no:n=>`No. ${String(n).padStart(3,"0")}`,since:"Playing since",position:"Position",points:"Points",avg:"Per round",exactN:"Exact scores",rightN:"Right results",wonN:"Rounds won",
  choose:"Player",h2h:"⚔️ Head to head",vs:"Against",h2hNeed:"Head to head starts when another player joins.",h2hAfter:"Head to head starts after the first completed round.",wins:"wins",draws:"level",
  adminH:"Admin",adminOnly:"This page is for admins only.",adminSub:n=>`${n} ${n===1?"player":"players"} in the game.`,current:"Current round",
  autoH:"Autopilot",autoM:"Opens each round from the real Premier League fixtures, locks it at the first kick-off, and settles results and the Golden Goal.",autoOn:"On",autoOff:"Off",runNow:"Run now",lastRun:"Last action",callsToday:n=>`${n} of 80 data requests used today`,never:"Nothing yet",
  resultsT:n=>`Round ${n} results`,fg:"Minute of the first goal (90 if goalless)",saveResults:"Save results",resultsSaved:"💙 Results saved",lockNow:"Lock picks now",reopen:"Reopen picks",lockedMsg:"Picks locked",reopenedMsg:"Picks reopened",resNote:"A round counts toward the table once all six results are in.",
- newT:n=>`Open round ${n} by hand`,homeN:i=>`Home ${i}`,awayL:"Away",ko:"Kick-off (Kuwait time)",deadline:"Pick deadline (blank means the first kick-off)",openN:n=>`Open round ${n}`,opened:n=>`🔵 Round ${n} is open`,
+ newT:n=>`Open round ${n} by hand`,homeN:i=>`Home ${i}`,awayL:"Away",ko:"Kick-off (your time)",deadline:"Pick deadline (blank means the first kick-off)",openN:n=>`Open round ${n}`,opened:n=>`🔵 Round ${n} is open`,
  needSix:"Fill all six fixtures: two different teams and a kick-off for each.",dup:"A team appears in more than one fixture.",curChanged:"Current round updated",choosePh:"Choose",lockedS:"Locked",openS:"Open",
  err:{perm:"You don't have permission for that change.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
  land:{h:["Six matches.","Six predictions.","One leaderboard."],p:"Call the score of six Premier League games every round. Exact score 5, right result 2. Free to play.",
@@ -98,12 +98,11 @@ const S={uid:null,member:false,isAdmin:false,ready:false,loadFailed:false,
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const KW={timeZone:"Asia/Kuwait"};
 const LOC=()=>"en-GB";
-const fDay=iso=>new Date(iso).toLocaleDateString(LOC(),{...KW,weekday:"short",day:"numeric",month:"short"}).replace(",","");
-const fLong=iso=>new Date(iso).toLocaleDateString(LOC(),{...KW,weekday:"long",day:"numeric",month:"long"}).replace(",","");
-const fWd=iso=>new Date(iso).toLocaleDateString(LOC(),{...KW,weekday:"short"});
-const fTime=iso=>new Date(iso).toLocaleTimeString("en-GB",{...KW,hour:"2-digit",minute:"2-digit"});
+const fDay=iso=>new Date(iso).toLocaleDateString(LOC(),{weekday:"short",day:"numeric",month:"short"}).replace(",","");
+const fLong=iso=>new Date(iso).toLocaleDateString(LOC(),{weekday:"long",day:"numeric",month:"long"}).replace(",","");
+const fWd=iso=>new Date(iso).toLocaleDateString(LOC(),{weekday:"short"});
+const fTime=iso=>new Date(iso).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
 const pad=(n,l=2)=>String(n).padStart(l,"0");
 const name=c=>CLUBS[c]||c;
 const sname=c=>SHORT[c]||CLUBS[c]||c;
@@ -193,7 +192,7 @@ const MARK6=(cls="",size)=>`<span class="mark6 ${cls}" ${size?`style="height:${s
 const WM=`<span class="wm" aria-hidden="true"></span>`;
 /* six progress pips in a row: one per fixture */
 const SIX=(n,cls="")=>`<span class="six ${cls}" aria-hidden="true">${Array.from({length:6},(_,i)=>`<i class="${i<n?"on":""}" style="--i:${i}"></i>`).join("")}</span>`;
-const greet=()=>{const h=+new Date().toLocaleString("en-GB",{...KW,hour:"2-digit",hour12:false});return h<12?t.hi.m:h<17?t.hi.a:t.hi.e};
+const greet=()=>{const h=+new Date().toLocaleString("en-GB",{hour:"2-digit",hour12:false});return h<12?t.hi.m:h<17?t.hi.a:t.hi.e};
 
 /* ===================== shell ===================== */
 const PAGES=["home","round","table","player"];
@@ -242,7 +241,7 @@ const STADIUM=`<div class="stadium" aria-hidden="true"><svg class="pitch" viewBo
 /* the round on show: the open one if there is one, otherwise the latest */
 function landing(){const L=t.land,r=current(),open=r&&!isLocked(r);
   const row=f=>`<li class="lt-row"><span class="lt-t">${crest(f.h,34)}<abbr title="${esc(name(f.h))}">${esc(f.h)}</abbr></span>
-      <span class="lt-mid num" dir="ltr">${f.res?`${f.res[0]}–${f.res[1]}`:f.void?"P":`<span class="lt-q">?</span><i>:</i><span class="lt-q">?</span>`}</span>
+      <span class="lt-mid num" dir="ltr">${f.res||f.live?`${(f.res||f.live)[0]}–${(f.res||f.live)[1]}`:f.void?"P":`<span class="lt-q">?</span><i>:</i><span class="lt-q">?</span>`}</span>
       <span class="lt-t a"><abbr title="${esc(name(f.a))}">${esc(f.a)}</abbr>${crest(f.a,34)}</span></li>`;
   const ticket=r?`<section class="lt" aria-labelledby="lth"><div class="lt-head"><h2 class="lt-h" id="lth">${open?L.round(r.n):L.lastRes}</h2>
       ${open?`<div class="lt-clock"><span>${L.locks}</span><div class="clock" data-deadline="${esc(r.deadline)}" role="timer" aria-live="off"><span class="dur" data-dur dir="ltr"></span></div></div>`:""}</div>
@@ -396,12 +395,12 @@ function roundView(){
   const r=list.find(x=>x.id===S.viewRound)||current()||list.at(-1);S.viewRound=r.id;
   const locked=isLocked(r),sc=board(r.id),mine=pickOf(S.uid,r.id);if(locked&&!S.boards[r.id])ensureBoard(r.id);
   const now=Date.now();
-  const mcard=f=>{const v=mine?.s?.[f.id];const p=f.res?ptsFor(v,f.res):null;const ko=new Date(f.ko).getTime();const live=!f.res&&!f.void&&now>=ko&&now<ko+115*6e4;
+  const mcard=f=>{const v=mine?.s?.[f.id];const sc=f.res||f.live,p=sc?ptsFor(v,sc):null;const ko=new Date(f.ko).getTime();const live=!f.res&&!f.void&&(!!f.live||now>=ko&&now<ko+115*6e4);
     const picks=locked?sc.map(x=>x.s[f.id]).filter(Array.isArray):[];
     const H=picks.filter(x=>x[0]>x[1]).length,D=picks.filter(x=>x[0]===x[1]).length,A=picks.filter(x=>x[0]<x[1]).length,N=picks.length;
     const split=N?`<div class="odds" role="img" aria-label="${H} ${esc(name(f.h))}, ${D} ${t.draw}, ${A} ${esc(name(f.a))}"><span class="pill"><small>1</small><b class="num">${H}</b></span><span class="pill"><small>X</small><b class="num">${D}</b></span><span class="pill"><small>2</small><b class="num">${A}</b></span></div>`:"";
     return `<li class="mc card${live?" is-live":""}">${live?`<span class="notch live"><i class="dot"></i>${t.live}</span>`:""}<div class="mc-board"><div class="tm">${crest(f.h,56)}<span class="tm-n">${esc(sname(f.h))}</span></div>
-      <div class="mc-score">${f.res?`<div class="big num" dir="ltr">${f.res[0]}<span class="c">:</span>${f.res[1]}</div><span class="mc-st">${t.ft}</span>`:f.void?`<span class="mc-st">${t.voidF}</span>`:`<span class="mc-st">${esc(fDay(f.ko))}</span><div class="big num ko" dir="ltr">${fTime(f.ko)}</div>`}</div>
+      <div class="mc-score">${sc?`<div class="big num" dir="ltr">${sc[0]}<span class="c">:</span>${sc[1]}</div><span class="mc-st">${f.res?t.ft:f.st==="HT"?t.ht:f.min?f.min+"′":t.live}</span>`:f.void?`<span class="mc-st">${t.voidF}</span>`:`<span class="mc-st">${esc(fDay(f.ko))}</span><div class="big num ko" dir="ltr">${fTime(f.ko)}</div>`}</div>
       <div class="tm">${crest(f.a,56)}<span class="tm-n">${esc(sname(f.a))}</span></div></div>
       ${v?`<p class="mc-mine">${t.yourPick} <b class="num" dir="ltr">${v[0]}–${v[1]}</b>${p!=null?`<span class="pts p${p}">+${p}</span>`:""}</p>`:""}${split}</li>`};
   let body;
@@ -409,7 +408,7 @@ function roundView(){
   else if(!sc.length)body=empty(t.everyone,t.nobody);
   else body=`<div class="card pad"><div class="picks-wrap" tabindex="0" role="region" aria-label="${t.everyone}"><table class="picks"><thead><tr><th scope="col">${t.member}</th>${r.fixtures.map(f=>`<th scope="col">${esc(f.h)} ${esc(f.a)}<span class="num" dir="ltr">${f.res?f.res.join("–"):"–"}</span></th>`).join("")}<th scope="col">${t.ggShort}</th><th scope="col">${t.total}</th><th scope="col">${t.savedAt}</th></tr></thead><tbody>
     ${sc.map(x=>{const p=x;return `<tr><td><span class="who"><span class="avatar">${esc(initials(x.uid))}</span><span>${bn(x.uid)}${x.uid===S.uid?` <span class="meta">${t.you}</span>`:""}</span></span></td>
-      ${r.fixtures.map(f=>{const v=p?.s?.[f.id];const pt=f.res&&v?ptsFor(v,f.res):null;return `<td><span class="pk ${pt==null?"":"p"+pt}" dir="ltr">${v?`${v[0]}–${v[1]}`:"–"}</span></td>`}).join("")}
+      ${r.fixtures.map(f=>{const v=p?.s?.[f.id];const pt=(f.res||f.live)&&v?ptsFor(v,f.res||f.live):null;return `<td><span class="pk ${pt==null?"":"p"+pt}" dir="ltr">${v?`${v[0]}–${v[1]}`:"–"}</span></td>`}).join("")}
       <td class="num">${x.gg??"–"}</td><td class="num tot">${x.pts}</td><td class="meta">${(()=>{const at=x.at;return at?`${esc(fWd(at))} <span class="num">${fTime(at)}</span>`:"–"})()}</td></tr>`}).join("")}</tbody></table></div>
     <div class="legend"><span><span class="pk p5">2–1</span> ${t.exact5}</span><span><span class="pk p2">2–1</span> ${t.right2}</span>${r.firstGoal!=null?`<span>${t.ggWas(r.firstGoal)}</span>`:""}</div></div>`;
   return `<div class="wrap"><header class="page-head"><h1 class="title">${t.resultsH}</h1>
@@ -446,7 +445,7 @@ function playerView(){const ids=[...new Set([S.uid,...S.lb.map(x=>x.user_id)])];
   const pass=`<section class="pass" aria-label="${t.yourName}">
       <div class="pass-top">${MARK6("pass-mark")}<span class="pass-club">subarsitta.com</span><span class="num pass-no">${t.no(memberNo(uid)||1)}</span></div>
       <h1 class="pass-name">${bn(uid)}</h1>
-      <div class="pass-row"><span>${t.since}<b>${joined?esc(new Date(joined).toLocaleDateString(LOC(),{...KW,month:"short",year:"numeric"})):"2026"}</b></span><span>${t.position}<b class="num">${me.rank||"–"}</b></span><span>${t.points}<b class="num">${me.pts}</b></span></div></section>`;
+      <div class="pass-row"><span>${t.since}<b>${joined?esc(new Date(joined).toLocaleDateString(LOC(),{month:"short",year:"numeric"})):"2026"}</b></span><span>${t.position}<b class="num">${me.rank||"–"}</b></span><span>${t.points}<b class="num">${me.pts}</b></span></div></section>`;
   const stats=`<dl class="stats">${[[t.avg,me.played?(Math.round(me.pts/me.played*10)/10):"–"],[t.wonN,me.won],[t.exactN,me.ex],[t.rightN,me.rs]].map(([k,v])=>`<div class="card stat"><dt>${k}</dt><dd class="num">${v}</dd></div>`).join("")}</dl>`;
   const h2h=`<section class="section card" aria-labelledby="h2hh"><div class="section-head"><h2 class="h2" id="h2hh">${t.h2h}</h2></div>
     ${!vs?`<p class="foot-note">${t.h2hNeed}</p>`:`<div class="field" style="margin-top:14px"><label for="selv">${t.vs}</label><select id="selv">${opts(others,vs)}</select></div>
@@ -522,7 +521,7 @@ function postRender(){
   /* rank movement: rows that changed position slide from where they were, once per visit */
   if(S.page==="table"&&!RM.matches&&!S.movedShown){S.movedShown=true;$$("#standings .st").forEach(b=>{const mv=+b.dataset.move;if(mv){b.style.setProperty("--from",`${mv*100}%`);b.classList.add("moving")}})}
 }
-const kwIso=v=>v?new Date(v+":00+03:00").toISOString():null;
+const kwIso=v=>v?new Date(v).toISOString():null;   /* datetime-local is read in the device time zone */
 
 /* ===================== drums and the minute rail: native scroll physics, snapped ===================== */
 function markDrum(d,k){d.querySelectorAll("span.on").forEach(x=>x.classList.remove("on"));d.querySelector(`[data-j="${k}"]`)?.classList.add("on")}
