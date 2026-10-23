@@ -68,3 +68,6 @@ Do 2 before 3, or sign-ins fail until the new `config.js` is live.
   update public.league set season = '2027/28', api_season = 2027;
   ```
 - **Pause automation:** use the Admin → Autopilot switch. You can still enter results and open rounds by hand on the same page.
+
+## Tests and monitoring
+`ops/README.md` describes the automated checks (CI, 15-minute live monitor, nightly regression), the scheduled Claude routines and their rules. Tooling lives in `tests/`, `.github/` and `ops/` and is never deployed (see `.vercelignore`).

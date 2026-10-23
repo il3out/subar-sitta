@@ -1,0 +1,19 @@
+/* PROPOSAL (not live): compact matchday on phones so the first score drum is on the first screen.
+   Same components and brand; only spacing and the order of what a phone shows first change.
+   Apply by appending to styles.css after approval. */
+@media (max-width:599px){
+  .page-home .banner{display:none}                         /* the rules it rotates stay in "How it works" */
+  .page-home .hello{padding:12px 0 6px}
+  .page-home .hello>div{display:flex;align-items:baseline;gap:8px}  /* "Good afternoon ABDAL" on one line */
+  .page-home .hello-2{margin:0;font-size:22px}
+  .page-home .hello .avatar.lg{display:none}               /* your initial is already in the header */
+  .page-home .col-main>.sec-head:first-child{display:none} /* "Matchday 2026/27": the hero already names the round */
+  .page-home .chips{padding-bottom:0}
+  .hero-card{margin-top:16px;padding:30px 18px 12px}
+  .hero-card .hc-lbl{font-size:12px}
+  .dur b{font-size:clamp(40px,11vw,52px)}
+  .dur i{font-size:13px;margin-inline:2px 7px}
+  .hc-sub{font-size:13px;margin-top:4px}
+  .hc-foot{margin-top:10px;padding-top:10px}
+  .page-home .col-main>.sec-head{margin:18px 0 10px}
+}
