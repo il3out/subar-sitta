@@ -11,7 +11,8 @@ const P = { // the league
 const ids = Object.keys(P);
 const fx = (pairs, ko, res) => pairs.map(([h, a], i) => ({ id: "f" + (i + 1), h, a, ko: iso(ko + (i >> 1) * 2.5), res: res ? res[i] : null }));
 
-function league({ open = true, deadlineH = 28.5 } = {}) {
+function league({ open = true, deadlineH = 28.5, live = false, coWin = false } = {}) {
+  if (live) { open = false; deadlineH = -50 / 60; }
   const rounds = [
     { id: "r1", n: 1, deadline: iso(-21 * 24), locked: false, first_goal: 7, settled_at: iso(-20 * 24),
       fixtures: fx([["ARS", "CFC"], ["LFC", "MCI"], ["TOT", "NEW"], ["AVL", "EVE"], ["BRI", "FUL"], ["WHU", "WOL"]], -21 * 24, [[2, 1], [1, 1], [0, 2], [3, 0], [1, 0], [2, 2]]) },
@@ -20,7 +21,8 @@ function league({ open = true, deadlineH = 28.5 } = {}) {
     { id: "r3", n: 3, deadline: iso(-7 * 24), locked: false, first_goal: 4, settled_at: iso(-6 * 24),
       fixtures: fx([["LFC", "ARS"], ["MCI", "CFC"], ["AVL", "TOT"], ["EVE", "NFO"], ["FUL", "WHU"], ["BOU", "BRI"]], -7 * 24, [[2, 2], [3, 1], [1, 0], [0, 0], [2, 3], [1, 1]]) },
     { id: "r4", n: 4, deadline: iso(open ? deadlineH : -1), locked: false, first_goal: null, settled_at: null,
-      fixtures: fx([["ARS", "MCI"], ["CFC", "TOT"], ["LFC", "NEW"], ["AVL", "MUN"], ["BRI", "CRY"], ["NFO", "SUN"]], open ? deadlineH : -1, null) },
+      fixtures: fx([["ARS", "MCI"], ["CFC", "TOT"], ["LFC", "NEW"], ["AVL", "MUN"], ["BRI", "CRY"], ["NFO", "SUN"]], open || live ? deadlineH : -1, null)
+        .map((f, i) => live && i === 0 ? { ...f, live: [1, 0], min: 50, st: "2H" } : live && i === 1 ? { ...f, live: [0, 0], min: 45, st: "HT" } : f) },
   ];
   const pts = [[31, 3, 8, 1], [29, 3, 7, 1], [26, 2, 8, 1], [22, 2, 6, 0], [17, 1, 6, 0], [12, 0, 6, 0]];
   const lb = ids.map((id, i) => ({ rank: i + 1, user_id: id, nick: P[id], member_no: i + 1, joined_at: iso(-30 * 24 + i), is_admin: false,
@@ -29,6 +31,7 @@ function league({ open = true, deadlineH = 28.5 } = {}) {
   // the round_board for the last settled round
   const board = ids.map((id, i) => ({ user_id: id, nick: P[id], gg: 5 + i * 3, ggd: 1 + i * 3, at: iso(-7 * 24 - 5 - i), pts: [12, 9, 7, 7, 4, 2][i], ex: [2, 1, 1, 1, 0, 0][i], rs: 1,
     s: { f1: [2, 2], f2: [i % 3, 1], f3: [1, 0], f4: [i, 0], f5: [1, 2], f6: [1, 1] } }));
+  if (coWin) Object.assign(board[1], { pts: board[0].pts, ggd: board[0].ggd });   // two players share the round
   const picks = { r1: { f1: [2, 1], f2: [1, 0] }, r2: { f1: [1, 2] }, r3: { f1: [2, 2], f2: [2, 1], f3: [1, 0], f4: [0, 0], f5: [1, 2], f6: [1, 1] } };
   return { rounds, lb, board, picks, who: ids.slice(1, 5).map((id, i) => ({ user_id: id, filled: [6, 6, 4, 2][i], has_gg: i < 2, last_at: iso(-1 - i * 3), players: { nick: P[id] } })) };
 }
@@ -38,7 +41,7 @@ const jwt = () => `${b64({ alg: "HS256", typ: "JWT" })}.${b64({ sub: ME, role: "
 const user = { id: ME, aud: "authenticated", role: "authenticated", email: "test@example.com", app_metadata: {}, user_metadata: {}, created_at: iso(-30 * 24) };
 
 /**
- * mock(page, { signedIn, open, deadlineH, picks, failSaves })
+ * mock(page, { signedIn, open, deadlineH, live, coWin, picks, failSaves })
  * Returns the state; state.saves collects every pick save the app sends.
  */
 async function mock(page, opt = {}) {

@@ -9,6 +9,8 @@ create schema vault;
 create view vault.decrypted_secrets as select ''::text name, ''::text decrypted_secret where false;
 create schema cron;
 create function cron.schedule(text, text, text) returns bigint language sql as $$ select 1::bigint $$;
+create table cron.job (jobid bigint, jobname text);
+create function cron.alter_job(job_id bigint, schedule text) returns void language sql as $$ select $$;
 do $$ begin
   if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon; end if;
   if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated; end if;

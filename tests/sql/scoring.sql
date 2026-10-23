@@ -90,3 +90,25 @@ do $$ begin
   raise exception 'FAIL: a player made themselves admin';
 exception when insufficient_privilege then null; end $$;
 reset role;
+
+-- ---------------------------------------------------------------- live scores (update-03): display only, never points
+-- af_get is replaced by a canned API answer so refresh_round runs offline
+create table pg_temp.api (j jsonb);
+create or replace function public.af_get(path text) returns jsonb language sql as $$ select j from pg_temp.api $$;
+insert into public.rounds (id, n, deadline, fixtures) values ('r9', 9, now() - interval '1 hour',
+  '[{"id":"f1","api":1,"h":"ARS","a":"CFC","ko":"2026-10-01T12:00:00Z","res":null},{"id":"f2","api":2,"h":"LFC","a":"MCI","ko":"2026-10-01T12:00:00Z","res":null},
+    {"id":"f3","api":3,"h":"TOT","a":"NEW","ko":"2099-01-01T12:00:00Z","res":null},{"id":"f4","api":4,"h":"AVL","a":"EVE","ko":"2099-01-01T12:00:00Z","res":null},
+    {"id":"f5","api":5,"h":"BRI","a":"FUL","ko":"2099-01-01T12:00:00Z","res":null},{"id":"f6","api":6,"h":"WHU","a":"WOL","ko":"2099-01-01T12:00:00Z","res":null}]');
+insert into pg_temp.api values ('{"response":[
+  {"fixture":{"id":1,"status":{"short":"2H","elapsed":63}},"goals":{"home":2,"away":1},"events":[]},
+  {"fixture":{"id":2,"status":{"short":"HT","elapsed":45}},"goals":{"home":0,"away":0},"events":[]}]}');
+select public.refresh_round('r9');
+select pg_temp.ok((select fixtures->0->'live' from public.rounds where id = 'r9') = '[2,1]', 'live score is shown during the match');
+select pg_temp.ok((select fixtures->0->'res' from public.rounds where id = 'r9') = 'null', 'a live score is never a result');
+select pg_temp.ok((select fixtures->1->>'st' from public.rounds where id = 'r9') = 'HT', 'half time is recorded');
+select pg_temp.ok((select settled_at is null from public.rounds where id = 'r9'), 'a round with matches in play is not settled');
+update pg_temp.api set j = '{"response":[
+  {"fixture":{"id":1,"status":{"short":"FT","elapsed":90}},"goals":{"home":3,"away":1},"events":[{"type":"Goal","detail":"Normal Goal","time":{"elapsed":12}}]}]}';
+select public.refresh_round('r9');
+select pg_temp.ok((select fixtures->0->'res' from public.rounds where id = 'r9') = '[3,1]', 'full time writes the result');
+select pg_temp.ok((select not (fixtures->0 ? 'live') from public.rounds where id = 'r9'), 'full time clears the live score');
