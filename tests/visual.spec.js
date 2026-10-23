@@ -16,6 +16,7 @@ const SCREENS = [
   ["landing", { signedIn: false }, async () => {}],
   ["join", { signedIn: false }, async (page) => page.locator(".land-go").first().click()],
   ["matchday", { picks: { f1: [2, 1], f2: [0, 0], f3: [1, 1] }, gg: 34 }, async () => {}],
+  ["matchday-live", { live: true, coWin: true, picks: { f1: [2, 1], f2: [0, 0] }, gg: 34 }, async () => {}],
   ["matchday-locked", { open: false, picks: { f1: [2, 1], f2: [0, 0] } }, async () => {}],
   ["results", {}, async (page) => { await nav(page, "round"); await page.locator(".tabs button", { hasText: "Round 3" }).click(); await page.locator("table.picks").waitFor(); }],
   ["table", {}, async (page) => nav(page, "table")],

@@ -203,7 +203,7 @@ html[data-nav="fade"]::view-transition-new(main){animation:vtFade var(--t3) var(
 .tm{display:grid;justify-items:center;gap:8px;text-align:center;min-width:0}
 .tm .crest{width:50px;height:50px;object-fit:contain}
 .crest-ph{width:50px;height:50px;display:grid;place-items:center;border-radius:50%;background:var(--tint);font:700 12px/1 var(--label);color:var(--brand)}
-.tm-n{font-size:15px;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.tm-n{font-size:clamp(12.5px,3.9vw,15px);font-weight:700;line-height:1.2;overflow-wrap:break-word;hyphens:manual}
 .fx-mid{display:grid;justify-items:center;gap:6px}
 .fx-when{display:flex;gap:6px;font:700 13px/1.2 var(--label);text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3)}
 .fx-when b{color:var(--brand);font-weight:700}
@@ -580,3 +580,26 @@ body[data-page="land"] :focus-visible{outline:3px solid var(--powder);outline-of
   .land-end{grid-column:2}
 }
 .lt-t abbr{text-decoration:none}
+/* live on Matchday: in-play score on the ticket stub, joint round winners side by side */
+.fx-foot .pill.live{background:var(--cobalt);color:var(--white);box-shadow:none;font-weight:600}
+.fx-foot .pill.live b{color:inherit}
+.fx-foot .pill.live .dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 1.4s ease-in-out infinite}
+.win-avs{display:flex;gap:10px;justify-content:center}
+/* phones: the first pick sits on the first screen (no banner, one-line greeting, tighter hero) */
+@media (max-width:599px){
+  .page-home .banner{display:none}
+  .page-home .hello{padding:12px 0 6px}
+  .page-home .hello>div{display:flex;align-items:baseline;gap:8px}
+  .page-home .hello-2{margin:0;font-size:22px}
+  .page-home .hello .avatar.lg{display:none}
+  .page-home .col-main>.sec-head:first-child{display:none}
+  .page-home .chips{padding-bottom:0}
+  .hero-card{margin-top:16px;padding:30px 18px 12px}
+  .hero-card .hc-lbl{font-size:12px}
+  .dur b{font-size:clamp(40px,11vw,52px)}
+  .dur i{font-size:13px;margin-inline:2px 7px}
+  .hc-big{font-size:36px}
+  .hc-sub{font-size:13px;margin-top:4px}
+  .hc-foot{margin-top:10px;padding-top:10px}
+  .page-home .col-main>.sec-head{margin:18px 0 10px}
+}

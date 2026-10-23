@@ -125,3 +125,31 @@ test("scoring in the app matches the rules (exact 5, result 2, no pick 0)", asyn
   const r = await page.evaluate(() => [ptsFor([2, 1], [2, 1]), ptsFor([3, 0], [2, 1]), ptsFor([1, 1], [0, 0]), ptsFor([0, 1], [2, 1]), ptsFor(undefined, [0, 0]), ptsFor([0, 0], [0, 0])]);
   expect(r).toEqual([5, 2, 2, 0, 0, 5]);
 });
+
+test("during matches Matchday shows live scores and your running total", async ({ page }) => {
+  await mock(page, { live: true, picks: { f1: [2, 1], f2: [0, 0] } });
+  await page.goto("/");
+  await expect(page.locator(".hero-card .notch")).toContainText("Live");
+  await expect(page.locator(".hero-card .hc-sub")).toHaveText(/7 points so far/);   // 2 (right result) + 5 (0–0 at half time)
+  await expect(page.locator('[data-card="f1"] .pill.live')).toContainText("1–0");
+  await expect(page.locator('[data-card="f1"] .fx-when')).toHaveText("Your pick");
+  await expect(page.locator('[data-card="f2"] .pill.live')).toContainText("Half time");
+  await expect(page.locator('[data-card="f3"] .fx-foot')).toContainText("Awaiting result");
+});
+
+test("the back button returns to the previous section", async ({ page }) => {
+  await mock(page);
+  await page.goto("/");
+  await page.locator('[data-go="table"]:visible').first().click();
+  await expect(page.locator("#standings")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator(".hero-card")).toBeVisible();
+  await expect(page).toHaveURL(/localhost:4173\/$/);   // still inside Subar Sitta
+});
+
+test("joint round winners are both shown", async ({ page }) => {
+  await mock(page, { coWin: true });
+  await page.goto("/");
+  await expect(page.locator(".win-card .win-name")).toContainText("Abdal & Noura");
+  await expect(page.locator(".win-card .win-sub")).toContainText("Joint round winners");
+});
