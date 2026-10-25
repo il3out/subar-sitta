@@ -10,6 +10,7 @@ Nothing here deploys. `main` deploys to subarsitta.com through Vercel, and only 
 | Every push / PR | `CI`: SQL scoring + access-rule tests on the real migrations; 20 journey tests and 28 visual-baseline screens (desktop 1440 + iPhone 13, light + dark), Supabase mocked | GitHub Actions | PR check |
 | Every 15 min | `Monitor`: site, assets, database and autopilot health (read-only, signed out) | GitHub Actions | Opens one `outage` issue on failure, closes it on recovery |
 | Nightly 03:17 Kuwait | `Nightly`: full regression, live smoke on subarsitta.com, phone performance, Lighthouse mobile ×3 on the live landing page | GitHub Actions | `METRICS {…}` lines in the job logs, artifacts for 30 days |
+| Every 10 min (after update-04 is run) | Database job `notify_run`: emails for players who switched them on (new round, 3-hour reminder if picks are unfinished, result) | Supabase | Resend emails, logged in `notify_log` |
 | Every 2 days, 07:47 Kuwait | Claude routine **48-hour review**: functionality, speed, mobile, visual design, accessibility; a short plain-language report with screenshots and at most 3 ranked recommendations | Claude cloud | Private report page + phone and email notification |
 
 The owner is a product owner, not a developer: reports use plain words, no code or logs, at most 3 recommendations, and numbered one-action steps.
