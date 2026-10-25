@@ -1,0 +1,30 @@
+{
+ "before-light": {
+  "firstDrum": 665,
+  "firstDrumBottom": 785,
+  "dockTop": 586,
+  "gg": 1979,
+  "page": 3822
+ },
+ "after-light": {
+  "firstDrum": 447,
+  "firstDrumBottom": 567,
+  "dockTop": 586,
+  "gg": 1761,
+  "page": 3604
+ },
+ "before-dark": {
+  "firstDrum": 665,
+  "firstDrumBottom": 785,
+  "dockTop": 586,
+  "gg": 1979,
+  "page": 3822
+ },
+ "after-dark": {
+  "firstDrum": 447,
+  "firstDrumBottom": 567,
+  "dockTop": 586,
+  "gg": 1761,
+  "page": 3604
+ }
+}

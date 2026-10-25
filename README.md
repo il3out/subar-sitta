@@ -40,6 +40,14 @@ It makes a handful of API requests a day and stops itself at 80, under the free 
 2. Set Framework Preset to **Other**. Leave the build command empty and keep the output directory as the root. Click **Deploy**.
 3. **Settings → Domains**: add `subarsitta.com`, then copy the DNS records Vercel shows into your domain registrar.
 
+### Email notifications (optional)
+Players can switch on emails (off by default): a new round is open, a reminder 3 hours before the lock if they haven't picked all six, and their result. Every email has a one-tap unsubscribe link. Emails go through [Resend](https://resend.com) (free up to 100 a day, 3,000 a month).
+1. Resend → **Domains** → add `subarsitta.com` and copy the DNS records it shows into your domain registrar. Wait until Resend says *Verified*.
+2. Resend → **API Keys** → create a key with *Sending access*.
+3. Supabase → **SQL Editor**: `select vault.create_secret('YOUR_RESEND_KEY', 'resend_api_key');`
+4. Supabase → **SQL Editor**: paste all of `supabase/update-04-notifications.sql` and click **Run**.
+Until step 4 is done the website hides the email switch, so the site can go live before emails are set up.
+
 ### 3. Make yourself admin
 Sign up on the site, then in the SQL Editor:
 ```sql
@@ -68,3 +76,6 @@ Do 2 before 3, or sign-ins fail until the new `config.js` is live.
   update public.league set season = '2027/28', api_season = 2027;
   ```
 - **Pause automation:** use the Admin → Autopilot switch. You can still enter results and open rounds by hand on the same page.
+
+## Tests and monitoring
+`ops/README.md` describes the automated checks (CI, 15-minute live monitor, nightly regression), the scheduled Claude routines and their rules. Tooling lives in `tests/`, `.github/` and `ops/` and is never deployed (see `.vercelignore`).

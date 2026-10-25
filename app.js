@@ -23,17 +23,17 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  st:{todo:"",half:"✏️ Add the other score",edited:"⏳ Saving",saving:"⏳ Saving",saved:"💙 Saved",failed:"⚠️ Not saved",locked:"🔒 Locked in",none:"😶 No prediction"},
  final:"🏁 Full time",awaiting:"⏳ Awaiting result",voidF:"🚫 Postponed, not scored",
  goalsOf:c=>`${c} goals`,swipe:"👆 Swipe a number, or tap it",
- ggH:"⏱️ Golden Goal",ggP:"The minute of the first goal across all six. It settles ties.",ggSet:"Slide to the minute",ggWas:m=>`First goal: minute ${m}`,ggUnset:"Not set",
+ ggH:"⏱️ Golden Goal",ggP:"The minute of the first goal across all six. It picks the round winner when points are level.",ggSet:"Slide to the minute",ggWas:m=>`First goal: minute ${m}`,ggUnset:"Not set",
  roomH:"👀 Who's in",roomOpen:"🙈 Scores stay hidden until kick-off.",roomMore:n=>`and ${n} more`,roomLocked:"👉 Everyone's picks are on Results.",notYet:"😴 Not in yet",ggShort:"GG",
  lastH:"🏁 Last round",lastNone:"Results appear here once a round is complete.",yourPick:"You",winner:(n,who,p)=>`Round ${n} went to ${who} with ${p}`,
  tableH:"📈 The table",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
  after:n=>n===1?"After 1 round":`After ${n} rounds`,exactWon:(e,w)=>`${e} exact, ${w} ${w===1?"round":"rounds"} won`,
  behind:(p,n)=>p===0?`🤝 Level with ${n}`:`🎯 ${p} behind ${n}`,leads:p=>p===0?"🤝 Level at the top":`📈 Leads by ${p}`,you:"you",lastRd:p=>`${p} last round`,
- rulesH:"📖 How it works",rules:["⚽ Six fixtures every round. Predict the full-time score of each.","🎯 An exact score is worth 5 points. The right result is worth 2.","⏱️ The Golden Goal is the minute of the first goal across all six. It settles ties.","🔒 Picks lock at the first kick-off. Then everyone's picks are revealed."],
+ rulesH:"📖 How it works",rules:["⚽ Six fixtures every round. Predict the full-time score of each.","🎯 An exact score is worth 5 points. The right result is worth 2.","⏱️ The Golden Goal is the minute of the first goal across all six. It picks the round winner when points are level.","🔒 Picks lock at the first kick-off. Then everyone's picks are revealed."],
  joinM:"Pick the name everyone will see on the table.",
  nick:"Username",nickHint:"3 to 20 characters. Everyone sees this on the table.",nickErr:"Usernames are 3 to 20 characters.",nickTaken:"That username is taken. Try another.",nickFree:"Available",
  join:"Choose your username",joinBtn:"Start playing",joined:"🎉 You're in. Make your six.",
- signInT:"Sign in",joinT:"Join the game",email:"Email",emailHint:"For password resets only. Never shown to other players.",password:"Password",pwHint:"At least 8 characters",
+ signInT:"Sign in",joinT:"Join the game",email:"Email",emailHint:"For password resets, and game emails only if you switch them on. Never shown to other players.",password:"Password",pwHint:"At least 8 characters",
  signIn:"Sign in",signUp:"Create account",haveAcc:"Already playing?",newHere:"New here?",back:"Back",
  emailTaken:"That email already has an account. Sign in instead.",tooMany:"Too many attempts. Wait a minute and try again.",botCheck:"Complete the check above, then try again.",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"💙 Password saved",
  confirmEmail:"Check your email to confirm your account, then sign in.",signOut:"Sign out",authErr:"Email or password is not right.",
@@ -51,12 +51,14 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  err:{perm:"You don't have permission for that change.",gen:"Couldn't save. Check your connection and try again.",load:"Couldn't load the league. Check your connection."},retry:"Try again",
  land:{h:["Six matches.","Six predictions.","One leaderboard."],p:"Call the score of six Premier League games every round. Exact score 5, right result 2. Free to play.",
    cta:"JOIN THE GAME ⚽",how:"HOW IT WORKS",round:n=>`Round ${n}`,locks:"Picks lock in",lastRes:"Last round",
-   howH:"How it works",steps:[["Predict six scores","Every round we pick six Premier League fixtures. Call the full-time score of each and the minute of the first goal."],["Picks lock at kick-off","Change your mind as often as you like until the first game starts. Then everyone's picks are revealed."],["Climb the table","Exact score 5 points, right result 2. The Golden Goal minute settles ties. Bragging rights last all week."]],
+   howH:"How it works",steps:[["Predict six scores","Every round we pick six Premier League fixtures. Call the full-time score of each and the minute of the first goal."],["Picks lock at kick-off","Change your mind as often as you like until the first game starts. Then everyone's picks are revealed."],["Climb the table","Exact score 5 points, right result 2. The Golden Goal minute picks the round winner when points are level. Bragging rights last all week."]],
    story:"We started with friends. Now everyone's invited.",join2:"Join the game",free:"Free. No invite code. Takes 20 seconds."},
  allSaved:tm=>`💙 All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"💙 Six scores saved. Now the Golden Goal ⏱️",saveNow:"💾 Save now",cheer:"💙 All six saved. Good luck ⚽",
  units:{d:"d",h:"h",m:"m",s:"s"},toDark:"Switch to dark mode",toLight:"Switch to light mode",yourName:"Your player card",langSwitch:"Switch to Arabic",
- hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"👀 Who's in",yourSix:"⚽ Your six",matchday:"🗓️ Matchday",viewAll:"View all",winnerSub:p=>`🎉 Round winner with ${p} points`,
- banner:["🔥 Six matches. Six exact scores. One perfect six.","🎯 Exact score 5 points. Right result 2.","⏱️ The Golden Goal settles every tie.","💙 Bragging rights last a whole week."]}};
+ hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"👀 Who's in",yourSix:"⚽ Your six",matchday:"🗓️ Matchday",viewAll:"View all",winnerSub:p=>`🎉 Round winner with ${p} points`,coWin:p=>`🎉 Joint round winners with ${p} points`,yourPickL:"Your pick",emailH:"📧 Email reminders",emailP:"When a round opens, 3 hours before picks lock if you haven't finished, and your results.",on:"On",off:"Off",
+ askH:"⏰ Never miss a lock",askP:"Get an email 3 hours before picks lock if you haven't finished your six.",askYes:"Email me",askNo:"No thanks",
+ emailSaved:v=>v?"📧 Emails on. Stop them any time here or from any email.":"Emails off",unsubOk:"You won't get Subar Sitta emails any more.",unsubBad:"That link didn't work. Turn emails off on your Me page.",soFar:p=>`⚽ You're on ${p} ${p===1?"point":"points"} so far`,
+ banner:["🔥 Six matches. Six exact scores. One perfect six.","🎯 Exact score 5 points. Right result 2.","⏱️ The Golden Goal picks the round winner on level points.","💙 Bragging rights last a whole week."]}};
 const LANG="en";
 /* theme: follows the device until the member picks one in the header */
 const DARKQ=matchMedia("(prefers-color-scheme: dark)");
@@ -150,8 +152,9 @@ async function loadAll(){
   S.member=!!me.data;
   if(!S.member){S.loadFailed=false;S.ready=true;softRender();return}
   addPlayer(S.uid,me.data.nick,{isAdmin:me.data.is_admin,joinedAt:me.data.joined_at});
-  const [lb,mine,tot]=await Promise.all([sb.rpc("leaderboard",{lim:100}),sb.from("picks").select("*").eq("user_id",S.uid),
-    sb.from("players").select("id",{count:"exact",head:true})]);
+  const [lb,mine,tot,nt]=await Promise.all([sb.rpc("leaderboard",{lim:100}),sb.from("picks").select("*").eq("user_id",S.uid),
+    sb.from("players").select("id",{count:"exact",head:true}),sb.from("player_notify").select("email_on").maybeSingle()]);
+  S.notify=nt.error?null:{on:!!nt.data?.email_on};   /* null: emails not set up yet, so nothing is shown */
   if(lb.error||mine.error){S.loadFailed=true;S.ready=true;render();return}
   S.lb=lb.data||[];S.lb.forEach(r=>addPlayer(r.user_id,r.nick,{isAdmin:r.is_admin,joinedAt:r.joined_at,no:r.member_no}));
   S.mine={};(mine.data||[]).forEach(p=>S.mine[p.round_id]={s:p.s||{},gg:p.gg,at:p.at});
@@ -225,7 +228,7 @@ function render(){
 function softRender(){if(S.page==="home"&&Date.now()-(S.touchAt||0)<2500){clearTimeout(S.softT);S.softT=setTimeout(softRender,1200);return}render()}
 function go(pg,after){
   const from=[...PAGES,"admin"].indexOf(S.page),to=[...PAGES,"admin"].indexOf(pg);
-  const swap=()=>{S.page=pg;after?.();try{history.replaceState(null,"","#"+pg)}catch(_){}render();scrollTo({top:0});$("#main").focus({preventScroll:true})};
+  const swap=()=>{S.page=pg;after?.();try{if(location.hash!=="#"+pg)history.pushState(null,"","#"+pg)}catch(_){}render();scrollTo({top:0});$("#main").focus({preventScroll:true})};
   if(pg!=="home")flushSave();
   if(!document.startViewTransition||RM.matches||from===to){swap();return}
   document.documentElement.dataset.nav=(to>from)===(t.dir==="ltr")?"fwd":"back";
@@ -296,18 +299,23 @@ function home(){
   if(!r)return `<div class="wrap">${hello}${empty(t.noRound,S.isAdmin?t.noRoundAdmin:t.noRoundUser)}${railTable()}</div>`;
   ensureDraft(r);const locked=isLocked(r),settled=isSettled(r);
   const n=r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length;
+  /* live: a match in play; soFar: points from finished and in-play matches (in-play points are provisional) */
+  const live=locked&&!settled&&r.fixtures.some(f=>f.live&&!f.res),started=r.fixtures.some(f=>f.res||f.live);
+  const soFar=r.fixtures.reduce((a,f)=>a+(f.res||f.live?ptsFor(S.draft.s[f.id],f.res||f.live):0),0);
   const hero=`<section class="hero-card" aria-labelledby="mwh">
-      <span class="notch">${locked?(settled?t.final:`<i class="dot"></i>${t.st.locked}`):`${t.round(r.n)}`}</span>
+      <span class="notch${live?" live":""}">${live?`<i class="dot"></i>${t.live}`:locked?(settled?t.final:`<i class="dot"></i>${t.st.locked}`):`${t.round(r.n)}`}</span>
       <h1 class="sr" id="mwh">${t.mw} ${r.n}</h1>
-      ${locked?`<p class="hc-big">${t.mw} <b class="num">${pad(r.n)}</b></p><p class="hc-sub">${esc(t.lockedAt(fDay(r.deadline),fTime(r.deadline)))}</p>`
+      ${locked?`<p class="hc-big">${t.mw} <b class="num">${pad(r.n)}</b></p><p class="hc-sub">${esc(started&&!settled?t.soFar(soFar):t.lockedAt(fDay(r.deadline),fTime(r.deadline)))}</p>`
         :`<p class="hc-lbl">${t.locksIn}</p><div class="clock" data-deadline="${esc(r.deadline)}" role="timer" aria-live="off"><span class="dur" data-dur dir="ltr"></span></div><p class="hc-sub">${esc(t.locksAt(fLong(r.deadline),fTime(r.deadline)))}</p>`}
       <div class="hc-foot" id="heroDie">${SIX(n,"hc-six")}<span class="hc-n"><b class="num" id="heroN">${n}</b>/6</span></div></section>`;
   const fx=`<div class="sec-head"><h2 class="h2">${t.yourSix}</h2><span class="status" id="status" aria-live="polite"></span></div>
-    <ol class="slate" id="fixtures" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(f=>fixture(f,locked)).join("")}</ol>${ggBlock(r,locked)}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
+    <ol class="slate" id="fixtures" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(f=>fixture(f,locked)).join("")}</ol>${ggBlock(r,locked)}${!locked&&S.notify&&!S.notify.on&&!asked()?`<section class="card pad ask"><div><h2 class="h2">${t.askH}</h2><p class="sub">${t.askP}</p></div>
+      <div class="row"><button class="btn glow" type="button" data-act="notify" data-v="1">${t.askYes}</button><button class="link quiet" type="button" data-act="notifyno">${t.askNo}</button></div></section>`:""}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
   return `<div class="wrap md">${banner()}${hello}${whoRow(r)}
     <div class="grid"><div class="col-main"><div class="sec-head"><h2 class="h2">${t.matchday}</h2><span class="meta">${esc(S.meta?.season||"2026/27")}</span></div>${hero}${fx}</div>
     <aside class="rail" aria-label="${esc(t.tableH)}">${winCard()}${lastRound()}${room(r)}${railTable()}${rules()}</aside></div></div>`;
 }
+const asked=()=>{try{return !!localStorage.getItem("ss-ask")}catch(_){return false}};
 const banner=()=>`<div class="banner" role="note"><span class="banner-tag">SUBAR 6</span><span id="bannerTxt" aria-live="off">${t.banner[S.bannerI||0]}</span></div>`;
 function whoRow(r){const W=S.who?.rid===r.id?S.who:{count:0,rows:[]};const mineN=S.draft?r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length:0;
   const others=W.rows.filter(x=>x.uid!==S.uid).slice(0,11);
@@ -331,9 +339,9 @@ function drum(f,i,val,locked,club){
 function fixture(f,locked){
   const v=S.draft.s[f.id];const st=locked?"locked":cardState(f);
   const side=c=>`<div class="tm">${crest(c,52)}<span class="tm-n">${esc(sname(c))}</span></div>`;
-  const res=f.void?`<span class="pill">${t.voidF}</span>`:f.res?`<span class="pill">${t.final} <b class="num" dir="ltr">${f.res[0]}–${f.res[1]}</b></span><span class="pts p${ptsFor(v,f.res)}">+${ptsFor(v,f.res)}</span>`:locked?`<span class="pill">${t.awaiting}</span>`:"";
+  const res=f.void?`<span class="pill">${t.voidF}</span>`:f.res?`<span class="pill">${t.final} <b class="num" dir="ltr">${f.res[0]}–${f.res[1]}</b></span><span class="pts p${ptsFor(v,f.res)}">+${ptsFor(v,f.res)}</span>`:f.live?`<span class="pill live"><i class="dot"></i>${f.st==="HT"?t.ht:f.min?f.min+"′":t.live} <b class="num" dir="ltr">${f.live[0]}–${f.live[1]}</b></span><span class="pts p${ptsFor(v,f.live)}">+${ptsFor(v,f.live)}</span>`:locked?`<span class="pill">${t.awaiting}</span>`:"";
   return `<li class="fx card" data-card="${f.id}" data-state="${st}">
-    <div class="fx-line">${side(f.h)}<div class="fx-mid"><p class="fx-when"><span>${esc(fDay(f.ko))}</span><b class="num">${fTime(f.ko)}</b></p><div class="score">${drum(f.id,0,v?.[0],locked,name(f.h))}<span class="colon" aria-hidden="true">:</span>${drum(f.id,1,v?.[1],locked,name(f.a))}</div></div>${side(f.a)}</div>
+    <div class="fx-line">${side(f.h)}<div class="fx-mid"><p class="fx-when">${locked&&(f.live||f.res)?`<span>${t.yourPickL}</span>`:`<span>${esc(fDay(f.ko))}</span><b class="num">${fTime(f.ko)}</b>`}</p><div class="score">${drum(f.id,0,v?.[0],locked,name(f.h))}<span class="colon" aria-hidden="true">:</span>${drum(f.id,1,v?.[1],locked,name(f.a))}</div></div>${side(f.a)}</div>
     <div class="fx-foot"><span class="fx-state">${footState(f,st,locked)}</span>${res}</div></li>`}
 const footState=(f,st,locked)=>locked?(Array.isArray(S.draft.s[f.id])?t.st.locked:t.st.none):st==="saved"?t.st.saved:st==="todo"?t.swipe:t.st[st];
 function ggBlock(r,locked){const g=S.draft.gg;
@@ -369,8 +377,9 @@ function celebrate(){const d=$(".hero-card");if(!d||RM.matches)return;d.classLis
 
 /* ===================== the rail ===================== */
 function winCard(){const r=lastSettled();if(!r)return"";const top=board(r.id)[0];if(!top||top.pts<=0)return"";
-  return `<section class="win-card" aria-label="${esc(t.winner(r.n,dname(top.uid),top.pts))}"><span class="notch">${t.round(r.n)}</span><span class="crown" aria-hidden="true">${I.pennant}</span>
-    <span class="avatar xl">${esc(initials(top.uid))}</span><p class="win-name">${bn(top.uid)}</p><p class="win-sub">${t.winnerSub(top.pts)}</p></section>`}
+  const ws=board(r.id).filter(x=>x.pts===top.pts&&x.ggd===top.ggd);   /* same rule as the database's round winner */
+  return `<section class="win-card" aria-label="${esc(t.winner(r.n,ws.map(x=>dname(x.uid)).join(" & "),top.pts))}"><span class="notch">${t.round(r.n)}</span><span class="crown" aria-hidden="true">${I.pennant}</span>
+    <span class="win-avs">${ws.slice(0,3).map(x=>`<span class="avatar xl">${esc(initials(x.uid))}</span>`).join("")}</span><p class="win-name">${ws.map(x=>bn(x.uid)).join(" &amp; ")}</p><p class="win-sub">${ws.length>1?t.coWin(top.pts):t.winnerSub(top.pts)}</p></section>`}
 /* the latest savers this round (never their scores) */
 function room(r){const W=S.who?.rid===r.id?S.who:{count:0,rows:[]},locked=isLocked(r);const rows=W.rows.slice(0,12),more=W.count-rows.length;
   return `<section class="section card room-card" aria-labelledby="roomh"><div class="section-head"><h2 class="h2" id="roomh">${t.roomH}</h2><span class="meta num">${W.count}/${S.total}</span></div>
@@ -453,7 +462,9 @@ function playerView(){const ids=[...new Set([S.uid,...S.lb.map(x=>x.user_id)])];
       <div class="vs-strip" role="list">${per.map(p=>`<div role="listitem" class="${p.a>p.b?"w":p.b>p.a?"l":""}"><b class="num" dir="ltr">${p.a}–${p.b}</b><span>${t.round(p.n)}</span></div>`).join("")}</div>`}`}</section>`;
   return `<div class="wrap member"><div class="member-page"><div>${pass}
       <div class="card pad member-ctl"><div class="field"><label for="selp">${t.choose}</label><select id="selp">${opts(ids,uid)}</select></div>
-      ${uid===S.uid?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div></div>
+      ${uid===S.uid?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div>
+      ${uid===S.uid&&S.notify?`<div class="card pad notify-row"><div><h2 class="h2">${t.emailH}</h2><p class="sub">${t.emailP}</p></div>
+        <div class="seg2" role="group" aria-label="${esc(t.emailH)}"><button type="button" data-act="notify" data-v="1" aria-pressed="${S.notify.on}">${t.on}</button><button type="button" data-act="notify" data-v="0" aria-pressed="${!S.notify.on}">${t.off}</button></div></div>`:""}</div>
     <div>${stats}${h2h}</div></div></div>`}
 
 /* ===================== edits + autosave ===================== */
@@ -560,7 +571,9 @@ document.addEventListener("click",async e=>{
     const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin,...captchaOpt()});resetCaptcha();authErr(error?errMsg(error):t.resetSent);return}
   if(a==="setpw"){const pw=$("#npw").value||"";if(pw.length<8)return toast(t.weakPw,true);if(await q(sb.auth.updateUser({password:pw}))){S.recovery=false;toast(t.pwSaved);loadAll()}return}
   if(a==="signout"){S.auth=null;S.page="home";await sb.auth.signOut();return}
-  if(a==="retryload"){S.ready=false;render();loadAll();return}
+  if(a==="notify"){const v=act.dataset.v==="1";if(await q(sb.from("player_notify").upsert({user_id:S.uid,email_on:v}))){S.notify={on:v};toast(t.emailSaved(v));render()}return}
+  if(a==="notifyno"){try{localStorage.setItem("ss-ask","1")}catch(_){}render();return}
+  if(a==="retryload"){if(!sb)return location.reload();S.ready=false;render();loadAll();return}
   if(a==="auto"){if(await q(sb.from("league").update({auto:act.dataset.v==="1"}).eq("id",1)))reload();return}
   if(a==="runauto"){act.disabled=true;const r=await q(sb.rpc("run_autopilot"));act.disabled=false;if(r)toast(String(r));reload();return}
   if(a==="lock"){const r=S.rounds[act.dataset.r];if(await write("rounds/"+act.dataset.r,{locked:!r.locked},true)){toast(r.locked?t.reopenedMsg:t.lockedMsg);render()}return}
@@ -628,6 +641,8 @@ document.addEventListener("change",async e=>{const el=e.target;
   if(el.id==="selp"){S.viewPlayer=el.value;render()}
   if(el.id==="selv"){S.vsPlayer=el.value;render()}
 });
+addEventListener("popstate",()=>{const h=location.hash.slice(1),pg=[...PAGES,"admin"].includes(h)?h:"home";
+  if(pg!==S.page&&S.uid&&S.member){if(S.page==="home")flushSave();S.page=pg;render();scrollTo({top:0})}});
 addEventListener("beforeunload",e=>{if(S.dirty){flushSave();e.preventDefault()}});
 addEventListener("visibilitychange",()=>{if(document.hidden)flushSave()});
 
@@ -638,7 +653,10 @@ setInterval(()=>{const b=$("#bannerTxt");if(!b||RM.matches||document.hidden)retu
 /* ===================== boot ===================== */
 (()=>{const h=location.hash.slice(1);if(h==="predict")S.page="home";else if([...PAGES,"admin"].includes(h))S.page=h;else if(h==="join")S.auth="up";else if(h==="signin")S.auth="in"})();
 render();
-(async()=>{
+/* the database library loads after the first paint, so phones show the page instead of a blank screen while it downloads */
+const sbJs=document.createElement("script");sbJs.src="vendor/supabase.js";sbJs.onload=()=>boot();
+sbJs.onerror=()=>{S.loadFailed=true;S.ready=true;render()};document.head.append(sbJs);
+async function boot(){
   sb=supabase.createClient(cfg.url,cfg.key);
   sb.auth.onAuthStateChange((ev,session)=>{
     if(ev==="PASSWORD_RECOVERY"){S.recovery=true;S.uid=session?.user?.id||null;S.ready=true;render();return}
@@ -647,6 +665,9 @@ render();
     if(S.pendingJoin)return;
     setTimeout(loadAll,0)});
   live();
+  const ut=new URLSearchParams(location.search).get("unsubscribe");
+  if(ut){try{history.replaceState(null,"",location.pathname+location.hash)}catch(_){}
+    sb.rpc("unsubscribe",{t:ut}).then(({data,error})=>{toast(!error&&data?t.unsubOk:t.unsubBad,!!error||!data);if(!error&&data&&S.notify)S.notify.on=false})}
   if(S.auth)mountCaptcha();
   addEventListener("focus",()=>reload());
-})();
+}
