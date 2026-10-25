@@ -41,6 +41,8 @@ Routines read all of this before proposing anything.
 ## Reports
 
 - 14 Oct 2026 (baseline): https://claude.ai/artifact/KsBKM9zjvgfaMF7QjzY31m (private to the owner), evidence in `ops/reports/2026-10-14/`
+- 23 Oct 2026 (four test-and-judge rounds): https://claude.ai/artifact/N1RZQocWsqPDEuTXYsQujv, evidence in `ops/reports/2026-10-23/`
+- 25 Oct 2026 (live check, email reminders preview): https://claude.ai/artifact/Q8RvSgFHfgg5wqpusyBi47, evidence in `ops/reports/2026-10-25/`
 
 ## Running things yourself
 
