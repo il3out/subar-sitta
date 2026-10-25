@@ -112,3 +112,35 @@ update pg_temp.api set j = '{"response":[
 select public.refresh_round('r9');
 select pg_temp.ok((select fixtures->0->'res' from public.rounds where id = 'r9') = '[3,1]', 'full time writes the result');
 select pg_temp.ok((select not (fixtures->0 ? 'live') from public.rounds where id = 'r9'), 'full time clears the live score');
+
+-- ---------------------------------------------------------------- email notifications (update-04)
+-- send_emails is replaced so the test captures emails instead of sending them
+create table pg_temp.sent (msg jsonb);
+create or replace function public.send_emails(batch jsonb) returns void language sql as
+  $$ insert into pg_temp.sent select x from jsonb_array_elements(batch) x $$;
+update auth.users set email = right(id::text, 1) || '@example.com';
+update public.rounds set settled_at = now() where id = 'r1';                       -- just settled: results due
+insert into public.rounds (id, n, deadline, fixtures) values ('r10', 10, now() + interval '2 hours',
+  '[{"id":"f1","h":"ARS","a":"CFC"},{"id":"f2","h":"LFC","a":"MCI"},{"id":"f3","h":"TOT","a":"NEW"},{"id":"f4","h":"AVL","a":"EVE"},{"id":"f5","h":"BRI","a":"FUL"},{"id":"f6","h":"WHU","a":"WOL"}]');
+insert into public.picks (user_id, round_id, s) values   -- B has finished round 10, so B gets no reminder
+  ('00000000-0000-0000-0000-00000000000b', 'r10', '{"f1":[1,0],"f2":[1,0],"f3":[1,0],"f4":[1,0],"f5":[1,0],"f6":[1,0]}');
+insert into public.player_notify (user_id, email_on) values
+  ('00000000-0000-0000-0000-00000000000a', true), ('00000000-0000-0000-0000-00000000000b', true), ('00000000-0000-0000-0000-00000000000c', false);
+select public.notify_run();
+create temp table s as select msg->'to'->>0 who, msg->>'subject' subj, msg->>'html' html from pg_temp.sent;
+select pg_temp.ok(not exists (select 1 from s where who = 'c@example.com'), 'a player with emails off gets nothing');
+select pg_temp.ok((select count(*) from s where subj like 'Round 10 is open%') = 2, 'both opted-in players hear that round 10 is open');
+select pg_temp.ok((select count(*) from s where subj like 'Round 1 is open%') = 0, 'no "open" email for a round that already locked');
+select pg_temp.ok((select subj from s where who = 'a@example.com' and subj like '3 hours left%') = '3 hours left: 0 of 6 picked for round 10', 'reminder says how many are picked');
+select pg_temp.ok(not exists (select 1 from s where who = 'b@example.com' and subj like '3 hours left%'), 'no reminder for a player who has all six');
+select pg_temp.ok((select subj from s where who = 'a@example.com' and subj like 'Round 1:%') = 'Round 1: you scored 7', 'result email has your points');
+select pg_temp.ok((select html from s where who = 'a@example.com' and subj like 'Round 1:%') like '%Round winner: Alpha & Charlie%', 'result email names the joint winners');
+select pg_temp.ok((select bool_and(html like '%?unsubscribe=%') from s), 'every email has an unsubscribe link');
+delete from pg_temp.sent;
+select pg_temp.ok(public.notify_run() = 'No emails due', 'nobody gets the same email twice');
+select pg_temp.ok(public.unsubscribe((select token from public.player_notify where user_id::text like '%a')), 'the unsubscribe link works');
+select pg_temp.ok(not (select email_on from public.player_notify where user_id::text like '%a'), 'unsubscribed player is off');
+set role authenticated;
+set test.uid = '00000000-0000-0000-0000-00000000000b';
+select pg_temp.ok((select count(*) from public.player_notify) = 1, 'players only see their own email setting (and token)');
+reset role;

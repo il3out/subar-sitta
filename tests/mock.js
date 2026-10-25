@@ -41,12 +41,12 @@ const jwt = () => `${b64({ alg: "HS256", typ: "JWT" })}.${b64({ sub: ME, role: "
 const user = { id: ME, aud: "authenticated", role: "authenticated", email: "test@example.com", app_metadata: {}, user_metadata: {}, created_at: iso(-30 * 24) };
 
 /**
- * mock(page, { signedIn, open, deadlineH, live, coWin, picks, failSaves })
+ * mock(page, { signedIn, open, deadlineH, live, coWin, notify, picks, failSaves })
  * Returns the state; state.saves collects every pick save the app sends.
  */
 async function mock(page, opt = {}) {
   const L = league(opt);
-  const st = { saves: [], failSaves: !!opt.failSaves, mine: { ...L.picks, ...(opt.picks ? { r4: opt.picks } : {}) } };
+  const st = { saves: [], notifySaves: [], notifyOn: !!opt.notify, failSaves: !!opt.failSaves, mine: { ...L.picks, ...(opt.picks ? { r4: opt.picks } : {}) } };
   await page.clock.setFixedTime(NOW);
   if (opt.signedIn !== false) {
     await page.addInitScript(([k, v]) => localStorage.setItem(k, v), ["sb-jjavqcpxyljxprefbtta-auth-token",
@@ -73,6 +73,12 @@ async function mock(page, opt = {}) {
     if (tbl === "rpc/leaderboard") return json(r, L.lb);
     if (tbl === "rpc/round_board") { const { rid } = req.postDataJSON(); return json(r, rid === "r4" ? [] : L.board); }
     if (tbl === "pick_status") return m === "HEAD" ? json(r, null, 200, count(L.who.length)) : json(r, L.who);
+    // email reminders: without opt.notify the table "doesn't exist yet", like before update-04 is run
+    if (tbl === "player_notify" && opt.notify !== undefined) {
+      if (m === "GET") return json(r, [{ email_on: st.notifyOn }]);
+      const b = req.postDataJSON(); st.notifySaves.push(b); st.notifyOn = b.email_on; return json(r, [], 201);
+    }
+    if (tbl === "rpc/unsubscribe") { st.unsubscribed = req.postDataJSON().t; return json(r, true); }
     if (tbl === "picks" && m === "GET") return json(r, Object.entries(st.mine).map(([round_id, s]) => ({ user_id: ME, round_id, s, gg: round_id === "r4" ? opt.gg ?? null : 20, at: iso(-30) })));
     if (tbl === "picks" && m === "POST") {
       const body = req.postDataJSON(); st.saves.push(body);

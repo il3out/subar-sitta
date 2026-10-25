@@ -153,3 +153,43 @@ test("joint round winners are both shown", async ({ page }) => {
   await expect(page.locator(".win-card .win-name")).toContainText("Abdal & Noura");
   await expect(page.locator(".win-card .win-sub")).toContainText("Joint round winners");
 });
+
+test("email reminders: the offer under the picks switches them on", async ({ page }) => {
+  const st = await mock(page, { notify: false });
+  await page.goto("/");
+  await page.locator(".ask").getByRole("button", { name: "Email me" }).click();
+  await expect.poll(() => st.notifySaves.at(-1)?.email_on).toBe(true);
+  await expect(page.locator(".ask")).toHaveCount(0);
+  await page.locator('[data-go="player"]:visible').first().click();
+  await expect(page.locator('.notify-row [data-v="1"]')).toHaveAttribute("aria-pressed", "true");
+  await page.locator('.notify-row [data-v="0"]').click();
+  await expect.poll(() => st.notifySaves.at(-1)?.email_on).toBe(false);
+});
+
+test("email reminders: No thanks hides the offer for good", async ({ page }) => {
+  await mock(page, { notify: false });
+  await page.goto("/");
+  await page.locator(".ask").getByRole("button", { name: "No thanks" }).click();
+  await expect(page.locator(".ask")).toHaveCount(0);
+  await page.reload();
+  await expect(page.locator(".hero-card")).toBeVisible();
+  await expect(page.locator(".ask")).toHaveCount(0);
+});
+
+test("email reminders: the unsubscribe link works without signing in", async ({ page }) => {
+  const st = await mock(page, { signedIn: false, notify: true });
+  await page.goto("/?unsubscribe=0b3d91aa-0000-4000-8000-000000000001");
+  await expect(page.locator("#toast")).toHaveText("You won't get Subar Sitta emails any more.");
+  expect(st.unsubscribed).toBe("0b3d91aa-0000-4000-8000-000000000001");
+  await expect(page).not.toHaveURL(/unsubscribe/);
+});
+
+test("email reminders stay hidden until the database is updated", async ({ page }) => {
+  await mock(page);
+  await page.goto("/");
+  await expect(page.locator(".hero-card")).toBeVisible();
+  await expect(page.locator(".ask")).toHaveCount(0);
+  await page.locator('[data-go="player"]:visible').first().click();
+  await expect(page.locator(".pass-name")).toBeVisible();
+  await expect(page.locator(".notify-row")).toHaveCount(0);
+});

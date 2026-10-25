@@ -603,3 +603,9 @@ body[data-page="land"] :focus-visible{outline:3px solid var(--powder);outline-of
   .hc-foot{margin-top:10px;padding-top:10px}
   .page-home .col-main>.sec-head{margin:18px 0 10px}
 }
+/* email reminders: switch on the Me page, one-time offer under the picks */
+.notify-row{margin-top:14px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.notify-row>div:first-child{flex:1;min-width:200px}
+.ask{margin-top:14px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.ask>div:first-child{flex:1;min-width:200px}
+.ask .row{display:flex;gap:12px;align-items:center}

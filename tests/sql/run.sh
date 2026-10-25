@@ -15,5 +15,7 @@ grep -v '^create extension' supabase/setup.sql | "${P[@]}"
 # grants Supabase gives every table by default
 "${P[@]}" -c "grant select, insert, update, delete on all tables in schema public to authenticated; grant select on all tables in schema public to anon;
   revoke insert, update, delete on public.pick_status from authenticated; revoke update on public.players from authenticated; grant update (nick) on public.players to authenticated;"
+# update-04 runs after the default grants, so its own revokes are what the tests see
+"${P[@]}" -f supabase/update-04-notifications.sql
 "${P[@]}" -o /dev/null -f tests/sql/scoring.sql
 echo "SQL tests passed"

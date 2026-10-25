@@ -33,7 +33,7 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  joinM:"Pick the name everyone will see on the table.",
  nick:"Username",nickHint:"3 to 20 characters. Everyone sees this on the table.",nickErr:"Usernames are 3 to 20 characters.",nickTaken:"That username is taken. Try another.",nickFree:"Available",
  join:"Choose your username",joinBtn:"Start playing",joined:"🎉 You're in. Make your six.",
- signInT:"Sign in",joinT:"Join the game",email:"Email",emailHint:"For password resets only. Never shown to other players.",password:"Password",pwHint:"At least 8 characters",
+ signInT:"Sign in",joinT:"Join the game",email:"Email",emailHint:"For password resets, and game emails only if you switch them on. Never shown to other players.",password:"Password",pwHint:"At least 8 characters",
  signIn:"Sign in",signUp:"Create account",haveAcc:"Already playing?",newHere:"New here?",back:"Back",
  emailTaken:"That email already has an account. Sign in instead.",tooMany:"Too many attempts. Wait a minute and try again.",botCheck:"Complete the check above, then try again.",forgot:"Forgot password",resetSent:"Check your email for a reset link.",newPw:"New password",setPw:"Save new password",pwSaved:"💙 Password saved",
  confirmEmail:"Check your email to confirm your account, then sign in.",signOut:"Sign out",authErr:"Email or password is not right.",
@@ -55,7 +55,9 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
    story:"We started with friends. Now everyone's invited.",join2:"Join the game",free:"Free. No invite code. Takes 20 seconds."},
  allSaved:tm=>`💙 All six saved${tm?`, ${tm}`:""}`,allSavedNoGG:"💙 Six scores saved. Now the Golden Goal ⏱️",saveNow:"💾 Save now",cheer:"💙 All six saved. Good luck ⚽",
  units:{d:"d",h:"h",m:"m",s:"s"},toDark:"Switch to dark mode",toLight:"Switch to light mode",yourName:"Your player card",langSwitch:"Switch to Arabic",
- hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"👀 Who's in",yourSix:"⚽ Your six",matchday:"🗓️ Matchday",viewAll:"View all",winnerSub:p=>`🎉 Round winner with ${p} points`,coWin:p=>`🎉 Joint round winners with ${p} points`,yourPickL:"Your pick",soFar:p=>`⚽ You're on ${p} ${p===1?"point":"points"} so far`,
+ hi:{m:"Good morning",a:"Good afternoon",e:"Good evening"},whoIn:"👀 Who's in",yourSix:"⚽ Your six",matchday:"🗓️ Matchday",viewAll:"View all",winnerSub:p=>`🎉 Round winner with ${p} points`,coWin:p=>`🎉 Joint round winners with ${p} points`,yourPickL:"Your pick",emailH:"📧 Email reminders",emailP:"When a round opens, 3 hours before picks lock if you haven't finished, and your results.",on:"On",off:"Off",
+ askH:"⏰ Never miss a lock",askP:"Get an email 3 hours before picks lock if you haven't finished your six.",askYes:"Email me",askNo:"No thanks",
+ emailSaved:v=>v?"📧 Emails on. Stop them any time here or from any email.":"Emails off",unsubOk:"You won't get Subar Sitta emails any more.",unsubBad:"That link didn't work. Turn emails off on your Me page.",soFar:p=>`⚽ You're on ${p} ${p===1?"point":"points"} so far`,
  banner:["🔥 Six matches. Six exact scores. One perfect six.","🎯 Exact score 5 points. Right result 2.","⏱️ The Golden Goal picks the round winner on level points.","💙 Bragging rights last a whole week."]}};
 const LANG="en";
 /* theme: follows the device until the member picks one in the header */
@@ -150,8 +152,9 @@ async function loadAll(){
   S.member=!!me.data;
   if(!S.member){S.loadFailed=false;S.ready=true;softRender();return}
   addPlayer(S.uid,me.data.nick,{isAdmin:me.data.is_admin,joinedAt:me.data.joined_at});
-  const [lb,mine,tot]=await Promise.all([sb.rpc("leaderboard",{lim:100}),sb.from("picks").select("*").eq("user_id",S.uid),
-    sb.from("players").select("id",{count:"exact",head:true})]);
+  const [lb,mine,tot,nt]=await Promise.all([sb.rpc("leaderboard",{lim:100}),sb.from("picks").select("*").eq("user_id",S.uid),
+    sb.from("players").select("id",{count:"exact",head:true}),sb.from("player_notify").select("email_on").maybeSingle()]);
+  S.notify=nt.error?null:{on:!!nt.data?.email_on};   /* null: emails not set up yet, so nothing is shown */
   if(lb.error||mine.error){S.loadFailed=true;S.ready=true;render();return}
   S.lb=lb.data||[];S.lb.forEach(r=>addPlayer(r.user_id,r.nick,{isAdmin:r.is_admin,joinedAt:r.joined_at,no:r.member_no}));
   S.mine={};(mine.data||[]).forEach(p=>S.mine[p.round_id]={s:p.s||{},gg:p.gg,at:p.at});
@@ -306,11 +309,13 @@ function home(){
         :`<p class="hc-lbl">${t.locksIn}</p><div class="clock" data-deadline="${esc(r.deadline)}" role="timer" aria-live="off"><span class="dur" data-dur dir="ltr"></span></div><p class="hc-sub">${esc(t.locksAt(fLong(r.deadline),fTime(r.deadline)))}</p>`}
       <div class="hc-foot" id="heroDie">${SIX(n,"hc-six")}<span class="hc-n"><b class="num" id="heroN">${n}</b>/6</span></div></section>`;
   const fx=`<div class="sec-head"><h2 class="h2">${t.yourSix}</h2><span class="status" id="status" aria-live="polite"></span></div>
-    <ol class="slate" id="fixtures" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(f=>fixture(f,locked)).join("")}</ol>${ggBlock(r,locked)}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
+    <ol class="slate" id="fixtures" aria-label="${esc(t.round(r.n))}">${r.fixtures.map(f=>fixture(f,locked)).join("")}</ol>${ggBlock(r,locked)}${!locked&&S.notify&&!S.notify.on&&!asked()?`<section class="card pad ask"><div><h2 class="h2">${t.askH}</h2><p class="sub">${t.askP}</p></div>
+      <div class="row"><button class="btn glow" type="button" data-act="notify" data-v="1">${t.askYes}</button><button class="link quiet" type="button" data-act="notifyno">${t.askNo}</button></div></section>`:""}${locked?"":`<div class="savebar" id="savebar" aria-live="polite"></div>`}`;
   return `<div class="wrap md">${banner()}${hello}${whoRow(r)}
     <div class="grid"><div class="col-main"><div class="sec-head"><h2 class="h2">${t.matchday}</h2><span class="meta">${esc(S.meta?.season||"2026/27")}</span></div>${hero}${fx}</div>
     <aside class="rail" aria-label="${esc(t.tableH)}">${winCard()}${lastRound()}${room(r)}${railTable()}${rules()}</aside></div></div>`;
 }
+const asked=()=>{try{return !!localStorage.getItem("ss-ask")}catch(_){return false}};
 const banner=()=>`<div class="banner" role="note"><span class="banner-tag">SUBAR 6</span><span id="bannerTxt" aria-live="off">${t.banner[S.bannerI||0]}</span></div>`;
 function whoRow(r){const W=S.who?.rid===r.id?S.who:{count:0,rows:[]};const mineN=S.draft?r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length:0;
   const others=W.rows.filter(x=>x.uid!==S.uid).slice(0,11);
@@ -457,7 +462,9 @@ function playerView(){const ids=[...new Set([S.uid,...S.lb.map(x=>x.user_id)])];
       <div class="vs-strip" role="list">${per.map(p=>`<div role="listitem" class="${p.a>p.b?"w":p.b>p.a?"l":""}"><b class="num" dir="ltr">${p.a}–${p.b}</b><span>${t.round(p.n)}</span></div>`).join("")}</div>`}`}</section>`;
   return `<div class="wrap member"><div class="member-page"><div>${pass}
       <div class="card pad member-ctl"><div class="field"><label for="selp">${t.choose}</label><select id="selp">${opts(ids,uid)}</select></div>
-      ${uid===S.uid?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div></div>
+      ${uid===S.uid?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div>
+      ${uid===S.uid&&S.notify?`<div class="card pad notify-row"><div><h2 class="h2">${t.emailH}</h2><p class="sub">${t.emailP}</p></div>
+        <div class="seg2" role="group" aria-label="${esc(t.emailH)}"><button type="button" data-act="notify" data-v="1" aria-pressed="${S.notify.on}">${t.on}</button><button type="button" data-act="notify" data-v="0" aria-pressed="${!S.notify.on}">${t.off}</button></div></div>`:""}</div>
     <div>${stats}${h2h}</div></div></div>`}
 
 /* ===================== edits + autosave ===================== */
@@ -564,6 +571,8 @@ document.addEventListener("click",async e=>{
     const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin,...captchaOpt()});resetCaptcha();authErr(error?errMsg(error):t.resetSent);return}
   if(a==="setpw"){const pw=$("#npw").value||"";if(pw.length<8)return toast(t.weakPw,true);if(await q(sb.auth.updateUser({password:pw}))){S.recovery=false;toast(t.pwSaved);loadAll()}return}
   if(a==="signout"){S.auth=null;S.page="home";await sb.auth.signOut();return}
+  if(a==="notify"){const v=act.dataset.v==="1";if(await q(sb.from("player_notify").upsert({user_id:S.uid,email_on:v}))){S.notify={on:v};toast(t.emailSaved(v));render()}return}
+  if(a==="notifyno"){try{localStorage.setItem("ss-ask","1")}catch(_){}render();return}
   if(a==="retryload"){if(!sb)return location.reload();S.ready=false;render();loadAll();return}
   if(a==="auto"){if(await q(sb.from("league").update({auto:act.dataset.v==="1"}).eq("id",1)))reload();return}
   if(a==="runauto"){act.disabled=true;const r=await q(sb.rpc("run_autopilot"));act.disabled=false;if(r)toast(String(r));reload();return}
@@ -656,6 +665,9 @@ async function boot(){
     if(S.pendingJoin)return;
     setTimeout(loadAll,0)});
   live();
+  const ut=new URLSearchParams(location.search).get("unsubscribe");
+  if(ut){try{history.replaceState(null,"",location.pathname+location.hash)}catch(_){}
+    sb.rpc("unsubscribe",{t:ut}).then(({data,error})=>{toast(!error&&data?t.unsubOk:t.unsubBad,!!error||!data);if(!error&&data&&S.notify)S.notify.on=false})}
   if(S.auth)mountCaptcha();
   addEventListener("focus",()=>reload());
 }

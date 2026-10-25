@@ -1,7 +1,7 @@
 -- Just enough of Supabase for setup.sql and update-02-public.sql to load into a plain Postgres.
 -- auth.uid() reads a session setting, so tests can act as any player.
 create schema auth;
-create table auth.users (id uuid primary key);
+create table auth.users (id uuid primary key, email text);
 create function auth.uid() returns uuid language sql stable as
   $$ select nullif(current_setting('test.uid', true), '')::uuid $$;
 create schema extensions;
