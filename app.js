@@ -19,11 +19,11 @@ en:{dir:"ltr",lang:"en",other:"عربي",otherLabel:"العربية",
  mw:"Matchweek",round:n=>`Round ${n}`,
  locksIn:"Locks in",lockedAt:(d,tm)=>`Locked ${d}, ${tm}`,locksAt:(d,tm)=>`${d}, ${tm}`,
  of6:n=>`${n} of 6`,gg:m=>m==null?"Golden Goal not set":`Golden Goal ${m}′`,
- save:{clean:"",pending:"⏳ Saving",saving:"⏳ Saving",saved:tm=>`💙 Saved ${tm}`,failed:"⚠️ Not saved. Tap to retry",half:"✏️ Add the other score"},
- st:{todo:"",half:"✏️ Add the other score",edited:"⏳ Saving",saving:"⏳ Saving",saved:"💙 Saved",failed:"⚠️ Not saved",locked:"🔒 Locked in",none:"😶 No prediction"},
+ save:{clean:"",pending:"✏️ Not saved yet",saving:"⏳ Saving",saved:tm=>`💙 Saved ${tm}`,failed:"⚠️ Not saved. Tap to retry"},
+ st:{todo:"👆 Tap + or −",edited:"✏️ Not saved yet",saving:"⏳ Saving",saved:"💙 Saved",failed:"⚠️ Not saved",locked:"🔒 Locked in",none:"😶 No prediction"},saveG:"💾 Save",more:c=>`One more goal for ${c}`,less:c=>`One less goal for ${c}`,ggMore:"One minute later",ggLess:"One minute earlier",unsaved:n=>`✏️ ${n} not saved yet`,saveAll:"💾 Save all",
  final:"🏁 Full time",awaiting:"⏳ Awaiting result",voidF:"🚫 Postponed, not scored",
  goalsOf:c=>`${c} goals`,swipe:"👆 Swipe a number, or tap it",
- ggH:"⏱️ Golden Goal",ggP:"The minute of the first goal across all six. It settles ties.",ggSet:"Slide to the minute",ggWas:m=>`First goal: minute ${m}`,ggUnset:"Not set",
+ ggH:"⏱️ Golden Goal",ggP:"The minute of the first goal across all six. It settles ties.",ggSet:"Slide or tap − / + to pick the minute",ggWas:m=>`First goal: minute ${m}`,ggUnset:"Not set",
  roomH:"👀 Who's in",roomOpen:"🙈 Scores stay hidden until kick-off.",roomMore:n=>`and ${n} more`,roomLocked:"👉 Everyone's picks are on Results.",notYet:"😴 Not in yet",ggShort:"GG",
  lastH:"🏁 Last round",lastNone:"Results appear here once a round is complete.",yourPick:"You",winner:(n,who,p)=>`Round ${n} went to ${who} with ${p}`,
  tableH:"📈 The table",fullTable:"Full table",noTable:"The table starts once the first round is complete.",
@@ -91,7 +91,7 @@ const I={
 const S={uid:null,member:false,isAdmin:false,ready:false,loadFailed:false,
  meta:null,rounds:{},players:{},mine:{},lb:[],total:0,who:null,boards:{},
  page:"home",viewRound:null,viewPlayer:null,vsPlayer:null,auth:null,
- draft:null,draftRound:null,draftSrc:null,dirty:false,saveState:"clean",ver:0,savedAt:null,kp:null};
+ draft:null,draftRound:null,draftSrc:null,savedAt:null,kp:null};
 
 
 /* ===================== helpers ===================== */
@@ -289,13 +289,13 @@ function joinView(){
       <button class="btn glow" type="submit">${t.joinBtn}</button><button class="link" type="button" data-act="signout">${t.signOut}</button></form></section></div></div>`}
 
 /* ===================== matchday ===================== */
-const DH=40,MW=14;
+const MW=14;
 function home(){
   const r=current();
   const hello=`<header class="hello"><span class="avatar lg" aria-hidden="true">${esc(initials(S.uid))}</span><div><p class="hello-1">${greet()}</p><p class="hello-2">${bn(S.uid)}</p></div></header>`;
   if(!r)return `<div class="wrap">${hello}${empty(t.noRound,S.isAdmin?t.noRoundAdmin:t.noRoundUser)}${railTable()}</div>`;
   ensureDraft(r);const locked=isLocked(r),settled=isSettled(r);
-  const n=r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length;
+  const n=savedN(r);
   const hero=`<section class="hero-card" aria-labelledby="mwh">
       <span class="notch">${locked?(settled?t.final:`<i class="dot"></i>${t.st.locked}`):`${t.round(r.n)}`}</span>
       <h1 class="sr" id="mwh">${t.mw} ${r.n}</h1>
@@ -309,62 +309,68 @@ function home(){
     <aside class="rail" aria-label="${esc(t.tableH)}">${winCard()}${lastRound()}${room(r)}${railTable()}${rules()}</aside></div></div>`;
 }
 const banner=()=>`<div class="banner" role="note"><span class="banner-tag">SUBAR 6</span><span id="bannerTxt" aria-live="off">${t.banner[S.bannerI||0]}</span></div>`;
-function whoRow(r){const W=S.who?.rid===r.id?S.who:{count:0,rows:[]};const mineN=S.draft?r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length:0;
+function whoRow(r){const W=S.who?.rid===r.id?S.who:{count:0,rows:[]};const mineN=savedN(r);
   const others=W.rows.filter(x=>x.uid!==S.uid).slice(0,11);
   const ring=(u,filled,gg)=>{const p=Math.round(filled/6*100);return `<span class="ring${filled===6&&gg?" full":""}" role="listitem" style="--p:${p}" title="${esc(dname(u))}"><span class="avatar">${esc(initials(u))}</span><span class="sr">${esc(dname(u))}: ${filled?t.of6(filled):t.notYet}</span></span>`};
   return `<div class="chips" role="list" tabindex="0" aria-label="${t.roomH}"><span class="chip on" role="listitem"><span class="chip-ico">${I.player}</span>${t.whoIn} <b class="num">${W.count}/${S.total}</b></span>
-    ${ring(S.uid,mineN,S.draft?.gg!=null)}${others.map(x=>ring(x.uid,x.filled,x.gg)).join("")}</div>`}
+    ${ring(S.uid,mineN,pickOf(S.uid,r.id)?.gg!=null)}${others.map(x=>ring(x.uid,x.filled,x.gg)).join("")}</div>`}
 function ensureDraft(r){const p=pickOf(S.uid,r.id);const src=JSON.stringify(p?{s:p.s,gg:p.gg}:null);
-  if(S.draftRound!==r.id||!S.draft||(!S.dirty&&S.saveState!=="saving"&&src!==S.draftSrc)){S.draftSrc=src;
-    S.draft={s:Object.fromEntries(Object.entries(p?.s||{}).map(([k,v])=>[k,[v[0],v[1]]])),gg:p?.gg??null};S.draftRound=r.id;S.dirty=false;
-    if(S.saveState!=="saved")S.saveState="clean";if(p?.at&&!S.savedAt)S.savedAt=p.at}}
-function cardState(f){const v=S.draft.s[f.id];const saved=pickOf(S.uid,S.draftRound)?.s?.[f.id];
-  const full=fullPick(v);
-  if(Array.isArray(v)&&!full)return"half";if(!v&&!saved)return"todo";
-  if(full&&Array.isArray(saved)&&saved[0]===v[0]&&saved[1]===v[1])return"saved";
-  if(S.saveState==="saving")return"saving";if(S.saveState==="failed")return"failed";return"edited"}
-function drum(f,i,val,locked,club){
+  if(S.draftRound!==r.id||!S.draft||(!unsaved(r).length&&!pending.size&&src!==S.draftSrc)){S.draftSrc=src;
+    S.draft={s:Object.fromEntries(Object.entries(p?.s||{}).map(([k,v])=>[k,[v[0],v[1]]])),gg:p?.gg??null};S.draftRound=r.id;
+    if(p?.at&&!S.savedAt)S.savedAt=p.at}}
+/* per-game saving: each match (and the Golden Goal, key "gg") is saved on its own with its Save button */
+const pending=new Set(),failed=new Set();
+const PM=d=>`<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14${d>0?"M12 5v14":""}" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>`;
+const savedN=r=>{const p=pickOf(S.uid,r.id);return r.fixtures.filter(f=>fullPick(p?.s?.[f.id])).length};
+function keyState(k){const v=k==="gg"?S.draft.gg:S.draft.s[k],p=pickOf(S.uid,S.draftRound),sv=k==="gg"?p?.gg??null:p?.s?.[k];
+  if(pending.has(k))return"saving";
+  if(k==="gg"?v==null:!fullPick(v))return"todo";
+  if(k==="gg"?sv===v:fullPick(sv)&&sv[0]===v[0]&&sv[1]===v[1])return"saved";
+  return failed.has(k)?"failed":"edited"}
+const cardState=f=>keyState(f.id);
+const unsaved=r=>S.draft?[...r.fixtures.map(f=>f.id),"gg"].filter(k=>["edited","failed"].includes(keyState(k))):[];
+const foot=(k,st)=>`<span class="fx-state" tabindex="-1">${k==="gg"&&st==="todo"?"":t.st[st]}</span>${st==="edited"||st==="failed"?`<button class="sv-btn${st==="failed"?" bad":""}" type="button" data-act="saveone" data-k="${k}">${st==="failed"?t.retry:t.saveG}</button>`:""}`;
+function stepper(fid,i,val,locked,club){
   if(locked)return `<span class="sc${val==null?" blank":""}" aria-label="${esc(t.goalsOf(club))}: ${val??"-"}">${val??"–"}</span>`;
-  const k=val==null?0:val+1;
-  return `<div class="drum" role="spinbutton" tabindex="0" aria-label="${esc(t.goalsOf(club))}" aria-valuemin="0" aria-valuemax="20" ${val!=null?`aria-valuenow="${val}"`:""} aria-valuetext="${val??t.ggUnset}" data-drum="${f}" data-i="${i}" data-k="${k}">
-    <div class="drum-in">${["–",...Array.from({length:21},(_,j)=>j)].map((v,j)=>`<span data-j="${j}"${j===k?' class="on"':""}>${v}</span>`).join("")}</div></div>`}
+  return `<div class="stp" role="group" aria-label="${esc(t.goalsOf(club))}">
+    <button class="stp-b" type="button" data-step="${fid}" data-i="${i}" data-d="1" aria-label="${esc(t.more(club))}"${val>=20?" disabled":""}>${PM(1)}</button>
+    <output class="stp-v${val==null?" blank":""}" data-v="${fid}-${i}" aria-label="${esc(t.goalsOf(club))}">${val??"–"}</output>
+    <button class="stp-b" type="button" data-step="${fid}" data-i="${i}" data-d="-1" aria-label="${esc(t.less(club))}"${val===0?" disabled":""}>${PM(-1)}</button></div>`}
 function fixture(f,locked){
   const v=S.draft.s[f.id];const st=locked?"locked":cardState(f);
   const side=c=>`<div class="tm">${crest(c,52)}<span class="tm-n">${esc(sname(c))}</span></div>`;
   const res=f.void?`<span class="pill">${t.voidF}</span>`:f.res?`<span class="pill">${t.final} <b class="num" dir="ltr">${f.res[0]}–${f.res[1]}</b></span><span class="pts p${ptsFor(v,f.res)}">+${ptsFor(v,f.res)}</span>`:locked?`<span class="pill">${t.awaiting}</span>`:"";
   return `<li class="fx card" data-card="${f.id}" data-state="${st}">
-    <div class="fx-line">${side(f.h)}<div class="fx-mid"><p class="fx-when"><span>${esc(fDay(f.ko))}</span><b class="num">${fTime(f.ko)}</b></p><div class="score">${drum(f.id,0,v?.[0],locked,name(f.h))}<span class="colon" aria-hidden="true">:</span>${drum(f.id,1,v?.[1],locked,name(f.a))}</div></div>${side(f.a)}</div>
-    <div class="fx-foot"><span class="fx-state">${footState(f,st,locked)}</span>${res}</div></li>`}
-const footState=(f,st,locked)=>locked?(Array.isArray(S.draft.s[f.id])?t.st.locked:t.st.none):st==="saved"?t.st.saved:st==="todo"?t.swipe:t.st[st];
+    <div class="fx-line">${side(f.h)}<div class="fx-mid"><p class="fx-when"><span>${esc(fDay(f.ko))}</span><b class="num">${fTime(f.ko)}</b></p><div class="score">${stepper(f.id,0,v?.[0],locked,name(f.h))}<span class="colon" aria-hidden="true">:</span>${stepper(f.id,1,v?.[1],locked,name(f.a))}</div></div>${side(f.a)}</div>
+    <div class="fx-foot" data-foot="${f.id}">${locked?`<span class="fx-state">${Array.isArray(v)?t.st.locked:t.st.none}</span>${res}`:foot(f.id,st)}</div></li>`}
 function ggBlock(r,locked){const g=S.draft.gg;
   const out=`<output class="gg-val${g==null?" unset":""}" id="ggout" dir="ltr">${g==null?"–":`${g}<sup>′</sup>`}</output>`;
   if(locked)return `<section class="gg card" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${r.firstGoal!=null?t.ggWas(r.firstGoal):t.ggP}</p></div><div class="gg-dial">${out}</div></section>`;
   const ticks=Array.from({length:90},(_,i)=>{const m=i+1;return `<i class="${m%15===0||m===1?"maj":m%5===0?"mid":""}" data-m="${m}">${m%15===0||m===1?`<b>${m===45?"HT":m}</b>`:""}</i>`}).join("");
-  return `<section class="gg card" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${t.ggP}</p></div>
-    <div class="gg-dial">${out}<p class="gg-hint" id="gghint">${g==null?t.ggSet:""}</p></div>
-    <div class="mrail-wrap"><div class="mrail${g==null?" unset":""}" id="mrail" role="slider" tabindex="0" aria-label="${t.ggH}" aria-valuemin="1" aria-valuemax="90" aria-valuenow="${g??45}" aria-valuetext="${g==null?t.ggUnset:g}" dir="ltr"><div class="mrail-in">${ticks}</div></div><span class="mrail-cur" aria-hidden="true"></span></div></section>`}
+  return `<section class="gg card" data-card="gg" data-state="${keyState("gg")}" aria-labelledby="ggh"><div class="gg-head"><h2 class="h2" id="ggh">${t.ggH}</h2><p class="sub">${t.ggP}</p></div>
+    <div class="gg-dial"><div class="gg-row"><button class="stp-b gg-b" type="button" data-act="ggstep" data-d="-1" aria-label="${t.ggLess}">${PM(-1)}</button>${out}<button class="stp-b gg-b" type="button" data-act="ggstep" data-d="1" aria-label="${t.ggMore}">${PM(1)}</button></div><p class="gg-hint" id="gghint">${g==null?t.ggSet:""}</p></div>
+    <div class="mrail-wrap"><div class="mrail${g==null?" unset":""}" id="mrail" role="slider" tabindex="0" aria-label="${t.ggH}" aria-valuemin="1" aria-valuemax="90" aria-valuenow="${g??45}" aria-valuetext="${g==null?t.ggUnset:g}" dir="ltr"><div class="mrail-in">${ticks}</div></div><span class="mrail-cur" aria-hidden="true"></span></div>
+    <div class="fx-foot gg-foot" data-foot="gg">${foot("gg",keyState("gg"))}</div></section>`}
 
 function syncHead(){const r=current();if(!r||!S.draft)return;const locked=isLocked(r);
-  const n=r.fixtures.filter(f=>fullPick(S.draft.s[f.id])).length;
-  const half=Object.values(S.draft.s).some(v=>(v[0]==null)!==(v[1]==null));
-  const k=locked?"clean":half&&S.saveState!=="saving"?"half":S.saveState==="saving"?"saving":S.saveState==="failed"?"failed":S.dirty?"pending":S.saveState==="saved"||S.savedAt?"saved":"clean";
+  const n=savedN(r),u=locked?[]:unsaved(r),ggSaved=pickOf(S.uid,r.id)?.gg!=null;
+  const k=locked?"clean":pending.size?"saving":u.some(x=>failed.has(x))?"failed":u.length?"pending":S.savedAt?"saved":"clean";
   const tm=S.savedAt?fTime(S.savedAt):"";
-  const all=n===6&&k==="saved"&&S.draft.gg!=null;
+  const all=n===6&&k==="saved"&&ggSaved;
   const die=$("#heroDie");if(die){die.querySelectorAll(".six i").forEach((p,i)=>p.classList.toggle("on",i<n));$("#heroN").textContent=n;die.classList.toggle("all",all)}
-  const el=$("#status");if(el){el.dataset.s=all?"all":k;el.innerHTML=k==="saved"||all?t.save.saved(tm):k==="saving"||k==="pending"?t.save.saving:k==="failed"?t.st.failed:""}
+  const el=$("#status");if(el){el.dataset.s=all?"all":k;el.innerHTML=k==="saved"||all?t.save.saved(tm):k==="saving"?t.save.saving:k==="pending"?t.save.pending:k==="failed"?t.st.failed:""}
   const sb2=$("#savebar");if(sb2){sb2.dataset.s=all?"all":n===6&&k==="saved"?"nogg":k;
-    sb2.innerHTML=`${SIX(n,"sb-six")}<span class="sb-msg">${all?t.allSaved(tm):n===6&&k==="saved"?t.allSavedNoGG:k==="failed"?t.save.failed:k==="half"?t.save.half:k==="saving"||k==="pending"?t.save.saving:k==="saved"?t.save.saved(tm):t.of6(n)}</span>
-      ${k==="failed"?`<button class="sb-btn bad" type="button" data-act="retrysave">${t.retry}</button>`:k==="pending"?`<button class="sb-btn" type="button" data-act="savenow">${t.saveNow}</button>`:all?`<span class="sb-ok">${I.check}</span>`:""}`;
+    sb2.innerHTML=`${SIX(n,"sb-six")}<span class="sb-msg">${all?t.allSaved(tm):k==="failed"?t.save.failed:k==="saving"?t.save.saving:k==="pending"?t.unsaved(u.length):n===6&&k==="saved"?t.allSavedNoGG:k==="saved"?t.save.saved(tm):t.of6(n)}</span>
+      ${k==="failed"?`<button class="sb-btn bad" type="button" data-act="saveall">${t.retry}</button>`:k==="pending"?`<button class="sb-btn" type="button" data-act="saveall">${t.saveAll}</button>`:all?`<span class="sb-ok">${I.check}</span>`:""}`;
     if(all&&S.cheered!==r.id&&S.justSaved){S.cheered=r.id;celebrate()}S.justSaved=false}}
-function syncRow(fid){const r=current();const f=r?.fixtures.find(x=>x.id===fid);const el=document.querySelector(`[data-card="${fid}"]`);if(!f||!el)return;
-  const prev=el.dataset.state,st=cardState(f);el.dataset.state=st;
+function syncRow(k){const r=current();const el=document.querySelector(`[data-card="${k}"]`);if(!r||!el||isLocked(r))return;
+  const prev=el.dataset.state,st=keyState(k);el.dataset.state=st;
   if(st==="saved"&&prev!=="saved"&&!RM.matches){el.classList.remove("just-saved");void el.offsetWidth;el.classList.add("just-saved")}
-  const v=S.draft.s[fid];
-  [0,1].forEach(k=>{const d=el.querySelector(`[data-drum="${fid}"][data-i="${k}"]`);if(!d)return;const val=v?.[k];
-    if(val!=null)d.setAttribute("aria-valuenow",val);else d.removeAttribute("aria-valuenow");d.setAttribute("aria-valuetext",val??t.ggUnset);
-    const want=val==null?0:val+1;if(+d.dataset.k!==want&&!d.dataset.user){d.dataset.k=want;d.scrollTop=want*DH;markDrum(d,want)}});
-  el.querySelector(".fx-state").innerHTML=footState(f,st,false)}
-const syncAll=()=>{const r=current();if(!r)return;r.fixtures.forEach(f=>syncRow(f.id));syncHead()};
+  if(k!=="gg"){const v=S.draft.s[k];[0,1].forEach(i=>{const o=el.querySelector(`[data-v="${k}-${i}"]`),val=v?.[i];if(!o)return;
+    o.textContent=val??"–";o.classList.toggle("blank",val==null);
+    el.querySelectorAll(`[data-step][data-i="${i}"]`).forEach(b=>b.disabled=+b.dataset.d>0?val>=20:val===0)})}
+  const ft=el.querySelector(`[data-foot="${k}"]`),had=ft.contains(document.activeElement);ft.innerHTML=foot(k,st);if(had)(ft.querySelector("button")||ft.querySelector(".fx-state")).focus()}
+const syncAll=()=>{const r=current();if(!r)return;r.fixtures.forEach(f=>syncRow(f.id));syncRow("gg");syncHead()};
 function celebrate(){const d=$(".hero-card");if(!d||RM.matches)return;d.classList.remove("cheer");void d.offsetWidth;d.classList.add("cheer")}
 
 /* ===================== the rail ===================== */
@@ -456,30 +462,28 @@ function playerView(){const ids=[...new Set([S.uid,...S.lb.map(x=>x.user_id)])];
       ${uid===S.uid?`<button class="btn quiet" type="button" data-act="signout">${t.signOut}</button>`:""}</div></div>
     <div>${stats}${h2h}</div></div></div>`}
 
-/* ===================== edits + autosave ===================== */
-function setScore(fid,i,val){const r=current();if(!r||isLocked(r))return;const cur=S.draft.s[fid]?[...S.draft.s[fid]]:[null,null];
-  cur[i]=val;if(cur[0]==null&&cur[1]==null)delete S.draft.s[fid];else S.draft.s[fid]=cur;S.dirty=true;S.ver++;if(S.saveState!=="saving")S.saveState="dirty";
-  syncRow(fid);syncHead();queueSave()}
-function setGG(v){S.draft.gg=Math.max(1,Math.min(90,v));S.dirty=true;S.ver++;if(S.saveState!=="saving")S.saveState="dirty";
+/* ===================== edits + per-game save ===================== */
+/* first tap on an empty match fills both sides from 0, so a pick is never half done: + gives 1–0, − gives 0–0 */
+function stepScore(fid,i,d){const r=current();if(!r||isLocked(r))return;const cur=S.draft.s[fid]?[...S.draft.s[fid]]:[0,0];
+  cur[i]=Math.max(0,Math.min(20,cur[i]+(S.draft.s[fid]||d>0?d:0)));S.draft.s[fid]=cur;buzz();syncRow(fid);syncHead()}
+function setGG(v){S.draft.gg=Math.max(1,Math.min(90,v));
   const o=$("#ggout");if(o){o.innerHTML=`${S.draft.gg}<sup>′</sup>`;o.classList.remove("unset")}$("#mrail")?.classList.remove("unset");const h=$("#gghint");if(h)h.textContent="";
-  const mr=$("#mrail");if(mr){mr.setAttribute("aria-valuenow",S.draft.gg);mr.setAttribute("aria-valuetext",S.draft.gg)}syncHead();queueSave()}
-let saveT=null,saving=false;
-function queueSave(ms=900){clearTimeout(saveT);saveT=setTimeout(save,ms)}
-function flushSave(){if(S.dirty){clearTimeout(saveT);save()}}
-async function save(){const r=current();if(!r||!S.draft||!S.dirty)return;if(isLocked(r)){toast(t.locked,true);render();return}
-  if(saving){queueSave(400);return}
-  if(!S.ready)return;
-  const clean=Object.fromEntries(Object.entries(S.draft.s).filter(([,v])=>v[0]!=null&&v[1]!=null).map(([k,v])=>[k,[v[0],v[1]]]));
-  const prev=pickOf(S.uid,r.id);
-  if(prev&&JSON.stringify(prev.s)===JSON.stringify(clean)&&prev.gg===S.draft.gg){S.dirty=Object.values(S.draft.s).some(v=>(v[0]==null)!==(v[1]==null));S.saveState="saved";syncAll();return}
-  if(!prev&&!Object.keys(clean).length&&S.draft.gg==null){syncAll();return}
-  const v=S.ver;saving=true;S.saveState="saving";syncAll();
-  const rounds={[r.id]:{s:clean,gg:S.draft.gg,at:new Date().toISOString()}};
-  const ok=await write("picks/"+S.uid,{rounds});saving=false;
-  if(ok){S.mine[r.id]=rounds[r.id];S.draftSrc=JSON.stringify({s:clean,gg:S.draft.gg});S.savedAt=new Date().toISOString();S.saveState="saved";S.justSaved=true;
-    S.dirty=S.ver!==v||Object.values(S.draft.s).some(x=>(x[0]==null)!==(x[1]==null));if(S.ver!==v)queueSave(300)}
-  else S.saveState="failed";
-  syncAll()}
+  const mr=$("#mrail");if(mr){mr.setAttribute("aria-valuenow",S.draft.gg);mr.setAttribute("aria-valuetext",S.draft.gg)}syncRow("gg");syncHead()}
+/* saves run one after another; each sends what is already saved plus the chosen games, so tapping two Saves fast never loses one */
+let chain=Promise.resolve();
+function saveKeys(keys){const r=current();if(!r||!S.draft||!keys.length)return chain;if(isLocked(r)){toast(t.locked,true);render();return chain}
+  const mr=$("#mrail");if(keys.includes("gg")&&mr?.dataset.user)commitRail(mr);
+  keys.forEach(k=>{pending.add(k);failed.delete(k)});syncAll();
+  return chain=chain.then(async()=>{
+    const prev=pickOf(S.uid,r.id)||{s:{},gg:null},s={...prev.s};let gg=prev.gg;
+    keys.forEach(k=>{if(k==="gg")gg=S.draft.gg;else if(fullPick(S.draft.s[k]))s[k]=[...S.draft.s[k]]});
+    const rounds={[r.id]:{s,gg,at:new Date().toISOString()}};
+    const ok=S.ready&&!isLocked(r)&&await write("picks/"+S.uid,{rounds});
+    keys.forEach(k=>{pending.delete(k);if(!ok)failed.add(k)});
+    if(ok){S.mine[r.id]=rounds[r.id];S.draftSrc=JSON.stringify({s,gg});S.savedAt=rounds[r.id].at;S.justSaved=true}
+    syncAll()})}
+/* safety net: anything typed but not saved goes in when the app is closed or hidden */
+function flushSave(){const r=current();if(r&&!isLocked(r))saveKeys(unsaved(r))}
 
 
 /* ===================== admin (unchanged behaviour) ===================== */
@@ -516,29 +520,22 @@ function tick(){const el=$("[data-deadline]");if(!el)return;const ms=new Date(el
 setInterval(()=>{if($("[data-deadline]"))tick()},1000);
 function postRender(){
   if(S.page==="home"&&S.draft){syncHead();
-    $$(".drum").forEach(d=>{const k=+d.dataset.k;d.scrollTop=k*DH;markDrum(d,k)});
     const mr=$("#mrail");if(mr){const g=S.draft.gg??45;mr.scrollLeft=(g-1)*MW;markRail(mr,g)}}
   /* rank movement: rows that changed position slide from where they were, once per visit */
   if(S.page==="table"&&!RM.matches&&!S.movedShown){S.movedShown=true;$$("#standings .st").forEach(b=>{const mv=+b.dataset.move;if(mv){b.style.setProperty("--from",`${mv*100}%`);b.classList.add("moving")}})}
 }
 const kwIso=v=>v?new Date(v).toISOString():null;   /* datetime-local is read in the device time zone */
 
-/* ===================== drums and the minute rail: native scroll physics, snapped ===================== */
-function markDrum(d,k){d.querySelectorAll("span.on").forEach(x=>x.classList.remove("on"));d.querySelector(`[data-j="${k}"]`)?.classList.add("on")}
+/* ===================== the minute rail: native scroll physics, snapped ===================== */
 function markRail(mr,m){mr.querySelectorAll("i.on").forEach(x=>x.classList.remove("on"));mr.querySelector(`[data-m="${m}"]`)?.classList.add("on")}
 const buzz=()=>{try{navigator.vibrate?.(3)}catch(_){}};
-function commitDrum(d,k){const f=d.dataset.drum,i=+d.dataset.i;const val=k===0?null:k-1;d.dataset.k=k;
-  if((S.draft.s[f]?.[i]??null)!==val)setScore(f,i,val)}
 function commitRail(mr){const m=Math.max(1,Math.min(90,Math.round(mr.scrollLeft/MW)+1));if(S.draft.gg!==m)setGG(m)}
-const userMark=e=>{const d=e.target.closest?.(".drum,#mrail");if(d){d.dataset.user="1";S.touchAt=Date.now()}};
+const userMark=e=>{const d=e.target.closest?.("#mrail");if(d){d.dataset.user="1";S.touchAt=Date.now()}};
 ["pointerdown","touchstart","wheel"].forEach(ev=>document.addEventListener(ev,userMark,{passive:true,capture:true}));
 document.addEventListener("scroll",e=>{const el=e.target;if(!(el instanceof Element))return;
-  if(el.classList.contains("drum")){const k=Math.max(0,Math.min(21,Math.round(el.scrollTop/DH)));if(el._k!==k){el._k=k;markDrum(el,k);if(el.dataset.user)buzz()}
-    if(el.dataset.user){S.touchAt=Date.now();clearTimeout(el._t);el._t=setTimeout(()=>{commitDrum(el,k);delete el.dataset.user},130)}}
-  else if(el.id==="mrail"){const m=Math.max(1,Math.min(90,Math.round(el.scrollLeft/MW)+1));if(el._m!==m){el._m=m;markRail(el,m);if(el.dataset.user){buzz();
+  if(el.id==="mrail"){const m=Math.max(1,Math.min(90,Math.round(el.scrollLeft/MW)+1));if(el._m!==m){el._m=m;markRail(el,m);if(el.dataset.user){buzz();
       const o=$("#ggout");o.innerHTML=`${m}<sup>′</sup>`;o.classList.remove("unset");el.classList.remove("unset");$("#gghint").textContent=""}}
     if(el.dataset.user){S.touchAt=Date.now();clearTimeout(el._t);el._t=setTimeout(()=>{commitRail(el);delete el.dataset.user},160)}}},true);
-function stepDrum(d,k){k=Math.max(0,Math.min(21,k));d.scrollTo({top:k*DH,behavior:RM.matches?"auto":"smooth"});markDrum(d,k);commitDrum(d,k)}
 function stepRail(mr,m){m=Math.max(1,Math.min(90,m));mr.scrollTo({left:(m-1)*MW,behavior:RM.matches?"auto":"smooth"});markRail(mr,m);setGG(m)}
 
 /* ===================== interactions ===================== */
@@ -547,15 +544,16 @@ document.addEventListener("click",async e=>{
     if(pg==="round")ensureBoard(S.viewRound||current()?.id);return}
   const pl=e.target.closest("[data-player]");if(pl){go("player",()=>{S.viewPlayer=pl.dataset.player});return}
   const rb=e.target.closest("[data-round]");if(rb){S.viewRound=rb.dataset.round;render();ensureBoard(S.viewRound);return}
-  const ds=e.target.closest(".drum [data-j]");if(ds){const d=ds.closest(".drum");stepDrum(d,+ds.dataset.j);return}
+  const sp=e.target.closest("[data-step]");if(sp){stepScore(sp.dataset.step,+sp.dataset.i,+sp.dataset.d);return}
   const tk=e.target.closest("#mrail [data-m]");if(tk){stepRail($("#mrail"),+tk.dataset.m);return}
   const act=e.target.closest("[data-act]");if(!act)return;const a=act.dataset.act;
   const authErr=m=>{const el=$("#autherr");if(el)el.textContent=m};
   if(a==="auth"){openAuth(act.dataset.v||null);return}
   if(a==="theme"){const v=isDark()?"light":"dark";try{localStorage.setItem("ss-theme",v)}catch(_){}
     const run=()=>{applyTheme(v);shell()};if(document.startViewTransition&&!RM.matches){document.documentElement.dataset.nav="fade";document.startViewTransition(run)}else run();return}
-  if(a==="retrysave"){S.saveState="dirty";S.dirty=true;save();return}
-  if(a==="savenow"){if(S.dirty)flushSave();else toast(t.save.saved(S.savedAt?fTime(S.savedAt):""));return}
+  if(a==="saveone"){saveKeys([act.dataset.k]);return}
+  if(a==="saveall"){const r=current();if(r)saveKeys(unsaved(r));return}
+  if(a==="ggstep"){const mr=$("#mrail");if(mr)stepRail(mr,S.draft.gg==null?45:S.draft.gg+ +act.dataset.d);return}
   if(a==="forgot"){const email=($("#em").value||"").trim();if(!/^\S+@\S+\.\S+$/.test(email))return authErr(t.badEmail);
     const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin,...captchaOpt()});resetCaptcha();authErr(error?errMsg(error):t.resetSent);return}
   if(a==="setpw"){const pw=$("#npw").value||"";if(pw.length<8)return toast(t.weakPw,true);if(await q(sb.auth.updateUser({password:pw}))){S.recovery=false;toast(t.pwSaved);loadAll()}return}
@@ -609,16 +607,8 @@ document.addEventListener("submit",async e=>{const f=e.target.closest("#authform
     if(a==="signin"){const {error}=await sb.auth.signInWithPassword({email,password:pw,options:captchaOpt()});resetCaptcha();
       if(error)return authErr(errMsg(error));S.auth=null;try{history.replaceState(null,"",location.pathname)}catch(_){}}
   }catch(_){authErr(t.err.gen)}finally{if(btn.isConnected)btn.disabled=false}});
-/* keyboard: drums are spinbuttons, the rail is a slider */
+/* keyboard: score steppers are plain buttons; the rail is a slider */
 document.addEventListener("keydown",e=>{
-  const d=e.target.closest?.(".drum");
-  if(d){const k=+d.dataset.k;
-    if(e.key==="ArrowUp"||e.key==="ArrowRight"&&t.dir==="ltr"||e.key==="ArrowLeft"&&t.dir==="rtl"){e.preventDefault();stepDrum(d,k===0?1:k+1)}
-    else if(e.key==="ArrowDown"||e.key==="ArrowLeft"&&t.dir==="ltr"||e.key==="ArrowRight"&&t.dir==="rtl"){e.preventDefault();stepDrum(d,Math.max(k===1?1:0,k-1))}
-    else if(/^[0-9]$/.test(e.key)){e.preventDefault();stepDrum(d,+e.key+1)}
-    else if(e.key==="Backspace"||e.key==="Delete"){e.preventDefault();stepDrum(d,0)}
-    else if(e.key==="Enter"){e.preventDefault();const all=$$(".drum");all[all.indexOf(d)+1]?.focus()}
-    return}
   const mr=e.target.closest?.("#mrail");
   if(mr){const g=S.draft.gg??45,step=e.shiftKey?5:1;
     if(e.key==="ArrowRight"||e.key==="ArrowUp"){e.preventDefault();stepRail(mr,g+step)}
@@ -628,7 +618,7 @@ document.addEventListener("change",async e=>{const el=e.target;
   if(el.id==="selp"){S.viewPlayer=el.value;render()}
   if(el.id==="selv"){S.vsPlayer=el.value;render()}
 });
-addEventListener("beforeunload",e=>{if(S.dirty){flushSave();e.preventDefault()}});
+addEventListener("beforeunload",e=>{const r=current();if(r&&S.draft&&!isLocked(r)&&unsaved(r).length){flushSave();e.preventDefault()}});
 addEventListener("visibilitychange",()=>{if(document.hidden)flushSave()});
 
 /* ===================== banner rotation ===================== */
@@ -643,7 +633,7 @@ render();
   sb.auth.onAuthStateChange((ev,session)=>{
     if(ev==="PASSWORD_RECOVERY"){S.recovery=true;S.uid=session?.user?.id||null;S.ready=true;render();return}
     const uid=session?.user?.id||null;if(uid===S.uid&&ev!=="SIGNED_IN"&&S.ready)return;
-    S.uid=uid;S.member=false;S.draft=null;S.draftRound=null;S.dirty=false;S.savedAt=null;S.mine={};S.lb=[];S.boards={};S.who=null;
+    S.uid=uid;S.member=false;S.draft=null;S.draftRound=null;S.savedAt=null;pending.clear();failed.clear();S.mine={};S.lb=[];S.boards={};S.who=null;
     if(S.pendingJoin)return;
     setTimeout(loadAll,0)});
   live();
